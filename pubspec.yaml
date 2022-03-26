@@ -14,6 +14,8 @@ dependencies:
   web_socket_channel: ^2.1.0
   flutter_riverpod: ^2.0.0-dev.4
   freezed_annotation:
+  intl: ^0.17.0
+  xrandom: ^0.7.2
 
 dev_dependencies:
   flutter_test:
