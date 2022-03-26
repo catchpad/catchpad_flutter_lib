@@ -1,0 +1,4 @@
+enum EnviromentType {
+  real,
+  simulated,
+}

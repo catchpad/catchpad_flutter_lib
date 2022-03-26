@@ -1,7 +1,5 @@
-library catchpad_simulator_flutter;
+export 'src/enums/enviroment_type.dart';
+export 'src/models/enviroment_model.dart';
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+export 'src/catchpad_simulator.dart';
+export 'src/enviroment_prov.dart';
