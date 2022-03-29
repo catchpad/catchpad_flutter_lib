@@ -7,6 +7,9 @@ const String mainServiceId = '4fafc201-1fb5-459e-8fcc-c5c9c331914b',
     mainCharacteristicId = 'beb5483e-36e1-4688-b7f5-ea07361b26a8',
     batteryCharacteristicId = 'beb5483e-36e1-4688-b7f5-ea07361b26a9';
 
+/// !!!simulator only!!!
+const simulatorServiceId = 'b3b7e8f4-9ab4-4d9b-80d4-bd61113a5017';
+
 Uuid get mainServiceUuid => Uuid.parse(mainServiceId);
 Uuid get mainCharacteristicUuid => Uuid.parse(mainCharacteristicId);
 Uuid get batteryCharacteristicUuid => Uuid.parse(batteryCharacteristicId);

@@ -2,6 +2,7 @@ export 'src/catchpad_simulator.dart';
 
 export 'src/enums/enviroment_type.dart';
 
+export 'src/models/pad_state.dart';
 export 'src/models/ble_logger.dart';
 export 'src/models/ble_manager.dart';
 export 'src/models/ble_scanner.dart';

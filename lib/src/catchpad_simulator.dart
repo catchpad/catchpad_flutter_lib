@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:catchpad_simulator_flutter/src/models/pad_state.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_reactive_ble/src/discovered_devices_registry.dart'
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:web_socket_channel/io.dart';
 
+import '../catchpad_simulator_flutter.dart';
 import 'utils/consts.dart';
 import 'provs/enviroment_prov.dart';
 
@@ -209,6 +211,31 @@ class CatchpadSimulator extends _FlutterReactiveBleExtender {
         );
 
         yield d;
+      }
+    } catch (e) {
+      debugPrint('Check your server is running');
+      debugPrint(e.toString());
+    } finally {
+      await ch.sink.close();
+    }
+  }
+
+  Stream<PadState> devicesStates() async* {
+    final env = ref.watch(enviromentProv);
+    if (env == null) return;
+
+    final ch = IOWebSocketChannel.connect(
+      [env.wsUri, simulatorServiceId, stateChannelName].join('/'),
+    );
+
+    ch.sink.add(startStateListeningCommand);
+
+    // if `ch` is not available, the server is not running.
+    try {
+      await for (final msg in ch.stream) {
+        final state = PadState.fromString(msg);
+
+        yield state;
       }
     } catch (e) {
       debugPrint('Check your server is running');
