@@ -27,3 +27,5 @@ export 'src/provs/ble_status_monitor_prov.dart';
 export 'src/utils/consts.dart';
 export 'src/utils/big_guy.dart';
 export 'src/utils/pad_consts.dart';
+
+export 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
