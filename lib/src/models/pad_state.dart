@@ -31,7 +31,7 @@ class PadState {
     Color? clr;
     final clst = sp[2];
     if (clst.toString() != null.toString()) {
-      final sp = clst.split('/');
+      final sp = clst.split(',');
       final red = int.parse(sp[0]),
           green = int.parse(sp[1]),
           blue = int.parse(sp[2]);
