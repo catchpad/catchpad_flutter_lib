@@ -157,7 +157,7 @@ abstract class PadManager {
     required WidgetRef ref,
   }) {
     return BleManager.subscribeToCharacteristic(
-      mainCharacteristic(deviceId),
+      simulatorCharacteristic(deviceId),
       ref: ref,
     ).map(TouchEvent.fromBytes);
   }

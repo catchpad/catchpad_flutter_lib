@@ -11,6 +11,7 @@ const String mainServiceId = '4fafc201-1fb5-459e-8fcc-c5c9c331914b',
 const simulatorServiceId = 'b3b7e8f4-9ab4-4d9b-80d4-bd61113a5017';
 
 Uuid get mainServiceUuid => Uuid.parse(mainServiceId);
+Uuid get simulatorServiceUuid => Uuid.parse(simulatorServiceId);
 Uuid get mainCharacteristicUuid => Uuid.parse(mainCharacteristicId);
 Uuid get batteryCharacteristicUuid => Uuid.parse(batteryCharacteristicId);
 
@@ -45,6 +46,13 @@ QualifiedCharacteristic batteryCharacteristic(String deviceId) =>
       characteristicId: batteryCharacteristicUuid,
       deviceId: deviceId,
       serviceId: mainServiceUuid,
+    );
+
+QualifiedCharacteristic simulatorCharacteristic(String deviceId) =>
+    QualifiedCharacteristic(
+      characteristicId: batteryCharacteristicUuid,
+      deviceId: deviceId,
+      serviceId: simulatorServiceUuid,
     );
 
 abstract class PadConsts {

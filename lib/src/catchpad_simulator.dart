@@ -175,6 +175,26 @@ class CatchpadSimulator extends _FlutterReactiveBleExtender {
   CatchpadSimulator(this.ref) : super();
 
   @override
+  Stream<List<int>> subscribeToCharacteristic(
+    QualifiedCharacteristic characteristic,
+  ) async* {
+    final env = ref.watch(enviromentProv);
+    if (env == null) return;
+
+    final ch = IOWebSocketChannel.connect(
+      [env.wsUri, scanChannelName].join('/'),
+    );
+
+    ch.sink.add(startSubscriptionCommand);
+
+    await for (final msg in ch.stream) {
+      // we'll recieve a string message, which we'll convert to a list of bytes
+      // and return.
+      yield (msg as String).codeUnits;
+    }
+  }
+
+  @override
   Stream<DiscoveredDevice> scanForDevices({
     required List<Uuid> withServices,
     ScanMode scanMode = ScanMode.balanced,
@@ -296,6 +316,15 @@ class CatchpadSimulator extends _FlutterReactiveBleExtender {
     if (env == null) return;
 
     _ch = IOWebSocketChannel.connect(env.wsUri);
+  }
+
+  static Future<bool> simulateTouchEvent(WidgetRef ref, String deviceId) async {
+    return await BleManager.writeCharacteristic(
+      c: mainCharacteristic(deviceId),
+      data: touchEventCommand.codeUnits,
+      withResponse: true,
+      ref: ref,
+    );
   }
 }
 
