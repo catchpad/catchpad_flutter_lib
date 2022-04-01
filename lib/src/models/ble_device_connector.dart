@@ -1,11 +1,7 @@
 import 'dart:async';
 
-import 'package:catchpad_simulator_flutter/catchpad_simulator_flutter.dart';
+import '../../catchpad_simulator_flutter.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
-
-import '../provs/ble_connection_state_prov.dart';
-import 'reactive_state.dart';
 
 class BleDeviceConnector extends ReactiveState<DeviceStatusMapEntry> {
   BleDeviceConnector({

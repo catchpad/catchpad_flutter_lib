@@ -1,7 +1,6 @@
 import 'dart:async';
 
-import 'package:catchpad_simulator_flutter/catchpad_simulator_flutter.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import '../../catchpad_simulator_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 abstract class BleManager {

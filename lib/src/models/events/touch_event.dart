@@ -1,6 +1,4 @@
-import 'package:catchpad_simulator_flutter/catchpad_simulator_flutter.dart';
-
-import '../../utils/pad_consts.dart';
+import '../../../catchpad_simulator_flutter.dart';
 
 class TouchEvent {
   final String deviceNameId;

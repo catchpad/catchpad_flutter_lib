@@ -1,9 +1,7 @@
 import 'dart:typed_data';
 
-import 'package:catchpad_simulator_flutter/src/models/pad_state.dart';
 import 'package:flutter/foundation.dart';
 
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 // ignore: implementation_imports
 import 'package:flutter_reactive_ble/src/discovered_devices_registry.dart'
     show DiscoveredDevicesRegistryImpl;
@@ -11,8 +9,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:web_socket_channel/io.dart';
 
 import '../catchpad_simulator_flutter.dart';
-import 'utils/consts.dart';
-import 'provs/enviroment_prov.dart';
 
 abstract class _FlutterReactiveBleExtender implements FlutterReactiveBle {
   // so wtf is going on here? you ask..
