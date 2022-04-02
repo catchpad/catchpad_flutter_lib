@@ -30,3 +30,4 @@ export 'src/utils/big_guy.dart';
 export 'src/utils/pad_consts.dart';
 
 export 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+export 'src/models/reactive_state.dart';
