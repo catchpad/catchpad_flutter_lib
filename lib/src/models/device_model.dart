@@ -17,7 +17,8 @@ extension CpDiscoveredDevice on DiscoveredDevice {
   }
 
   String? get deviceNameId {
-    final sp = name.split(' ');
+    List<String> sp;
+    sp = name.split(' ');
 
     if (sp.length == 2) {
       return sp[0];

@@ -181,16 +181,39 @@ class CatchpadSimulator extends _FlutterReactiveBleExtender {
     final env = ref.watch(enviromentProv);
     if (env == null) return;
 
-    final ch = IOWebSocketChannel.connect(
-      [env.wsUri, scanChannelName].join('/'),
-    );
+    late IOWebSocketChannel ch;
+
+    connect() async {
+      ch = IOWebSocketChannel.connect(
+        [
+          env.wsUri,
+          characteristic.serviceId,
+          characteristic.characteristicId,
+          characteristic.deviceId
+        ].join('/'),
+      );
+    }
+
+    connect();
 
     ch.sink.add(startSubscriptionCommand);
+    // ch.sink.add(startStateListeningCommand);
 
-    await for (final msg in ch.stream) {
-      // we'll recieve a string message, which we'll convert to a list of bytes
-      // and return.
-      yield (msg as String).codeUnits;
+    // if `ch` is not available, the server is not running.
+    try {
+      await for (final msg in ch.stream) {
+        yield (msg as String).codeUnits;
+      }
+
+      debugPrint('closing channel' + DateTime.now().toIso8601String());
+      await ch.sink.close();
+    } catch (e) {
+      debugPrint(
+          'Check your server is running' + DateTime.now().toIso8601String());
+      debugPrint(e.toString());
+      debugPrint('reconnecting');
+      connect();
+      debugPrint('reconnected');
     }
   }
 
@@ -240,12 +263,16 @@ class CatchpadSimulator extends _FlutterReactiveBleExtender {
     final env = ref.watch(enviromentProv);
     if (env == null) return;
 
-    final ch = IOWebSocketChannel.connect(
-      [env.wsUri, simulatorServiceId, stateChannelName].join('/'),
-    );
+    late IOWebSocketChannel ch;
 
+    connect() async {
+      ch = IOWebSocketChannel.connect(
+        [env.wsUri, simulatorServiceId, stateChannelName].join('/'),
+      );
+    }
+
+    connect();
     ch.sink.add(startStateListeningCommand);
-
     // if `ch` is not available, the server is not running.
     try {
       await for (final msg in ch.stream) {
@@ -253,11 +280,50 @@ class CatchpadSimulator extends _FlutterReactiveBleExtender {
 
         yield state;
       }
-    } catch (e) {
-      debugPrint('Check your server is running');
-      debugPrint(e.toString());
-    } finally {
+
+      debugPrint('closing channel' + DateTime.now().toIso8601String());
       await ch.sink.close();
+    } catch (e) {
+      debugPrint(
+          'Check your server is running' + DateTime.now().toIso8601String());
+      debugPrint(e.toString());
+      debugPrint('reconnecting');
+      connect();
+      debugPrint('reconnected');
+    }
+  }
+
+  Stream<TouchEvent> devicesTouches() async* {
+    final env = ref.watch(enviromentProv);
+    if (env == null) return;
+
+    late IOWebSocketChannel ch;
+
+    connect() async {
+      ch = IOWebSocketChannel.connect(
+        [env.wsUri, simulatorServiceId, mainCharacteristicUuid].join('/'),
+      );
+    }
+
+    connect();
+    ch.sink.add(startStateListeningCommand);
+    // if `ch` is not available, the server is not running.
+    try {
+      await for (final msg in ch.stream) {
+        final event = TouchEvent.fromBytes(msg);
+
+        yield event;
+      }
+
+      debugPrint('closing channel' + DateTime.now().toIso8601String());
+      await ch.sink.close();
+    } catch (e) {
+      debugPrint(
+          'Check your server is running' + DateTime.now().toIso8601String());
+      debugPrint(e.toString());
+      debugPrint('reconnecting');
+      connect();
+      debugPrint('reconnected');
     }
   }
 
@@ -284,6 +350,7 @@ class CatchpadSimulator extends _FlutterReactiveBleExtender {
     );
   }
 
+  static Map<String, IOWebSocketChannel> _channels = {};
   @override
   Future<void> writeCharacteristicWithoutResponse(
     QualifiedCharacteristic characteristic, {
@@ -292,9 +359,15 @@ class CatchpadSimulator extends _FlutterReactiveBleExtender {
     final env = ref.watch(enviromentProv);
     if (env == null) return;
 
-    final ch = IOWebSocketChannel.connect(
-      [env.wsUri, characteristic.idForSimulator].join('/'),
-    );
+    final url = [env.wsUri, characteristic.idForSimulator].join('/');
+
+    late IOWebSocketChannel ch;
+    if (_channels.containsKey(url)) {
+      ch = _channels[url]!;
+    } else {
+      ch = IOWebSocketChannel.connect(url);
+      _channels[url] = ch;
+    }
 
     ch.sink.add(value);
   }
@@ -320,7 +393,7 @@ class CatchpadSimulator extends _FlutterReactiveBleExtender {
 
   static Future<bool> simulateTouchEvent(WidgetRef ref, String deviceId) async {
     return await BleManager.writeCharacteristic(
-      c: mainCharacteristic(deviceId),
+      c: simulatorCharacteristic(deviceId),
       data: touchEventCommand.codeUnits,
       withResponse: true,
       ref: ref,

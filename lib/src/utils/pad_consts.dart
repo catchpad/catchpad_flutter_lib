@@ -50,7 +50,7 @@ QualifiedCharacteristic batteryCharacteristic(String deviceId) =>
 
 QualifiedCharacteristic simulatorCharacteristic(String deviceId) =>
     QualifiedCharacteristic(
-      characteristicId: batteryCharacteristicUuid,
+      characteristicId: mainCharacteristicUuid,
       deviceId: deviceId,
       serviceId: simulatorServiceUuid,
     );
