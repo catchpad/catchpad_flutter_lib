@@ -177,44 +177,24 @@ class CatchpadSimulator extends _FlutterReactiveBleExtender {
   @override
   Stream<List<int>> subscribeToCharacteristic(
     QualifiedCharacteristic characteristic,
-  ) async* {
+  ) {
     final env = ref.watch(enviromentProv);
-    if (env == null) return;
-
-    late IOWebSocketChannel ch;
-
-    connect() async {
-      ch = IOWebSocketChannel.connect(
-        [
-          env.wsUri,
-          characteristic.serviceId,
-          characteristic.characteristicId,
-          characteristic.deviceId
-        ].join('/'),
-      );
+    if (env == null) {
+      return const Stream.empty();
     }
 
-    connect();
+    late IOWebSocketChannel ch = IOWebSocketChannel.connect(
+      [
+        env.wsUri,
+        characteristic.serviceId,
+        characteristic.characteristicId,
+        characteristic.deviceId,
+      ].join('/'),
+    );
 
     ch.sink.add(startSubscriptionCommand);
-    // ch.sink.add(startStateListeningCommand);
 
-    // if `ch` is not available, the server is not running.
-    try {
-      await for (final msg in ch.stream) {
-        yield (msg as String).codeUnits;
-      }
-
-      debugPrint('closing channel' + DateTime.now().toIso8601String());
-      await ch.sink.close();
-    } catch (e) {
-      debugPrint(
-          'Check your server is running' + DateTime.now().toIso8601String());
-      debugPrint(e.toString());
-      debugPrint('reconnecting');
-      connect();
-      debugPrint('reconnected');
-    }
+    return ch.stream.map((msg) => (msg as String).codeUnits);
   }
 
   @override
@@ -282,14 +262,12 @@ class CatchpadSimulator extends _FlutterReactiveBleExtender {
       }
 
       debugPrint('closing channel' + DateTime.now().toIso8601String());
-      await ch.sink.close();
     } catch (e) {
       debugPrint(
           'Check your server is running' + DateTime.now().toIso8601String());
       debugPrint(e.toString());
-      debugPrint('reconnecting');
-      connect();
-      debugPrint('reconnected');
+    } finally {
+      await ch.sink.close();
     }
   }
 
@@ -321,9 +299,8 @@ class CatchpadSimulator extends _FlutterReactiveBleExtender {
       debugPrint(
           'Check your server is running' + DateTime.now().toIso8601String());
       debugPrint(e.toString());
-      debugPrint('reconnecting');
-      connect();
-      debugPrint('reconnected');
+    } finally {
+      await ch.sink.close();
     }
   }
 
