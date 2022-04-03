@@ -12,7 +12,6 @@ class PadState {
   final int? battery;
   final int? threshold;
   final int? timerStart;
-  final int? responseTime;
 
   const PadState({
     required this.padId,
@@ -21,7 +20,6 @@ class PadState {
     required this.battery,
     required this.threshold,
     required this.timerStart,
-    required this.responseTime,
   });
 
   // padId/name/color/battery/threshold/timerStart/responseTime
@@ -46,7 +44,6 @@ class PadState {
       battery: int.tryParse(sp[3]),
       threshold: int.tryParse(sp[4]),
       timerStart: int.tryParse(sp[5]),
-      responseTime: int.tryParse(sp[6]),
     );
   }
 
@@ -63,5 +60,5 @@ class PadState {
 
   @override
   toString() =>
-      'PadState(padId: $padId, name: $name, color: $color, battery: $battery, threshold: $threshold, timerStart: $timerStart, responseTime: $responseTime)';
+      'PadState(padId: $padId, name: $name, color: $color, battery: $battery, threshold: $threshold, timerStart: $timerStart)';
 }
