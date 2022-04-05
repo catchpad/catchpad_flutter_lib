@@ -52,6 +52,9 @@ class BleDeviceConnector extends ReactiveState<DeviceStatusMapEntry> {
         // }
 
         _deviceConnectionController.add(update);
+
+        final mt = await _ble.requestMtu(deviceId: device.id, mtu: 512);
+        debugPrint('mtu request: $mt');
       },
       onError: (Object e) =>
           _logMessage('Connecting to device ${device.id} resulted in error $e'),
