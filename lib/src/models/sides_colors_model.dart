@@ -20,6 +20,23 @@ class SidesColorsModel {
   factory SidesColorsModel.all(Color clr) {
     return SidesColorsModel(tr: clr, tl: clr, br: clr, bl: clr);
   }
+  factory SidesColorsModel.all100(SidesColorsColor clr) {
+    return SidesColorsModel.from100Colors(tr: clr, tl: clr, br: clr, bl: clr);
+  }
+
+  factory SidesColorsModel.from100Colors({
+    SidesColorsColor? tr,
+    SidesColorsColor? tl,
+    SidesColorsColor? br,
+    SidesColorsColor? bl,
+  }) {
+    return SidesColorsModel(
+      tr: tr?.to255Color(),
+      tl: tl?.to255Color(),
+      br: br?.to255Color(),
+      bl: bl?.to255Color(),
+    );
+  }
 
   String colorOrNull(Color? c) {
     // if empty we should send '-1/-1/-1'
@@ -38,5 +55,25 @@ class SidesColorsModel {
   @override
   String toString() {
     return clrs.map(colorOrNull).join(defaultSeperator);
+  }
+}
+
+/// the range of r g b here are 0-100
+class SidesColorsColor {
+  int r, g, b;
+
+  SidesColorsColor(
+    this.r,
+    this.g,
+    this.b,
+  );
+
+  Color to255Color() {
+    return Color.fromARGB(
+      255,
+      (r / 100 * 255).floor(),
+      (g / 100 * 255).floor(),
+      (b / 100 * 255).floor(),
+    );
   }
 }
