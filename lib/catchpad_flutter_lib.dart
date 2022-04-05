@@ -28,3 +28,4 @@ export 'src/provs/enviroment_prov.dart';
 export 'src/utils/big_guy.dart';
 export 'src/utils/consts.dart';
 export 'src/utils/pad_consts.dart';
+export 'src/models/cp_main_Colors.dart';

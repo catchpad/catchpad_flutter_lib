@@ -10,6 +10,7 @@ import '../utils/big_guy.dart';
 import '../utils/pad_consts.dart';
 import 'battery/battery_model.dart';
 import 'ble_manager.dart';
+import 'cp_main_Colors.dart';
 import 'events/touch_event.dart';
 import 'sides_colors_model.dart';
 export 'sides_colors_model.dart';
@@ -35,10 +36,14 @@ abstract class PadManager {
     String deviceId, {
     required WidgetRef ref,
   }) async {
-    return await BleManager.writeCharacteristic(
-      c: mainCharacteristic(deviceId),
-      data: utf8.encode('C'),
-      withResponse: false,
+    return await ledColor(
+      deviceId,
+      const SidesColorsModel(
+        tr: Color.fromARGB(255, 255, 255, 0),
+        tl: Color.fromARGB(255, 0, 255, 0),
+        br: Color.fromARGB(255, 255, 0, 0),
+        bl: Color.fromARGB(255, 0, 0, 255),
+      ),
       ref: ref,
     );
   }
@@ -46,11 +51,13 @@ abstract class PadManager {
   static Future<bool> ledOff(
     String deviceId, {
     required WidgetRef ref,
+    bool isCommand = false,
   }) async {
     return await ledColor(
       deviceId,
       SidesColorsModel.off(),
       ref: ref,
+      isCommand: isCommand,
     );
   }
 
@@ -84,6 +91,18 @@ abstract class PadManager {
     }
 
     return true;
+  }
+
+  static Future<bool> sendIsCommand(
+    String deviceId, {
+    required WidgetRef ref,
+  }) {
+    return ledColor(
+      deviceId,
+      const SidesColorsModel(),
+      ref: ref,
+      isCommand: true,
+    );
   }
 
   static Future<bool> ledColor(
