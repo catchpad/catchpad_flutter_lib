@@ -63,15 +63,26 @@ QualifiedCharacteristic simulatorCharacteristic(String deviceId) =>
 // led start //
 const String ledServiceId = '55cb9fe8-b2ab-11ec-b909-000000000000';
 
+/// this one takes only 1 colors for all 4 leds
 const String ledCharacteristicId = '6412075e-b2ab-11ec-b909-000000000001';
+
+/// this one takes a color for each led
+const String ledAllCharacteristicId = '6412075e-b2ab-11ec-b909-000000000111';
 
 Uuid get ledServiceUuid => Uuid.parse(ledServiceId);
 
 Uuid get ledCharacteristicUuid => Uuid.parse(ledCharacteristicId);
+Uuid get ledAllCharacteristicUuid => Uuid.parse(ledAllCharacteristicId);
 
 QualifiedCharacteristic ledCharacteristic(String deviceId) =>
     QualifiedCharacteristic(
       characteristicId: ledCharacteristicUuid,
+      deviceId: deviceId,
+      serviceId: ledServiceUuid,
+    );
+QualifiedCharacteristic ledAllCharacteristic(String deviceId) =>
+    QualifiedCharacteristic(
+      characteristicId: ledAllCharacteristicUuid,
       deviceId: deviceId,
       serviceId: ledServiceUuid,
     );

@@ -52,9 +52,15 @@ class SidesColorsModel {
   /// the circles take command in reverse of clockwise order
   Iterable<Color?> get clrs => [tl, bl, br, tr];
 
+  bool get allColorsSame => clrs.every((c) => c == tl);
+
   @override
   String toString() {
-    return clrs.map(colorOrNull).join(defaultSeperator);
+    /// if all same we send data as 'r/g/b'
+    /// else, we send each circle seperate like 'r1/g1/b1/r2/g2/b2/r3/g3/b3'
+    return allColorsSame
+        ? colorOrNull(clrs.elementAt(0))
+        : clrs.map(colorOrNull).join(defaultSeperator);
   }
 }
 

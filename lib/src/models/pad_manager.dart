@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:async/async.dart' show StreamGroup;
@@ -10,7 +9,6 @@ import '../utils/big_guy.dart';
 import '../utils/pad_consts.dart';
 import 'battery/battery_model.dart';
 import 'ble_manager.dart';
-import 'cp_main_Colors.dart';
 import 'events/touch_event.dart';
 import 'sides_colors_model.dart';
 export 'sides_colors_model.dart';
@@ -143,10 +141,14 @@ abstract class PadManager {
       BigGuy.boolToNumString(isCommand),
       colorModel,
     ].join('/');
+    final charac = colorModel.allColorsSame
+        ? ledAllCharacteristic(deviceId)
+        : ledCharacteristic(deviceId);
+
     return await BleManager.writeCharacteristic(
-      c: ledCharacteristic(deviceId),
+      c: charac,
       data: utf8.encode(dt),
-      withResponse: true,
+      withResponse: false,
       ref: ref,
     );
   }
