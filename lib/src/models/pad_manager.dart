@@ -11,6 +11,8 @@ import '../utils/pad_consts.dart';
 import 'battery/battery_model.dart';
 import 'ble_manager.dart';
 import 'events/touch_event.dart';
+import 'sides_colors_model.dart';
+export 'sides_colors_model.dart';
 
 abstract class PadManager {
   static Future<BatteryModel> readBattery(
@@ -47,8 +49,7 @@ abstract class PadManager {
   }) async {
     return await ledColor(
       deviceId,
-      const Color(0xFF000000),
-      sides: '0000',
+      SidesColorsModel.off(),
       ref: ref,
     );
   }
@@ -61,9 +62,7 @@ abstract class PadManager {
       await ledColor(
         deviceId,
         // random color
-        Color(
-          Random().nextInt(0xFFFFFFFF),
-        ),
+        SidesColorsModel.all(BigGuy.randomColor()),
         ref: ref,
       );
     }
@@ -89,10 +88,8 @@ abstract class PadManager {
 
   static Future<bool> ledColor(
     String deviceId,
-    Color color, {
-    String? sides,
+    SidesColorsModel colorModel, {
     bool isCommand = false,
-    int? threshold,
     required WidgetRef ref,
 
     /// for how long to flash the led
@@ -101,10 +98,8 @@ abstract class PadManager {
   }) async {
     final led = await _ledColor(
       deviceId,
-      color,
-      sides: sides,
+      colorModel,
       isCommand: isCommand,
-      threshold: threshold,
       ref: ref,
     );
 
@@ -121,31 +116,16 @@ abstract class PadManager {
 
   static Future<bool> _ledColor(
     String deviceId,
-    Color color, {
-    String? sides,
+    SidesColorsModel colorModel, {
     bool isCommand = false,
-    int? threshold,
     required WidgetRef ref,
   }) async {
-    threshold ??= 0;
-
-    if (!_validateSides(sides)) {
-      sides = '1111';
-    }
-
-    // TODO
     final dt = [
-      // deviceId,
-      '1',
-      color.red,
-      color.green,
-      color.blue,
-      sides,
       BigGuy.boolToNumString(isCommand),
-      threshold,
+      colorModel,
     ].join('/');
     return await BleManager.writeCharacteristic(
-      c: mainCharacteristic(deviceId),
+      c: ledCharacteristic(deviceId),
       data: utf8.encode(dt),
       withResponse: true,
       ref: ref,

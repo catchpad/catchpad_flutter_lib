@@ -18,6 +18,7 @@ dependencies:
   xrandom: ^0.7.2
 
 dev_dependencies:
+  test:
   flutter_test:
     sdk: flutter
   flutter_lints: ^1.0.0

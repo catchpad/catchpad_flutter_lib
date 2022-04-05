@@ -15,6 +15,7 @@ export 'src/models/pad_manager.dart';
 export 'src/models/pad_state.dart';
 export 'src/models/reactive_state.dart';
 export 'src/models/reactive_state.dart';
+export 'src/models/sides_colors_model.dart';
 export 'src/provs/ble_connection_state_prov.dart';
 export 'src/provs/ble_device_connector_prov.dart';
 export 'src/provs/ble_logger_prov.dart';
