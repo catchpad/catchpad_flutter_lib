@@ -80,6 +80,7 @@ QualifiedCharacteristic ledCharacteristic(String deviceId) =>
       deviceId: deviceId,
       serviceId: ledServiceUuid,
     );
+
 QualifiedCharacteristic ledAllCharacteristic(String deviceId) =>
     QualifiedCharacteristic(
       characteristicId: ledAllCharacteristicUuid,
@@ -87,6 +88,23 @@ QualifiedCharacteristic ledAllCharacteristic(String deviceId) =>
       serviceId: ledServiceUuid,
     );
 // led end //
+
+// admin start //
+const String adminServiceId = '23cb9fe8-b2ab-11ec-b909-000000000000';
+
+const String adminCharacteristicId = 'a4bf0dbb-b2ab-11ec-b909-00000000000A';
+
+Uuid get adminServiceUuid => Uuid.parse(adminServiceId);
+
+Uuid get adminCharacteristicUuid => Uuid.parse(adminCharacteristicId);
+
+QualifiedCharacteristic adminCharacteristic(String deviceId) =>
+    QualifiedCharacteristic(
+      characteristicId: adminCharacteristicUuid,
+      deviceId: deviceId,
+      serviceId: adminServiceUuid,
+    );
+// admin end //
 
 abstract class PadConsts {
   static const Color errorColor = Color(0xFFF44336);

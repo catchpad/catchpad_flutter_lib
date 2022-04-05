@@ -174,4 +174,25 @@ abstract class PadManager {
           )),
     );
   }
+
+  static Future<bool> toggleDebug(
+    String deviceId, {
+    required bool enable,
+    AdminMonitorType type = AdminMonitorType.serial,
+    required WidgetRef ref,
+  }) async {
+    final dt = [BigGuy.boolToInt(enable), type.index].join('/');
+    return await BleManager.writeCharacteristic(
+      c: adminCharacteristic(deviceId),
+      data: utf8.encode(dt),
+      withResponse: false,
+      ref: ref,
+    );
+  }
+}
+
+/// where to print the debug info
+enum AdminMonitorType {
+  serial,
+  ble,
 }
