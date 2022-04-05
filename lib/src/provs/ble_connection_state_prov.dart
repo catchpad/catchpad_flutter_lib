@@ -1,5 +1,8 @@
-import '../../catchpad_simulator_flutter.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../models/device_model.dart';
+import 'ble_device_connector_prov.dart';
 
 typedef DeviceStatusMapProvider = StateProvider<DeviceStatusMap>;
 

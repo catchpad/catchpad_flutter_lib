@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 // ignore: implementation_imports
 import 'package:flutter_reactive_ble/src/discovered_devices_registry.dart'
@@ -8,7 +9,12 @@ import 'package:flutter_reactive_ble/src/discovered_devices_registry.dart'
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:web_socket_channel/io.dart';
 
-import '../catchpad_simulator_flutter.dart';
+import 'models/ble_manager.dart';
+import 'models/events/touch_event.dart';
+import 'models/pad_state.dart';
+import 'provs/enviroment_prov.dart';
+import 'utils/consts.dart';
+import 'utils/pad_consts.dart';
 
 abstract class _FlutterReactiveBleExtender implements FlutterReactiveBle {
   // so wtf is going on here? you ask..

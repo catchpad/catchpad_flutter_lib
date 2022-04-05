@@ -1,7 +1,9 @@
 import 'dart:async';
 
-import '../../catchpad_simulator_flutter.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../provs/ble_prov.dart';
 
 abstract class BleManager {
   static FlutterReactiveBle _inst(WidgetRef ref) => ref.read(bleProv);

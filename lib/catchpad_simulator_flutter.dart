@@ -1,33 +1,29 @@
+export 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+
 export 'src/catchpad_simulator.dart';
-
 export 'src/enums/enviroment_type.dart';
-
-export 'src/models/pad_state.dart';
+export 'src/models/battery/battery_model.dart';
+export 'src/models/ble_device_connector.dart';
 export 'src/models/ble_logger.dart';
 export 'src/models/ble_manager.dart';
 export 'src/models/ble_scanner.dart';
-export 'src/models/pad_manager.dart';
-export 'src/models/device_model.dart';
-export 'src/models/reactive_state.dart';
-export 'src/models/enviroment_model.dart';
 export 'src/models/ble_status_monitor.dart';
+export 'src/models/device_model.dart';
+export 'src/models/enviroment_model.dart';
 export 'src/models/events/touch_event.dart';
-export 'src/models/ble_device_connector.dart';
-export 'src/models/battery/battery_model.dart';
-
-export 'src/provs/ble_prov.dart';
-export 'src/provs/ble_scan_prov.dart';
-export 'src/provs/ble_logger_prov.dart';
-export 'src/provs/ble_status_prov.dart';
-export 'src/provs/enviroment_prov.dart';
-export 'src/provs/ble_scanner_prov.dart';
+export 'src/models/pad_manager.dart';
+export 'src/models/pad_state.dart';
+export 'src/models/reactive_state.dart';
+export 'src/models/reactive_state.dart';
 export 'src/provs/ble_connection_state_prov.dart';
 export 'src/provs/ble_device_connector_prov.dart';
+export 'src/provs/ble_logger_prov.dart';
+export 'src/provs/ble_prov.dart';
+export 'src/provs/ble_scan_prov.dart';
+export 'src/provs/ble_scanner_prov.dart';
 export 'src/provs/ble_status_monitor_prov.dart';
-
-export 'src/utils/consts.dart';
+export 'src/provs/ble_status_prov.dart';
+export 'src/provs/enviroment_prov.dart';
 export 'src/utils/big_guy.dart';
+export 'src/utils/consts.dart';
 export 'src/utils/pad_consts.dart';
-
-export 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
-export 'src/models/reactive_state.dart';
