@@ -141,9 +141,11 @@ abstract class PadSensorManager {
   }) =>
       _unlockThreshold(
         sensorType: SensorType.acc,
+        accSensorType: AccSensorType.gravity,
         ref: ref,
         deviceId: deviceId,
       );
+
   static Future<bool> lockAccTapThreshold({
     required WidgetRef ref,
     required String deviceId,
@@ -161,6 +163,7 @@ abstract class PadSensorManager {
   }) =>
       _unlockThreshold(
         sensorType: SensorType.acc,
+        accSensorType: AccSensorType.tap,
         ref: ref,
         deviceId: deviceId,
       );
@@ -188,12 +191,14 @@ abstract class PadSensorManager {
     required SensorType sensorType,
     required WidgetRef ref,
     required String deviceId,
+    AccSensorType? accSensorType,
   }) async {
     return _activate(
       sensorType: sensorType,
       status: true,
       ref: ref,
       deviceId: deviceId,
+      accSensorType: accSensorType,
       // this kinda works in reverse, the comment in _activate
       thrLock: true,
     );
