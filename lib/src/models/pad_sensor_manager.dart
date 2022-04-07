@@ -66,14 +66,21 @@ abstract class PadSensorManager {
     required WidgetRef ref,
     required String deviceId,
   }) =>
-      _lockThreshold(sensorType: SensorType.dst, ref: ref, deviceId: deviceId);
+      _lockThreshold(
+        sensorType: SensorType.dst,
+        ref: ref,
+        deviceId: deviceId,
+      );
 
   static Future<bool> unlockDstThreshold({
     required WidgetRef ref,
     required String deviceId,
   }) =>
       _unlockThreshold(
-          sensorType: SensorType.dst, ref: ref, deviceId: deviceId);
+        sensorType: SensorType.dst,
+        ref: ref,
+        deviceId: deviceId,
+      );
 
   // #endregion
 
@@ -117,18 +124,46 @@ abstract class PadSensorManager {
     );
   }
 
-  static Future<bool> lockAccThreshold({
+  static Future<bool> lockAccGravityThreshold({
     required WidgetRef ref,
     required String deviceId,
   }) =>
-      _lockThreshold(sensorType: SensorType.acc, ref: ref, deviceId: deviceId);
+      _lockThreshold(
+        sensorType: SensorType.acc,
+        accSensorType: AccSensorType.gravity,
+        ref: ref,
+        deviceId: deviceId,
+      );
 
-  static Future<bool> unlockAccThreshold({
+  static Future<bool> unlockAccGravityThreshold({
     required WidgetRef ref,
     required String deviceId,
   }) =>
       _unlockThreshold(
-          sensorType: SensorType.acc, ref: ref, deviceId: deviceId);
+        sensorType: SensorType.acc,
+        ref: ref,
+        deviceId: deviceId,
+      );
+  static Future<bool> lockAccTapThreshold({
+    required WidgetRef ref,
+    required String deviceId,
+  }) =>
+      _lockThreshold(
+        sensorType: SensorType.acc,
+        accSensorType: AccSensorType.tap,
+        ref: ref,
+        deviceId: deviceId,
+      );
+
+  static Future<bool> unlockAccTapThreshold({
+    required WidgetRef ref,
+    required String deviceId,
+  }) =>
+      _unlockThreshold(
+        sensorType: SensorType.acc,
+        ref: ref,
+        deviceId: deviceId,
+      );
 
   // #endregion
 
@@ -136,12 +171,14 @@ abstract class PadSensorManager {
     required SensorType sensorType,
     required WidgetRef ref,
     required String deviceId,
+    AccSensorType? accSensorType,
   }) async {
     return _activate(
       sensorType: sensorType,
       status: true,
       ref: ref,
       deviceId: deviceId,
+      accSensorType: accSensorType,
       // this kinda works in reverse, the comment in _activate
       thrLock: false,
     );

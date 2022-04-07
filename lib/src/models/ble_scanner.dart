@@ -6,7 +6,6 @@ import 'package:meta/meta.dart';
 
 import '../provs/ble_device_connector_prov.dart';
 import '../utils/consts.dart';
-import '../utils/pad_consts.dart';
 import 'device_model.dart';
 import 'reactive_state.dart';
 
