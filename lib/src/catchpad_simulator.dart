@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 // ignore: implementation_imports
 import 'package:flutter_reactive_ble/src/discovered_devices_registry.dart'
@@ -9,12 +8,7 @@ import 'package:flutter_reactive_ble/src/discovered_devices_registry.dart'
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:web_socket_channel/io.dart';
 
-import 'models/ble_manager.dart';
-import 'models/events/touch_event.dart';
-import 'models/pad_state.dart';
-import 'provs/enviroment_prov.dart';
-import 'utils/consts.dart';
-import 'utils/pad_consts.dart';
+import '../catchpad_flutter_lib.dart';
 
 abstract class _FlutterReactiveBleExtender implements FlutterReactiveBle {
   // so wtf is going on here? you ask..
@@ -277,7 +271,7 @@ class CatchpadSimulator extends _FlutterReactiveBleExtender {
     }
   }
 
-  Stream<TouchEvent> devicesTouches() async* {
+  Stream<AcceleremetorTapModel> devicesTouches() async* {
     final env = ref.watch(enviromentProv);
     if (env == null) return;
 
@@ -294,7 +288,7 @@ class CatchpadSimulator extends _FlutterReactiveBleExtender {
     // if `ch` is not available, the server is not running.
     try {
       await for (final msg in ch.stream) {
-        final event = TouchEvent.fromBytes(msg);
+        final event = AcceleremetorTapModel.fromBytes(msg);
 
         yield event;
       }
@@ -333,7 +327,8 @@ class CatchpadSimulator extends _FlutterReactiveBleExtender {
     );
   }
 
-  static Map<String, IOWebSocketChannel> _channels = {};
+  static final Map<String, IOWebSocketChannel> _channels = {};
+
   @override
   Future<void> writeCharacteristicWithoutResponse(
     QualifiedCharacteristic characteristic, {
@@ -360,7 +355,6 @@ class CatchpadSimulator extends _FlutterReactiveBleExtender {
     QualifiedCharacteristic characteristic, {
     required List<int> value,
   }) async {
-    // TODO
     await writeCharacteristicWithoutResponse(characteristic, value: value);
   }
 

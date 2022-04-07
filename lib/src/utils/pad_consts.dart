@@ -106,6 +106,24 @@ QualifiedCharacteristic adminCharacteristic(String deviceId) =>
     );
 // admin end //
 
+// sensors start //
+
+const String sensorServiceId = '722d9150-b2ab-11ec-b909-000000000000';
+Uuid get sensorServiceUuid => Uuid.parse(sensorServiceId);
+
+// ACC START //
+const String accCharacteristicId = '7af57456-b2ab-11ec-b909-000000000001';
+Uuid get accCharacteristicUuid => Uuid.parse(accCharacteristicId);
+
+QualifiedCharacteristic accCharacteristic(String deviceId) =>
+    QualifiedCharacteristic(
+      characteristicId: accCharacteristicUuid,
+      deviceId: deviceId,
+      serviceId: sensorServiceUuid,
+    );
+// ACC END //
+
+// sensors end //
 abstract class PadConsts {
   static const Color errorColor = Color(0xFFF44336);
 }

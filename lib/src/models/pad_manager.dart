@@ -2,34 +2,17 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:async/async.dart' show StreamGroup;
-import 'package:flutter/foundation.dart';
+import 'package:catchpad_flutter_lib/catchpad_flutter_lib.dart';
+import 'sensors/acc_tap_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../utils/big_guy.dart';
 import '../utils/pad_consts.dart';
-import 'battery/battery_model.dart';
 import 'ble_manager.dart';
-import 'events/touch_event.dart';
 import 'sides_colors_model.dart';
 export 'sides_colors_model.dart';
 
 abstract class PadManager {
-  static Future<BatteryModel> readBattery(
-    String deviceId, {
-    required WidgetRef ref,
-  }) async {
-    final bat = await BleManager.readCharacteristic(
-      batteryCharacteristic(deviceId),
-      ref: ref,
-    );
-
-    final model = BatteryModel.parse(bat);
-
-    debugPrint(model.toString());
-
-    return model;
-  }
-
   static Future<bool> toggleLight(
     String deviceId, {
     required WidgetRef ref,
@@ -70,22 +53,6 @@ abstract class PadManager {
         SidesColorsModel.all(BigGuy.randomColor()),
         ref: ref,
       );
-    }
-
-    return true;
-  }
-
-  static bool _validateSides(String? sides) {
-    // if it's null, there's no assertion
-    if (sides == null) {
-      return false;
-    }
-
-    if (sides.length != 4 ||
-        !sides.split('').every((element) => element != '0' || element != '1')) {
-      assert(false, 'Sides must be 4 digits and only contain 0s and 1s');
-
-      return false;
     }
 
     return true;
@@ -153,17 +120,29 @@ abstract class PadManager {
     );
   }
 
-  static Stream<TouchEvent> listenToTouch(
+  static Stream<AcceleremetorGravityModel> listenToMotion(
+    String deviceId, {
+    required WidgetRef ref,
+  }) {
+    // TODO: find out how to differentiate between the two
+    // types of response that comes from `accCharacteristic`
+    return BleManager.subscribeToCharacteristic(
+      accCharacteristic(deviceId),
+      ref: ref,
+    ).map(AcceleremetorGravityModel.fromBytes);
+  }
+
+  static Stream<AcceleremetorTapModel> listenToTouch(
     String deviceId, {
     required WidgetRef ref,
   }) {
     return BleManager.subscribeToCharacteristic(
-      simulatorCharacteristic(deviceId),
+      accCharacteristic(deviceId),
       ref: ref,
-    ).map(TouchEvent.fromBytes);
+    ).map(AcceleremetorTapModel.fromBytes);
   }
 
-  static Stream<TouchEvent> listenToTouchMulti(
+  static Stream<AcceleremetorTapModel> listenToTouchMulti(
     Iterable<String> deviceIds, {
     required WidgetRef ref,
   }) {

@@ -6,6 +6,7 @@ import 'package:meta/meta.dart';
 
 import '../provs/ble_device_connector_prov.dart';
 import '../utils/consts.dart';
+import '../utils/pad_consts.dart';
 import 'device_model.dart';
 import 'reactive_state.dart';
 
@@ -48,10 +49,11 @@ class BleScanner implements ReactiveState<BleScannerState> {
     _logMessage('Start ble discovery');
     _devices.clear();
 
-    _subscription = _ble.scanForDevices(
-      // TODO: add filters
-      withServices: [],
-    ).listen(
+    _subscription = _ble
+        .scanForDevices(
+      withServices: serviceUuids,
+    )
+        .listen(
       (device) {
         if (!device.isCPDevice) return;
 

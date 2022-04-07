@@ -61,7 +61,9 @@ class BleDeviceConnector extends ReactiveState<DeviceStatusMapEntry> {
     );
   }
 
-  // TODO: this does not work properly
+  // TODO: this does not work properly,
+  // occasionally it drops the device from the list,
+  // but does not actually disconnect it
   Future<void> disconnect(DeviceModel device) async {
     try {
       _logMessage('disconnecting to device: ${device.id}');

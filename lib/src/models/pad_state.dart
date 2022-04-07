@@ -47,7 +47,6 @@ class PadState {
     );
   }
 
-  // TODO: implement equals
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
