@@ -118,6 +118,19 @@ abstract class PadManager {
     );
   }
 
+  static Future<bool> resetDevice(
+    String deviceId, {
+    required WidgetRef ref,
+  }) async {
+    const dt = 'R';
+    return await BleManager.writeCharacteristic(
+      c: adminCharacteristic.qualCharacteristic(deviceId),
+      data: utf8.encode(dt),
+      withResponse: false,
+      ref: ref,
+    );
+  }
+
   static Future<bool> toggleDebug(
     String deviceId, {
     required bool enable,
