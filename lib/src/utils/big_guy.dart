@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:catchpad_flutter_lib/src/models/pad_sensor_manager.dart';
+import '../models/pad_sensor_manager.dart';
 import 'package:xrandom/xrandom.dart';
 
 /// this class is just here for general purposed

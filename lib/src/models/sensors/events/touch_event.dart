@@ -1,5 +1,5 @@
-import 'package:catchpad_flutter_lib/catchpad_flutter_lib.dart';
-import 'package:catchpad_flutter_lib/src/models/sensors/events/sensor_event.dart';
+import '../../../../catchpad_flutter_lib.dart';
+import 'sensor_event.dart';
 
 import '../acc_tap_model.dart';
 

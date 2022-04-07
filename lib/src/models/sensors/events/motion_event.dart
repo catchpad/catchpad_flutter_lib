@@ -1,4 +1,4 @@
-import 'package:catchpad_flutter_lib/src/models/sensors/events/sensor_event.dart';
+import 'sensor_event.dart';
 
 import '../acc_gravity_model.dart';
 

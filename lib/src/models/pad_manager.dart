@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:ui';
 
+import 'dev_info_model.dart';
+
 import 'ble_manager.dart';
 import '../utils/pad_consts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -145,6 +147,50 @@ abstract class PadManager {
       ref: ref,
     );
   }
+
+  // #region device info
+  static Future<bool> _sendGetDeviceInfoSignal(
+    String deviceId, {
+    required WidgetRef ref,
+  }) async {
+    const dt = '?';
+
+    return await BleManager.writeCharacteristic(
+      c: infoCharacteristic.qualCharacteristic(deviceId),
+      data: utf8.encode(dt),
+      withResponse: false,
+      ref: ref,
+    );
+  }
+
+  static Future<DevInfoModel> getDeviceInfo(
+    String deviceId, {
+    required WidgetRef ref,
+  }) async {
+    await _sendGetDeviceInfoSignal(deviceId, ref: ref);
+    final dt = await BleManager.readCharacteristic(
+      infoCharacteristic.qualCharacteristic(deviceId),
+      ref: ref,
+    );
+
+    return DevInfoModel.fromBytes(dt);
+  }
+
+  static Future<bool> setDeviceName(
+    String deviceId, {
+    required WidgetRef ref,
+    required String name,
+  }) async {
+    final dt = ['SETNAME', name].join(defaultSeperator);
+
+    return await BleManager.writeCharacteristic(
+      c: infoCharacteristic.qualCharacteristic(deviceId),
+      data: utf8.encode(dt),
+      withResponse: false,
+      ref: ref,
+    );
+  }
+  // #endregion
 }
 
 /// where to print the debug info

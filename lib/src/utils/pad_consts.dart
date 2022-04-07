@@ -97,6 +97,15 @@ const CpCharacteristic configCharacteristic = CpCharacteristic(
 );
 // #endregion
 
+// #region info
+const String infoServiceId = '23cb9fe8-b2ab-11ec-b909-DDDDDDDDDDDD';
+
+const CpCharacteristic infoCharacteristic = CpCharacteristic(
+  id: 'a4bf0dbb-b2ab-11ec-b909-DDDDDDDDDDD0',
+  serviceId: infoServiceId,
+);
+
+// #endregion
 abstract class PadConsts {
   static const Color errorColor = Color(0xFFF44336);
 }
