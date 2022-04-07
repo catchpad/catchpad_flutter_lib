@@ -279,7 +279,7 @@ class CatchpadSimulator extends _FlutterReactiveBleExtender {
 
     connect() async {
       ch = IOWebSocketChannel.connect(
-        [env.wsUri, simulatorServiceId, mainCharacteristicUuid].join('/'),
+        [env.wsUri, simulatorServiceId, simulatorCharacteristicUuid].join('/'),
       );
     }
 

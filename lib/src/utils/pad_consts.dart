@@ -4,63 +4,31 @@ import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 const Duration responseTimeMistakeMargin = Duration(milliseconds: 20);
 const String defaultSeperator = '/';
 const String defaultEmptyValue = '-1';
-// legacy
-const String mainServiceId = '4fafc201-1fb5-459e-8fcc-c5c9c331914b',
-    mainCharacteristicId = 'beb5483e-36e1-4688-b7f5-ea07361b26a8',
-    batteryCharacteristicId = 'beb5483e-36e1-4688-b7f5-ea07361b26a9';
 
-// !!!simulator only!!! //
-const simulatorServiceId = 'b3b7e8f4-9ab4-4d9b-80d4-bd61113a5017';
-// !!!simulator only!!! //
+// #region main stuff
 
-Uuid get mainServiceUuid => Uuid.parse(mainServiceId);
-Uuid get simulatorServiceUuid => Uuid.parse(simulatorServiceId);
-Uuid get mainCharacteristicUuid => Uuid.parse(mainCharacteristicId);
-Uuid get batteryCharacteristicUuid => Uuid.parse(batteryCharacteristicId);
-
-// TODO: update with the new services
-const List<String> serviceIds = [mainServiceId];
-
-// TODO: update with the new characteristics
-const List<String> characteristicIds = [
-  mainCharacteristicId,
-  batteryCharacteristicId
-];
+const List<String> serviceIds = [ledServiceId, adminServiceId, sensorServiceId];
 
 List<Uuid> get serviceUuids => serviceIds.map(Uuid.parse).toList();
 
-List<Uuid> get characteristicUuids => characteristicIds
-    .map(
-      (e) => Uuid.parse(e),
-    )
-    .toList();
+// #endregion
 
-QualifiedCharacteristic mainCharacteristic(String deviceId) =>
-    QualifiedCharacteristic(
-      characteristicId: mainCharacteristicUuid,
-      deviceId: deviceId,
-      serviceId: mainServiceUuid,
-    );
+// #region simulator only
+const String simulatorServiceId = 'b3b7e8f4-9ab4-4d9b-80d4-bd61113a5017';
+const String simulatorCharacteristicId = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
 
-QualifiedCharacteristic batteryCharacteristic(String deviceId) =>
-    QualifiedCharacteristic(
-      characteristicId: batteryCharacteristicUuid,
-      deviceId: deviceId,
-      serviceId: mainServiceUuid,
-    );
+Uuid get simulatorServiceUuid => Uuid.parse(simulatorServiceId);
+Uuid get simulatorCharacteristicUuid => Uuid.parse(simulatorCharacteristicId);
 
 QualifiedCharacteristic simulatorCharacteristic(String deviceId) =>
     QualifiedCharacteristic(
-      characteristicId: mainCharacteristicUuid,
+      characteristicId: simulatorServiceUuid,
       deviceId: deviceId,
       serviceId: simulatorServiceUuid,
     );
+// #endregion
 
-// legacy end
-//
-//
-
-// led start //
+// #region led
 const String ledServiceId = '55cb9fe8-b2ab-11ec-b909-000000000000';
 
 /// this one takes only 1 colors for all 4 leds
@@ -87,9 +55,9 @@ QualifiedCharacteristic ledAllCharacteristic(String deviceId) =>
       deviceId: deviceId,
       serviceId: ledServiceUuid,
     );
-// led end //
+// #endregion
 
-// admin start //
+// #region admin
 const String adminServiceId = '23cb9fe8-b2ab-11ec-b909-000000000000';
 
 const String adminCharacteristicId = 'a4bf0dbb-b2ab-11ec-b909-00000000000A';
@@ -104,14 +72,13 @@ QualifiedCharacteristic adminCharacteristic(String deviceId) =>
       deviceId: deviceId,
       serviceId: adminServiceUuid,
     );
-// admin end //
+// #endregion
 
-// sensors start //
-
+// #region sensors
 const String sensorServiceId = '722d9150-b2ab-11ec-b909-000000000000';
 Uuid get sensorServiceUuid => Uuid.parse(sensorServiceId);
 
-// ACC START //
+// #region ACC
 const String accCharacteristicId = '7af57456-b2ab-11ec-b909-000000000001';
 Uuid get accCharacteristicUuid => Uuid.parse(accCharacteristicId);
 
@@ -121,9 +88,22 @@ QualifiedCharacteristic accCharacteristic(String deviceId) =>
       deviceId: deviceId,
       serviceId: sensorServiceUuid,
     );
-// ACC END //
+// #endregion
 
-// sensors end //
+// #region DST
+const String dstCharacteristicId = '83e7f7e6-b2ab-11ec-b909-000000000002';
+Uuid get dstCharacteristicUuid => Uuid.parse(dstCharacteristicId);
+
+QualifiedCharacteristic dstCharacteristic(String deviceId) =>
+    QualifiedCharacteristic(
+      characteristicId: dstCharacteristicUuid,
+      deviceId: deviceId,
+      serviceId: sensorServiceUuid,
+    );
+// #endregion
+
+// #endregion
+
 abstract class PadConsts {
   static const Color errorColor = Color(0xFFF44336);
 }

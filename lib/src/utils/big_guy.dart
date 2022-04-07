@@ -14,4 +14,12 @@ abstract class BigGuy {
   static String boolToNumString(bool b) => boolToInt(b).toString();
 
   static bool numStringToBool(String s) => intToBool(int.parse(s));
+
+  static int? responseTime(int? actionTime, int? commandTime) {
+    if (actionTime == null || commandTime == null) {
+      return null;
+    }
+
+    return actionTime - commandTime;
+  }
 }

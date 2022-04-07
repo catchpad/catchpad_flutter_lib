@@ -3,13 +3,9 @@ import 'dart:ui';
 
 import 'package:async/async.dart' show StreamGroup;
 import 'package:catchpad_flutter_lib/catchpad_flutter_lib.dart';
-import 'sensors/acc_tap_model.dart';
+import 'package:catchpad_flutter_lib/src/models/sensors/dst_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../utils/big_guy.dart';
-import '../utils/pad_consts.dart';
-import 'ble_manager.dart';
-import 'sides_colors_model.dart';
 export 'sides_colors_model.dart';
 
 abstract class PadManager {
@@ -120,12 +116,20 @@ abstract class PadManager {
     );
   }
 
+  static Stream<DistanceModel> listenToDistance(
+    String deviceId, {
+    required WidgetRef ref,
+  }) {
+    return BleManager.subscribeToCharacteristic(
+      dstCharacteristic(deviceId),
+      ref: ref,
+    ).map(DistanceModel.fromBytes);
+  }
+
   static Stream<AcceleremetorGravityModel> listenToMotion(
     String deviceId, {
     required WidgetRef ref,
   }) {
-    // TODO: find out how to differentiate between the two
-    // types of response that comes from `accCharacteristic`
     return BleManager.subscribeToCharacteristic(
       accCharacteristic(deviceId),
       ref: ref,
