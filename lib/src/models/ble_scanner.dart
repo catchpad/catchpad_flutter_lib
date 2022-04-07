@@ -49,11 +49,11 @@ class BleScanner implements ReactiveState<BleScannerState> {
     _logMessage('Start ble discovery');
     _devices.clear();
 
-    _subscription = _ble
-        .scanForDevices(
-      withServices: serviceUuids,
-    )
-        .listen(
+    _subscription = _ble.scanForDevices(
+      withServices: [],
+      // TODO
+      // serviceUuids,
+    ).listen(
       (device) {
         if (!device.isCPDevice) return;
 

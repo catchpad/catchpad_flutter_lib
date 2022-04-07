@@ -3,10 +3,10 @@ import 'dart:convert';
 import '../../utils/big_guy.dart';
 
 class AcceleremetorTapModel {
-  final int? commandTime, actionTime;
-  final int? tapCounter;
+  final int commandTime, actionTime;
+  final int tapCounter;
 
-  int? get responseTime => BigGuy.responseTime(actionTime, commandTime);
+  Duration get responseTime => BigGuy.responseTime(actionTime, commandTime);
 
   const AcceleremetorTapModel({
     required this.commandTime,
@@ -19,9 +19,9 @@ class AcceleremetorTapModel {
     final sp = s.split('/');
 
     return AcceleremetorTapModel(
-      commandTime: int.tryParse(sp[0]),
-      actionTime: int.tryParse(sp[1]),
-      tapCounter: int.tryParse(sp[2]),
+      commandTime: int.parse(sp[0]),
+      actionTime: int.parse(sp[1]),
+      tapCounter: int.parse(sp[2]),
     );
   }
 

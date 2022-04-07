@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class AcceleremetorGravityModel {
-  final int? x, y, z, temperature;
+  final int x, y, z, temperature;
 
   const AcceleremetorGravityModel({
     required this.x,
@@ -15,10 +15,10 @@ class AcceleremetorGravityModel {
     final sp = s.split('/');
 
     return AcceleremetorGravityModel(
-      x: int.tryParse(sp[0]),
-      y: int.tryParse(sp[1]),
-      z: int.tryParse(sp[2]),
-      temperature: int.tryParse(sp[3]),
+      x: int.parse(sp[0]),
+      y: int.parse(sp[1]),
+      z: int.parse(sp[2]),
+      temperature: int.parse(sp[3]),
     );
   }
 

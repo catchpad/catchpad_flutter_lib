@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:ui';
 
-import 'package:async/async.dart' show StreamGroup;
-import 'package:catchpad_flutter_lib/catchpad_flutter_lib.dart';
-import 'package:catchpad_flutter_lib/src/models/sensors/dst_model.dart';
+import 'ble_manager.dart';
+import '../utils/pad_consts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../utils/big_guy.dart';
+import 'sides_colors_model.dart';
 
 export 'sides_colors_model.dart';
 
@@ -105,56 +107,14 @@ abstract class PadManager {
       colorModel,
     ].join('/');
     final charac = colorModel.allColorsSame
-        ? ledAllCharacteristic(deviceId)
-        : ledCharacteristic(deviceId);
+        ? ledAllCharacteristic.qualCharacteristic(deviceId)
+        : ledCharacteristic.qualCharacteristic(deviceId);
 
     return await BleManager.writeCharacteristic(
       c: charac,
       data: utf8.encode(dt),
       withResponse: false,
       ref: ref,
-    );
-  }
-
-  static Stream<DistanceModel> listenToDistance(
-    String deviceId, {
-    required WidgetRef ref,
-  }) {
-    return BleManager.subscribeToCharacteristic(
-      dstCharacteristic(deviceId),
-      ref: ref,
-    ).map(DistanceModel.fromBytes);
-  }
-
-  static Stream<AcceleremetorGravityModel> listenToMotion(
-    String deviceId, {
-    required WidgetRef ref,
-  }) {
-    return BleManager.subscribeToCharacteristic(
-      accCharacteristic(deviceId),
-      ref: ref,
-    ).map(AcceleremetorGravityModel.fromBytes);
-  }
-
-  static Stream<AcceleremetorTapModel> listenToTouch(
-    String deviceId, {
-    required WidgetRef ref,
-  }) {
-    return BleManager.subscribeToCharacteristic(
-      accCharacteristic(deviceId),
-      ref: ref,
-    ).map(AcceleremetorTapModel.fromBytes);
-  }
-
-  static Stream<AcceleremetorTapModel> listenToTouchMulti(
-    Iterable<String> deviceIds, {
-    required WidgetRef ref,
-  }) {
-    return StreamGroup.merge(
-      deviceIds.map((deviceId) => listenToTouch(
-            deviceId,
-            ref: ref,
-          )),
     );
   }
 
@@ -166,7 +126,7 @@ abstract class PadManager {
   }) async {
     final dt = [BigGuy.boolToInt(enable), type.index].join('/');
     return await BleManager.writeCharacteristic(
-      c: adminCharacteristic(deviceId),
+      c: adminCharacteristic.qualCharacteristic(deviceId),
       data: utf8.encode(dt),
       withResponse: false,
       ref: ref,

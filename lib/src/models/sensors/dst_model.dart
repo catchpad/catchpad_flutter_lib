@@ -3,10 +3,10 @@ import 'dart:convert';
 import '../../utils/big_guy.dart';
 
 class DistanceModel {
-  final int? commandTime, actionTime;
-  final int? distance;
+  final int commandTime, actionTime;
+  final int distance;
 
-  int? get responseTime => BigGuy.responseTime(actionTime, commandTime);
+  Duration get responseTime => BigGuy.responseTime(actionTime, commandTime);
 
   const DistanceModel({
     required this.commandTime,
@@ -19,9 +19,9 @@ class DistanceModel {
     final sp = s.split('/');
 
     return DistanceModel(
-      commandTime: int.tryParse(sp[0]),
-      actionTime: int.tryParse(sp[1]),
-      distance: int.tryParse(sp[2]),
+      commandTime: int.parse(sp[0]),
+      actionTime: int.parse(sp[1]),
+      distance: int.parse(sp[2]),
     );
   }
 
