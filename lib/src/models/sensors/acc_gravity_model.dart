@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'dart:math';
+
 class AcceleremetorGravityModel {
   final double x, y, z, temperature;
 
@@ -22,6 +24,14 @@ class AcceleremetorGravityModel {
     );
   }
 
+  double get roll {
+    return atan2(y, z) * 57.3;
+  }
+
+  double get pitch {
+    return atan2((-1 * x), sqrt(y * y + z * z)) * 57.3;
+  }
+
   @override
   String toString() {
     return {
@@ -29,6 +39,8 @@ class AcceleremetorGravityModel {
       'y': y,
       'z': z,
       'temperature': temperature,
+      'roll': roll,
+      'pitch': pitch,
     }.entries.map((e) => e.key + ': ' + e.value.toString()).join('\n');
   }
 }
