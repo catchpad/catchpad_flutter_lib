@@ -6,5 +6,8 @@ class DistanceEvent extends SensorEvent {
 
   const DistanceEvent(String deviceId, this.distance) : super(deviceId);
 
-  Duration get responseTime => distance.responseTime;
+  Duration? get responseTime => distance.responseTime;
+
+  @override
+  bool get isValid => responseTime != null;
 }

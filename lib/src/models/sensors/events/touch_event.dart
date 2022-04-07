@@ -8,5 +8,8 @@ class TouchEvent extends SensorEvent {
 
   const TouchEvent(String deviceId, this.tap) : super(deviceId);
 
-  Duration get responseTime => tap.responseTime;
+  Duration? get responseTime => tap.responseTime;
+
+  @override
+  bool get isValid => responseTime != null;
 }

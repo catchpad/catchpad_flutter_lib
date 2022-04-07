@@ -6,7 +6,7 @@ class AcceleremetorTapModel {
   final int commandTime, actionTime;
   final int tapCounter;
 
-  Duration get responseTime => BigGuy.responseTime(actionTime, commandTime);
+  Duration? get responseTime => BigGuy.responseTime(actionTime, commandTime);
 
   const AcceleremetorTapModel({
     required this.commandTime,

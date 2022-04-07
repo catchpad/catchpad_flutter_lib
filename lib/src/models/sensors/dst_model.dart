@@ -6,7 +6,7 @@ class DistanceModel {
   final int commandTime, actionTime;
   final int distance;
 
-  Duration get responseTime => BigGuy.responseTime(actionTime, commandTime);
+  Duration? get responseTime => BigGuy.responseTime(actionTime, commandTime);
 
   const DistanceModel({
     required this.commandTime,

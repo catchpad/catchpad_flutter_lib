@@ -15,7 +15,10 @@ abstract class BigGuy {
 
   static bool numStringToBool(String s) => intToBool(int.parse(s));
 
-  static Duration responseTime(int actionTime, int commandTime) {
+  static Duration? responseTime(int actionTime, int commandTime) {
+    if (actionTime == -1 || commandTime == -1) {
+      return null;
+    }
     final ms = actionTime - commandTime;
     return Duration(milliseconds: ms);
   }

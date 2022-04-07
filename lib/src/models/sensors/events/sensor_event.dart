@@ -7,9 +7,7 @@ abstract class SensorEvent {
 
   bool equalsDevice(DeviceModel dev) => deviceId == dev.id;
 
-  /// currently we don't have any rules of validity,
-  /// so we just return true
-  bool get isValid => true;
+  bool get isValid;
 
   String get deviceNameId => deviceId;
 }
