@@ -63,6 +63,20 @@ class SidesColorsModel {
         ? colorOrNull(clrs.elementAt(0))
         : clrs.map(colorOrNull).join(defaultSeperator);
   }
+
+  SidesColorsModel copyWith({
+    Color? tr,
+    Color? tl,
+    Color? br,
+    Color? bl,
+  }) {
+    return SidesColorsModel(
+      tr: tr ?? this.tr,
+      tl: tl ?? this.tl,
+      br: br ?? this.br,
+      bl: bl ?? this.bl,
+    );
+  }
 }
 
 /// the range of r g b here are 0-100
