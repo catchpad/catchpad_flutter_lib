@@ -24,6 +24,11 @@ class AcceleremetorGravityModel {
 
   @override
   String toString() {
-    return 'AcceleremetorGravityModel{x: $x, y: $y, z: $z, temperature: $temperature}';
+    return {
+      'x': x,
+      'y': y,
+      'z': z,
+      'temperature': temperature,
+    }.entries.map((e) => e.key + ': ' + e.value.toString()).join('\n');
   }
 }

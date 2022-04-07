@@ -27,6 +27,11 @@ class DistanceModel {
 
   @override
   String toString() {
-    return 'DstModel{commandTime: $commandTime, actionTime: $actionTime, distance: $distance, responseTime: $responseTime}';
+    return {
+      'commandTime': commandTime,
+      'actionTime': actionTime,
+      'distance': distance,
+      'responseTime': responseTime,
+    }.entries.map((e) => e.key + ': ' + e.value.toString()).join('\n');
   }
 }

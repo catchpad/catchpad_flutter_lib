@@ -27,6 +27,11 @@ class AcceleremetorTapModel {
 
   @override
   String toString() {
-    return 'AcceleremetorTapModel{commandTime: $commandTime, actionTime: $actionTime, tapCounter: $tapCounter, responseTime: $responseTime}';
+    return {
+      'commandTime': commandTime,
+      'actionTime': actionTime,
+      'tapCounter': tapCounter,
+      'responseTime': responseTime,
+    }.entries.map((e) => e.key + ': ' + e.value.toString()).join('\n');
   }
 }
