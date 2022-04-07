@@ -2,10 +2,37 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 import '../models/cp_characteristic.dart';
+import '../models/pad_sensor_manager.dart';
 
 const Duration responseTimeMistakeMargin = Duration(milliseconds: 20);
 const String defaultSeperator = '/';
 const String defaultEmptyValue = '-1';
+
+// #region sensor defaults
+const ConfigScale defConfigScale = ConfigScale.LIS2DH12_4g;
+const ConfigMode defConfigMode = ConfigMode.LIS2DH12_NM_10bit;
+const DataRate defDataRate = DataRate.LIS2DH12_ODR_400Hz;
+
+const minDstThreshold = 0;
+const maxDstThreshold = 2000;
+const defDstThreshold = 20;
+
+const minAccThreshold = 0;
+const maxAccThreshold = 127;
+const defAccThreshold = 65;
+
+const minTimeOut = 0;
+const maxTimeOut = 99999;
+const defTimeOut = 250;
+
+int get minAccTimeOut => minTimeOut;
+int get maxAccTimeOut => maxTimeOut;
+int get defAccTimeOut => defTimeOut;
+
+int get minDstTimeOut => minTimeOut;
+int get maxDstTimeOut => maxTimeOut;
+int get defDstTimeOut => defTimeOut;
+// #endregion
 
 // #region main stuff
 
@@ -65,7 +92,7 @@ const CpCharacteristic activateCharacteristic = CpCharacteristic(
 );
 
 const CpCharacteristic configCharacteristic = CpCharacteristic(
-  id: '8a19169a-b2ab-11ec-b909-00000000000Cs',
+  id: '8a19169a-b2ab-11ec-b909-00000000000C',
   serviceId: sensorServiceId,
 );
 // #endregion

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import '../../utils/big_guy.dart';
+import '../../utils/pad_consts.dart';
 
 class AcceleremetorTapModel {
   final int commandTime, actionTime;
@@ -16,7 +17,7 @@ class AcceleremetorTapModel {
 
   factory AcceleremetorTapModel.fromBytes(List<int> bytes) {
     final s = utf8.decode(bytes);
-    final sp = s.split('/');
+    final sp = s.split(defaultSeperator);
 
     return AcceleremetorTapModel(
       commandTime: int.parse(sp[0]),

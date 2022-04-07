@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:catchpad_flutter_lib/src/models/pad_sensor_manager.dart';
 import 'package:xrandom/xrandom.dart';
 
 /// this class is just here for general purposed
@@ -21,5 +22,18 @@ abstract class BigGuy {
     }
     final ms = actionTime - commandTime;
     return Duration(milliseconds: ms);
+  }
+
+  static String sensorTypeToStr(SensorType type) {
+    switch (type) {
+      case SensorType.acc:
+        return 'ACC';
+      case SensorType.dst:
+        return 'DST';
+      case SensorType.vel:
+        return 'VEL';
+      default:
+        return '';
+    }
   }
 }

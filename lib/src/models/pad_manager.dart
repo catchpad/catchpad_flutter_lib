@@ -105,7 +105,7 @@ abstract class PadManager {
     final dt = [
       BigGuy.boolToNumString(isCommand),
       colorModel,
-    ].join('/');
+    ].join(defaultSeperator);
     final charac = colorModel.allColorsSame
         ? ledAllCharacteristic.qualCharacteristic(deviceId)
         : ledCharacteristic.qualCharacteristic(deviceId);
@@ -137,7 +137,7 @@ abstract class PadManager {
     AdminMonitorType type = AdminMonitorType.serial,
     required WidgetRef ref,
   }) async {
-    final dt = [BigGuy.boolToInt(enable), type.index].join('/');
+    final dt = [BigGuy.boolToInt(enable), type.index].join(defaultSeperator);
     return await BleManager.writeCharacteristic(
       c: adminCharacteristic.qualCharacteristic(deviceId),
       data: utf8.encode(dt),

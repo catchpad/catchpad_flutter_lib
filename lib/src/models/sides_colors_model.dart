@@ -41,7 +41,8 @@ class SidesColorsModel {
   String colorOrNull(Color? c) {
     // if empty we should send '-1/-1/-1'
     if (c == null) {
-      return List.generate(3, (index) => defaultEmptyValue).join('/');
+      return List.generate(3, (index) => defaultEmptyValue)
+          .join(defaultSeperator);
     }
 
     return [c.red, c.green, c.blue].map(colorUnitTo100).join(defaultSeperator);

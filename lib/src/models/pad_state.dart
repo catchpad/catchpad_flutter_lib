@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 
+import '../utils/pad_consts.dart';
+
 @immutable
 class PadState {
   final String padId;
@@ -24,7 +26,7 @@ class PadState {
 
   // padId/name/color/battery/threshold/timerStart/responseTime
   factory PadState.fromString(String s) {
-    final sp = s.split('/');
+    final sp = s.split(defaultSeperator);
 
     Color? clr;
     final clst = sp[2];

@@ -195,7 +195,7 @@ class CatchpadSimulator extends _FlutterReactiveBleExtender {
         characteristic.serviceId,
         characteristic.characteristicId,
         characteristic.deviceId,
-      ].join('/'),
+      ].join(defaultSeperator),
     );
 
     ch.sink.add(startSubscriptionCommand);
@@ -213,7 +213,7 @@ class CatchpadSimulator extends _FlutterReactiveBleExtender {
     if (env == null) return;
 
     final ch = IOWebSocketChannel.connect(
-      [env.wsUri, scanChannelName].join('/'),
+      [env.wsUri, scanChannelName].join(defaultSeperator),
     );
 
     // if `ch` is not available, the server is not running.
@@ -221,7 +221,7 @@ class CatchpadSimulator extends _FlutterReactiveBleExtender {
       ch.sink.add(startScanCommand);
 
       await for (final msg in ch.stream) {
-        final sp = msg.split('/');
+        final sp = msg.split(defaultSeperator);
 
         final id = sp[0];
         final name = sp[1];
@@ -253,7 +253,8 @@ class CatchpadSimulator extends _FlutterReactiveBleExtender {
 
     connect() async {
       ch = IOWebSocketChannel.connect(
-        [env.wsUri, simulatorServiceId, stateChannelName].join('/'),
+        [env.wsUri, simulatorServiceId, stateChannelName]
+            .join(defaultSeperator),
       );
     }
 
@@ -285,7 +286,8 @@ class CatchpadSimulator extends _FlutterReactiveBleExtender {
 
     connect() async {
       ch = IOWebSocketChannel.connect(
-        [env.wsUri, simulatorServiceId, simulatorCharacteristic.uuid].join('/'),
+        [env.wsUri, simulatorServiceId, simulatorCharacteristic.uuid]
+            .join(defaultSeperator),
       );
     }
 
@@ -343,7 +345,8 @@ class CatchpadSimulator extends _FlutterReactiveBleExtender {
     final env = ref.watch(enviromentProv);
     if (env == null) return;
 
-    final url = [env.wsUri, characteristic.idForSimulator].join('/');
+    final url =
+        [env.wsUri, characteristic.idForSimulator].join(defaultSeperator);
 
     late IOWebSocketChannel ch;
     if (_channels.containsKey(url)) {
@@ -389,5 +392,5 @@ extension CPCharectaristic on QualifiedCharacteristic {
         serviceId,
         characteristicId,
         deviceId,
-      ].join('/');
+      ].join(defaultSeperator);
 }

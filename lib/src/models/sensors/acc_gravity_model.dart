@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'dart:math';
 
+import '../../utils/pad_consts.dart';
+
 class AcceleremetorGravityModel {
   final double x, y, z, temperature;
 
@@ -14,7 +16,7 @@ class AcceleremetorGravityModel {
 
   factory AcceleremetorGravityModel.fromBytes(List<int> bytes) {
     final s = utf8.decode(bytes);
-    final sp = s.split('/');
+    final sp = s.split(defaultSeperator);
 
     return AcceleremetorGravityModel(
       x: double.parse(sp[0]),

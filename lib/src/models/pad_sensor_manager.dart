@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'dart:convert';
 
 import 'ble_manager.dart';
@@ -21,20 +23,36 @@ enum AccSensorType { tap, gravity }
 
 enum SensorType { acc, dst, vel }
 
-abstract class PadSensorManager {
-  static String _getSensorType(SensorType type) {
-    switch (type) {
-      case SensorType.acc:
-        return 'ACC';
-      case SensorType.dst:
-        return 'DST';
-      case SensorType.vel:
-        return 'VEL';
-      default:
-        return '';
-    }
-  }
+/// as in the multimeter, the lower the number, the more accurate the reading
+enum ConfigScale {
+  LIS2DH12_2g,
+  LIS2DH12_4g,
+  LIS2DH12_8g,
+  LIS2DH12_16g,
+}
 
+/// the higher the bitrate is, the more accurate the reading
+enum ConfigMode {
+  LIS2DH12_HR_12bit,
+  LIS2DH12_NM_10bit,
+}
+
+/// how many calculation in 1 second,
+/// keeping at 1khz is the most ideal
+enum DataRate {
+  LIS2DH12_POWER_DOWN,
+  LIS2DH12_ODR_1Hz,
+  LIS2DH12_ODR_10Hz,
+  LIS2DH12_ODR_25Hz,
+  LIS2DH12_ODR_50Hz,
+  LIS2DH12_ODR_100Hz,
+  LIS2DH12_ODR_200Hz,
+  LIS2DH12_ODR_400Hz,
+  LIS2DH12_ODR_1kHz620_LP,
+  LIS2DH12_ODR_5kHz376_LP_1kHz344_NM_HP,
+}
+
+abstract class PadSensorManager {
   // #region activate
 
   // #region dst methods
@@ -220,7 +238,7 @@ abstract class PadSensorManager {
   }) {
     // SENSOR ID	/	SENSOR STATUS	/	SENSORTYPE	/	THRLOCK
     final dt = [
-      _getSensorType(sensorType),
+      BigGuy.sensorTypeToStr(sensorType),
       BigGuy.boolToInt(status),
       (accSensorType
               // we have to send a value for the acc sensor type
@@ -229,13 +247,89 @@ abstract class PadSensorManager {
               AccSensorType.values[0])
           .index,
       BigGuy.boolToInt(thrLock),
-    ].join('/');
+    ].join(defaultSeperator);
     return BleManager.writeCharacteristic(
       ref: ref,
       c: activateCharacteristic.qualCharacteristic(deviceId),
       data: utf8.encode(dt),
     );
   }
+  // #endregion
+
+  // #region config
+  static Future<bool> _config({
+    required SensorType sensorType,
+    required String deviceId,
+    required WidgetRef ref,
+    ConfigScale? scale = defConfigScale,
+    ConfigMode? mode = defConfigMode,
+    DataRate? dataRate = defDataRate,
+
+    /// ACC: 0-127
+    /// DST: 0-2000
+    required int threshold,
+
+    /// 0 - 99999 ms
+    required int timeout,
+  }) {
+    final dt = [
+      BigGuy.sensorTypeToStr(sensorType),
+      scale?.index,
+      mode?.index,
+      dataRate?.index,
+      threshold,
+      timeout,
+    ].join(defaultSeperator);
+
+    return BleManager.writeCharacteristic(
+      ref: ref,
+      c: configCharacteristic.qualCharacteristic(deviceId),
+      data: utf8.encode(dt),
+    );
+  }
+
+  static Future<bool> configAcc({
+    required String deviceId,
+    required WidgetRef ref,
+    required ConfigScale scale,
+    required ConfigMode mode,
+    required DataRate dataRate,
+
+    /// 0-127
+    required int threshold,
+
+    /// 0 - 99999 ms
+    required int timeout,
+  }) =>
+      _config(
+        sensorType: SensorType.acc,
+        deviceId: deviceId,
+        ref: ref,
+        scale: scale,
+        mode: mode,
+        dataRate: dataRate,
+        threshold: threshold,
+        timeout: timeout,
+      );
+
+  static Future<bool> configDst({
+    required String deviceId,
+    required WidgetRef ref,
+
+    ///  0-2000
+    required int threshold,
+
+    /// 0 - 99999 ms
+    required int timeout,
+  }) =>
+      _config(
+        sensorType: SensorType.dst,
+        deviceId: deviceId,
+        ref: ref,
+        threshold: threshold,
+        timeout: timeout,
+      );
+
   // #endregion
 
   // #region listeners
