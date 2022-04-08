@@ -19,6 +19,7 @@ export 'src/models/dev_info_model.dart';
 export 'src/models/sensors/acc_gravity_model.dart';
 export 'src/models/sensors/acc_tap_model.dart';
 export 'src/models/sensors/events/distance_event.dart';
+export 'src/models/sensors/events/sensor_event.dart';
 export 'src/models/sensors/events/motion_event.dart';
 export 'src/models/sensors/events/touch_event.dart';
 export 'src/provs/ble_connection_state_prov.dart';
