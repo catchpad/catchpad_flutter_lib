@@ -22,7 +22,8 @@ class BleDeviceConnector extends ReactiveState<DeviceStatusMapEntry> {
 
   final _deviceConnectionController = StreamController<DeviceStatusMapEntry>();
 
-  late StreamSubscription<DeviceStatusMapEntry> _connection;
+  final Map<DeviceModel, StreamSubscription<DeviceStatusMapEntry>>
+      _connections = {};
 
   Future<void> connect(DeviceModel device) async {
     _logMessage('Start connecting to ${device.id}');
@@ -30,7 +31,7 @@ class BleDeviceConnector extends ReactiveState<DeviceStatusMapEntry> {
     final st = _ble.connectToDevice(id: device.id);
 
     // _connection
-    _connection = st.map(
+    _connections[device] = st.map(
       (event) {
         return MapEntry(device, event);
       },
@@ -38,18 +39,6 @@ class BleDeviceConnector extends ReactiveState<DeviceStatusMapEntry> {
       (update) async {
         _logMessage(
             'ConnectionState for device ${device.id} : ${update.value.connectionState}');
-        debugPrint(
-            'ConnectionState for device ${device.id} : ${update.value.connectionState}');
-
-        // FUTURE: this maybe needed later, when
-        // we start personal sales, for now it is
-        // not necessary
-        // if (update.value.isConnected &&
-        //     // requestConnectionPriority does not work on iOS
-        //     Platform.isAndroid) {
-        //   await _ble.requestConnectionPriority(
-        //       deviceId: deviceId, priority: ConnectionPriority.highPerformance);
-        // }
 
         _deviceConnectionController.add(update);
       },
@@ -58,11 +47,10 @@ class BleDeviceConnector extends ReactiveState<DeviceStatusMapEntry> {
     );
   }
 
-  // TODO: this does not work properly
   Future<void> disconnect(DeviceModel device) async {
     try {
       _logMessage('disconnecting to device: ${device.id}');
-      await _connection.cancel();
+      await _connections[device]?.cancel();
     } on Exception catch (e, _) {
       _logMessage("Error disconnecting from a device: $e");
     } finally {

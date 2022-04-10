@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class BleLogger {
@@ -8,7 +9,8 @@ class BleLogger {
 
   void addToLog(String message) {
     final now = DateTime.now();
-    _logMessages.add('${formatter.format(now)} - $message');
+    debugPrint('[${formatter.format(now)}] $message');
+    // _logMessages.add('${formatter.format(now)} - $message');
   }
 
   void clearLogs() => _logMessages.clear();
