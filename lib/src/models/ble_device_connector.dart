@@ -30,18 +30,36 @@ class BleDeviceConnector extends ReactiveState<DeviceStatusMapEntry> {
 
     final st = _ble.connectToDevice(id: device.id);
 
+    _updateStat(
+        MapEntry<DiscoveredDevice, ConnectionStateUpdate> update) async {
+      _logMessage(
+          'ConnectionState for device ${device.id} : ${update.value.connectionState}');
+
+      _deviceConnectionController.add(update);
+    }
+
+    /// initially we wanna make the connection status 'disconnecting',
+    /// because on auto connect, we're requesting so many connections
+    /// that the connector is giving us a connection state update only
+    /// when the connection is established.
+    /// this is an innocent step and it would not affect anything.
+    _updateStat(
+      MapEntry(
+        device,
+        ConnectionStateUpdate(
+          connectionState: DeviceConnectionState.connecting,
+          deviceId: device.id,
+          failure: null,
+        ),
+      ),
+    );
     // _connection
     _connections[device] = st.map(
       (event) {
         return MapEntry(device, event);
       },
     ).listen(
-      (update) async {
-        _logMessage(
-            'ConnectionState for device ${device.id} : ${update.value.connectionState}');
-
-        _deviceConnectionController.add(update);
-      },
+      _updateStat,
       onError: (Object e) =>
           _logMessage('Connecting to device ${device.id} resulted in error $e'),
     );

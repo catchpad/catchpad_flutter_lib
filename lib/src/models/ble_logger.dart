@@ -9,7 +9,7 @@ class BleLogger {
 
   void addToLog(String message) {
     final now = DateTime.now();
-    debugPrint('[${formatter.format(now)}] $message');
+    debugPrint('CATCHPAD FLUTTER LIB: [${formatter.format(now)}] $message');
     // _logMessages.add('${formatter.format(now)} - $message');
   }
 

@@ -51,7 +51,7 @@ class BleScanner implements ReactiveState<BleScannerState> {
       // TODO: add filters
       withServices: [],
     ).listen(
-      (device) async {
+      (device) {
         if (!device.isCPDevice) return;
 
         // dont add already added devices
