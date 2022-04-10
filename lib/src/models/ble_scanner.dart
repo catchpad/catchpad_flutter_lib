@@ -26,7 +26,7 @@ class BleScanner implements ReactiveState<BleScannerState> {
 
   StreamController<BleScannerState>? _stateStreamController;
 
-  final _devices = <DeviceModel>[];
+  final _devices = <DeviceModel>{};
 
   @override
   Stream<BleScannerState> get state {
@@ -46,7 +46,6 @@ class BleScanner implements ReactiveState<BleScannerState> {
     init();
 
     _logMessage('Start ble discovery');
-    _devices.clear();
 
     _subscription = _ble.scanForDevices(
       withServices: [],
@@ -59,15 +58,11 @@ class BleScanner implements ReactiveState<BleScannerState> {
         // dont add already added devices
         if (_devices.any((element) => element.id == device.id)) return;
 
-        deviceConnector.connect(device);
+        _devices.add(device);
 
-        final knownDeviceIndex = _devices.indexWhere((d) => d.id == device.id);
-        if (knownDeviceIndex >= 0) {
-          _devices[knownDeviceIndex] = device;
-        } else {
-          _devices.add(device);
-        }
         _pushState();
+
+        deviceConnector.connect(device);
       },
       onError: (Object e) => _logMessage(
         'Device scan fails with error: $e',
@@ -124,11 +119,11 @@ class BleScanner implements ReactiveState<BleScannerState> {
 @immutable
 class BleScannerState {
   const BleScannerState({
-    required List<DeviceModel> deviceModels,
+    required Set<DeviceModel> deviceModels,
     required this.scanIsInProgress,
   }) : _deviceModels = deviceModels;
 
-  final List<DeviceModel> _deviceModels;
+  final Set<DeviceModel> _deviceModels;
   final bool scanIsInProgress;
 
   List<DeviceModel> get deviceModels =>

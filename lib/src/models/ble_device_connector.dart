@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 import '../provs/ble_connection_state_prov.dart';
@@ -22,52 +21,53 @@ class BleDeviceConnector extends ReactiveState<DeviceStatusMapEntry> {
 
   final _deviceConnectionController = StreamController<DeviceStatusMapEntry>();
 
-  late StreamSubscription<DeviceStatusMapEntry> _connection;
+  final Map<DeviceModel, StreamSubscription<DeviceStatusMapEntry>>
+      _connections = {};
 
   Future<void> connect(DeviceModel device) async {
     _logMessage('Start connecting to ${device.id}');
 
     final st = _ble.connectToDevice(id: device.id);
 
+    _updateStat(
+        MapEntry<DiscoveredDevice, ConnectionStateUpdate> update) async {
+      _logMessage(
+          'ConnectionState for device ${device.id} : ${update.value.connectionState}');
+
+      _deviceConnectionController.add(update);
+    }
+
+    /// initially we wanna make the connection status 'disconnecting',
+    /// because on auto connect, we're requesting so many connections
+    /// that the connector is giving us a connection state update only
+    /// when the connection is established.
+    /// this is an innocent step and it would not affect anything.
+    _updateStat(
+      MapEntry(
+        device,
+        ConnectionStateUpdate(
+          connectionState: DeviceConnectionState.connecting,
+          deviceId: device.id,
+          failure: null,
+        ),
+      ),
+    );
     // _connection
-    _connection = st.map(
+    _connections[device] = st.map(
       (event) {
         return MapEntry(device, event);
       },
     ).listen(
-      (update) async {
-        _logMessage(
-            'ConnectionState for device ${device.id} : ${update.value.connectionState}');
-        debugPrint(
-            'ConnectionState for device ${device.id} : ${update.value.connectionState}');
-
-        // FUTURE: this maybe needed later, when
-        // we start personal sales, for now it is
-        // not necessary
-        // if (update.value.isConnected &&
-        //     // requestConnectionPriority does not work on iOS
-        //     Platform.isAndroid) {
-        //   await _ble.requestConnectionPriority(
-        //       deviceId: deviceId, priority: ConnectionPriority.highPerformance);
-        // }
-
-        _deviceConnectionController.add(update);
-
-        final mt = await _ble.requestMtu(deviceId: device.id, mtu: 512);
-        debugPrint('mtu request: $mt');
-      },
+      _updateStat,
       onError: (Object e) =>
           _logMessage('Connecting to device ${device.id} resulted in error $e'),
     );
   }
 
-  // TODO: this does not work properly,
-  // occasionally it drops the device from the list,
-  // but does not actually disconnect it
   Future<void> disconnect(DeviceModel device) async {
     try {
       _logMessage('disconnecting to device: ${device.id}');
-      await _connection.cancel();
+      await _connections[device]?.cancel();
     } on Exception catch (e, _) {
       _logMessage("Error disconnecting from a device: $e");
     } finally {
