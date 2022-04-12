@@ -1,5 +1,9 @@
 import 'dart:convert';
+import 'dart:math';
 import 'dart:ui';
+
+import 'package:catchpad_flutter_lib/src/models/cp_sound_data.dart';
+import 'package:flutter/rendering.dart';
 
 import 'dev_info_model.dart';
 
@@ -191,6 +195,78 @@ abstract class PadManager {
     );
   }
   // #endregion
+
+  // #region audio
+
+  static Future<bool> _turnAudio(
+      WidgetRef ref, String deviceId, bool enable) async {
+    return await BleManager.writeCharacteristic(
+      c: audioCharacteristic.qualCharacteristic(deviceId),
+      data: utf8.encode(enable ? 'ON' : 'OFF'),
+      withResponse: true,
+      ref: ref,
+    );
+  }
+
+  static Future<bool> _turnAudioOn(WidgetRef ref, String deviceId) =>
+      _turnAudio(ref, deviceId, true);
+
+  static Future<bool> _turnAudioOff(WidgetRef ref, String deviceId) =>
+      _turnAudio(ref, deviceId, false);
+
+  static Future<bool> playAudio(
+    String deviceId, {
+    required WidgetRef ref,
+    // required String fileName,
+  }) async {
+    await _turnAudioOff(ref, deviceId);
+
+    const data = cpSoundData;
+
+    const wholeSize = 500;
+    const width = 2;
+    //250
+    const size = wholeSize ~/ width;
+
+    // [08, 1f, 2d, ...]
+    final st =
+        data.map((e) => e.toRadixString(16).padLeft(width, '0')).toList();
+
+    final len = st.length;
+
+    bool b = false;
+    int indx = 0;
+
+    while (!b) {
+      final start = indx * size;
+      final end = min((indx + 1) * size, len);
+
+      b = end == len;
+
+      // list of current 250
+      final ls = st.sublist(start, end);
+
+      await BleManager.writeCharacteristic(
+        c: audioCharacteristic.qualCharacteristic(deviceId),
+        data: utf8.encode(ls.join()),
+        withResponse: false,
+        ref: ref,
+      );
+
+      indx++;
+    }
+
+    await _turnAudioOn(ref, deviceId);
+
+    await Future.delayed(const Duration(seconds: 2));
+
+    await _turnAudioOff(ref, deviceId);
+
+    return true;
+  }
+
+  // #endregion
+
 }
 
 /// where to print the debug info
