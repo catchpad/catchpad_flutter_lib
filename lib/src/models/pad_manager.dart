@@ -218,7 +218,10 @@ abstract class PadManager {
     String deviceId, {
     required WidgetRef ref,
     // required String fileName,
+    double level = 1.0,
   }) async {
+    assert(level >= 0.0 && level <= 1.0);
+
     await _turnAudioOff(ref, deviceId);
 
     const data = cpSoundData;
@@ -229,13 +232,16 @@ abstract class PadManager {
     const size = wholeSize ~/ width;
 
     // [08, 1f, 2d, ...]
-    final st =
-        data.map((e) => e.toRadixString(16).padLeft(width, '0')).toList();
+    final st = data
+        .map((e) => (e * level).toInt().toRadixString(16).padLeft(width, '0'))
+        .toList();
 
     final len = st.length;
 
     bool b = false;
     int indx = 0;
+
+    final sw = Stopwatch();
 
     while (!b) {
       final start = indx * size;
@@ -246,21 +252,26 @@ abstract class PadManager {
       // list of current 250
       final ls = st.sublist(start, end);
 
+      sw.start();
       await BleManager.writeCharacteristic(
         c: audioCharacteristic.qualCharacteristic(deviceId),
         data: utf8.encode(ls.join()),
         withResponse: false,
         ref: ref,
       );
+      sw.stop();
 
       indx++;
     }
 
     await _turnAudioOn(ref, deviceId);
 
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(milliseconds: 1100));
 
     await _turnAudioOff(ref, deviceId);
+
+    debugPrint(
+        'played into total of ${sw.elapsedMilliseconds}ms, avg ${sw.elapsedMilliseconds / indx}ms');
 
     return true;
   }
