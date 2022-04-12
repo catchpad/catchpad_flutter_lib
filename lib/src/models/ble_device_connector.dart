@@ -35,7 +35,8 @@ class BleDeviceConnector extends ReactiveState<DeviceStatusMapEntry> {
           'ConnectionState for device ${device.id} : ${update.value.connectionState}');
 
       if (update.value.isConnected) {
-        _ble.requestMtu(deviceId: device.id, mtu: 512);
+        final mt = await _ble.requestMtu(deviceId: device.id, mtu: 512);
+        _logMessage('MTU for device ${device.id} : $mt');
       }
 
       _deviceConnectionController.add(update);

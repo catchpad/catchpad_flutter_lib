@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:catchpad_flutter_lib/src/models/cp_sound_data.dart';
+import 'package:catchpad_flutter_lib/src/models/sounds/cp_sound_data.dart';
+import 'package:catchpad_flutter_lib/src/models/sounds/martilar15s.dart';
+import 'package:catchpad_flutter_lib/src/models/sounds/martilar_full.dart';
 import 'package:flutter/rendering.dart';
 
 import 'dev_info_model.dart';
@@ -222,7 +224,7 @@ abstract class PadManager {
   }) async {
     assert(level >= 0.0 && level <= 1.0);
 
-    await _turnAudioOff(ref, deviceId);
+    await _turnAudioOn(ref, deviceId);
 
     const data = cpSoundData;
 
@@ -263,10 +265,6 @@ abstract class PadManager {
 
       indx++;
     }
-
-    await _turnAudioOn(ref, deviceId);
-
-    await Future.delayed(const Duration(milliseconds: 1100));
 
     await _turnAudioOff(ref, deviceId);
 
