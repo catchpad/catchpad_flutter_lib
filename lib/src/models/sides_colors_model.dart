@@ -5,11 +5,16 @@ import '../utils/pad_consts.dart';
 class SidesColorsModel {
   final Color? tr, tl, br, bl;
 
+  /// when we want to send a signal to keep the colors the same,
+  /// usually used for `isCommand`
+  final bool same;
+
   const SidesColorsModel({
     this.tr,
     this.tl,
     this.br,
     this.bl,
+    this.same = false,
   });
 
   factory SidesColorsModel.off() {
@@ -17,11 +22,17 @@ class SidesColorsModel {
     return const SidesColorsModel(
         tr: offColor, tl: offColor, br: offColor, bl: offColor);
   }
+
   factory SidesColorsModel.all(Color clr) {
     return SidesColorsModel(tr: clr, tl: clr, br: clr, bl: clr);
   }
+
   factory SidesColorsModel.all100(SidesColorsColor clr) {
     return SidesColorsModel.from100Colors(tr: clr, tl: clr, br: clr, bl: clr);
+  }
+
+  factory SidesColorsModel.same() {
+    return const SidesColorsModel(same: true);
   }
 
   factory SidesColorsModel.from100Colors({
@@ -53,11 +64,19 @@ class SidesColorsModel {
   /// the circles take command in reverse of clockwise order
   Iterable<Color?> get clrs => [tl, bl, br, tr];
 
-  bool get allColorsSame => clrs.every((c) => c == tl);
+  /// if true, we will send from the `all` characteristic
+  bool get allColorsSame => same || clrs.every((c) => c == tl);
 
   @override
   String toString() {
+    if (same) {
+      /// as `allColorsSame` is gonna be true, they all are going to be sent
+      /// from the `all` charachteristic
+      return [-1, -1, -1].join(defaultSeperator);
+    }
+
     /// if all same we send data as 'r/g/b'
+    /// (as we're gonna send them from the `all` characteristic)
     /// else, we send each circle seperate like 'r1/g1/b1/r2/g2/b2/r3/g3/b3'
     return allColorsSame
         ? colorOrNull(clrs.elementAt(0))

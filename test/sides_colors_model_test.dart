@@ -20,7 +20,7 @@ void main() {
         () {
           expect(
             const SidesColorsModel().toString(),
-            '-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1',
+            '-1/-1/-1',
           );
         },
       );
@@ -29,7 +29,7 @@ void main() {
         () {
           expect(
             SidesColorsModel.off().toString(),
-            '0/0/0/0/0/0/0/0/0/0/0/0',
+            '0/0/0',
           );
         },
       );
@@ -40,11 +40,11 @@ void main() {
           const clr2 = Color.fromARGB(255, 100, 200, 150);
           expect(
             SidesColorsModel.all(clr1).toString(),
-            '100/0/0/100/0/0/100/0/0/100/0/0',
+            '100/0/0',
           );
           expect(
             SidesColorsModel.all(clr2).toString(),
-            '39/78/58/39/78/58/39/78/58/39/78/58',
+            '39/78/58',
           );
         },
       );
@@ -60,7 +60,20 @@ void main() {
                 .toString(),
             // as circles take command in reverse of clockwise order,
             // so, tl/bl/br/tr
-            '60/8/38/58/60/8/25/34/68/18/85/30',
+
+            '60/8/38/'
+            '58/60/8/'
+            '25/34/68/'
+            '18/85/30',
+          );
+        },
+      );
+      test(
+        'the `same` constructor works',
+        () {
+          expect(
+            SidesColorsModel.same().toString(),
+            '-1/-1/-1',
           );
         },
       );
