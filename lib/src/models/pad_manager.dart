@@ -219,23 +219,40 @@ abstract class PadManager {
     required WidgetRef ref,
   }) async {
     await _sendGetBatterySignal(deviceId, ref: ref);
-    await Future.delayed(Duration(milliseconds: 200));
-    final dt = await BleManager.readCharacteristic(
-      batteryCharacteristic.qualCharacteristic(deviceId),
-      ref: ref,
-    );
+    BatteryModel? bat;
 
-    return BatteryModel.fromBytes(dt);
+    // WHY???
+    // well, it's basic math
+    // when we write a '?' on the characteristic,
+    // apparently its shared, so when we read it,
+    // we will get the '?' that we sent, if the
+    // device has not written anything yet
+    // so we keep reading until we get real data
+    // that the device has written
+    while (bat == null) {
+      final dt = await BleManager.readCharacteristic(
+        batteryCharacteristic.qualCharacteristic(deviceId),
+        ref: ref,
+      );
+
+      bat = BatteryModel.fromBytes(dt);
+    }
+    return bat;
   }
 
   static Stream<BatteryModel> listenToBattery(
     String deviceId, {
     required WidgetRef ref,
-  }) {
-    return BleManager.subscribeToCharacteristic(
+  }) async* {
+    await _sendGetBatterySignal(deviceId, ref: ref);
+
+    yield* BleManager.subscribeToCharacteristic(
       batteryCharacteristic.qualCharacteristic(deviceId),
       ref: ref,
-    ).map(BatteryModel.fromBytes);
+    )
+        .map((dt) => BatteryModel.fromBytes(dt))
+        .where((event) => event != null)
+        .map((event) => event!);
   }
   // #endregion
 

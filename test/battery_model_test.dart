@@ -5,40 +5,36 @@ void main() {
   test(
     'from bytes',
     () {
-      const st = '1/1/4.2';
+      const st = '1/1/4200';
 
       final bytes = st.codeUnits;
 
       final model = BatteryModel.fromBytes(bytes);
 
-      expect(model.voltage, 4.2);
-      expect(model.isCharging, true);
-      expect(model.isCompleted, true);
+      expect(model?.voltage, 4200);
+      expect(model?.isCharging, true);
+      expect(model?.isCompleted, true);
     },
   );
   test(
     'closest bytes',
     () {
-      const st = '1/1/4.2';
+      const st = '1/1/4200';
       final bytes = st.codeUnits;
       final model = BatteryModel.fromBytes(bytes);
 
-      expect(model.closestNums(4.1), [4.1, 4.1]);
-      expect(model.closestNums(4.11), [4.1, 4.2]);
-      expect(model.closestNums(4.21), [4.2, 4.2]);
-      expect(model.closestNums(3.19), [3.2, 3.2]);
-      expect(model.closestNums(3.21), [3.2, 3.3]);
-      expect(model.closestNums(3.45), [3.4, 3.5]);
+      expect(model?.closestNums(4100), [4100, 4100]);
+      expect(model?.closestNums(4110), [4100, 4200]);
+      expect(model?.closestNums(4210), [4200, 4200]);
+      expect(model?.closestNums(3190), [3200, 3200]);
+      expect(model?.closestNums(3210), [3200, 3300]);
+      expect(model?.closestNums(3450), [3400, 3500]);
     },
   );
   test(
     'voltage to percentage',
     () {
-      const _st = '1/1/4.2';
-      final _bytes = _st.codeUnits;
-      final _model = BatteryModel.fromBytes(_bytes);
-
-      final keys = _model.voltagePercentageMap.keys;
+      final keys = BatteryModel.voltagePercentageMap.keys;
       for (var i = 0; i < keys.length; i++) {
         final key = keys.elementAt(i);
 
@@ -47,8 +43,8 @@ void main() {
         final model = BatteryModel.fromBytes(bytes);
 
         expect(
-          model.percentage,
-          _model.voltagePercentageMap[key],
+          model?.percentage,
+          BatteryModel.voltagePercentageMap[key],
         );
       }
     },

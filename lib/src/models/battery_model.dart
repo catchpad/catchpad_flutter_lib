@@ -15,9 +15,14 @@ class BatteryModel {
 
   int get percentage => voltageToPercentage(voltage);
 
-  factory BatteryModel.fromBytes(List<int> bytes) {
+  static BatteryModel? fromBytes(List<int> bytes) {
     final st = String.fromCharCodes(bytes);
+
     final sp = st.split('/');
+
+    if (sp.length != 3) {
+      return null;
+    }
 
     return BatteryModel(
       isCompleted: BigGuy.intToBool(int.tryParse(sp[0]) ?? 0),
@@ -47,8 +52,8 @@ class BatteryModel {
   List<double> closestNums(double vol) {
     final keys = voltagePercentageMap.keys.toList();
 
-    final max = keys.reduce((value, element) => math.max(value, element));
-    final min = keys.reduce((value, element) => math.min(value, element));
+    final max = keys.reduce((value, element) => math.max(value, element)) + .0;
+    final min = keys.reduce((value, element) => math.min(value, element)) + .0;
     double b = max, s = min;
 
     if (vol > max) {
@@ -57,7 +62,7 @@ class BatteryModel {
       b = s = min;
     } else {
       for (var i = 0; i < keys.length; i++) {
-        final a = keys[i];
+        final a = keys[i] + .0;
 
         if (a >= vol && a < b) {
           b = a;
@@ -82,17 +87,17 @@ class BatteryModel {
     return voltagePercentageMap[key]!;
   }
 
-  final Map<double, int> voltagePercentageMap = {
-    4.2: 100,
-    4.1: 92,
-    4.0: 78,
-    3.9: 61,
-    3.8: 43,
-    3.7: 14,
-    3.6: 3,
-    3.5: 1,
-    3.4: 0,
-    3.3: 0,
-    3.2: 0,
+  static const Map<int, int> voltagePercentageMap = {
+    4200: 100,
+    4100: 92,
+    4000: 78,
+    3900: 61,
+    3800: 43,
+    3700: 14,
+    3600: 3,
+    3500: 1,
+    3400: 0,
+    3300: 0,
+    3200: 0,
   };
 }
