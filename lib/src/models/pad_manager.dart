@@ -3,6 +3,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:catchpad_flutter_lib/catchpad_flutter_lib.dart';
+import 'package:catchpad_flutter_lib/src/models/battery_model.dart';
 import 'package:catchpad_flutter_lib/src/models/sounds/cp_sound_data.dart';
 import 'package:catchpad_flutter_lib/src/models/sounds/martilar15s.dart';
 import 'package:catchpad_flutter_lib/src/models/sounds/martilar_full.dart';
@@ -165,7 +166,7 @@ abstract class PadManager {
     return await BleManager.writeCharacteristic(
       c: infoCharacteristic.qualCharacteristic(deviceId),
       data: utf8.encode(dt),
-      withResponse: false,
+      withResponse: true,
       ref: ref,
     );
   }
@@ -193,10 +194,51 @@ abstract class PadManager {
     return await BleManager.writeCharacteristic(
       c: infoCharacteristic.qualCharacteristic(deviceId),
       data: utf8.encode(dt),
-      withResponse: false,
+      withResponse: true,
       ref: ref,
     );
   }
+
+  // #region battery
+  static Future<bool> _sendGetBatterySignal(
+    String deviceId, {
+    required WidgetRef ref,
+  }) async {
+    const dt = '?';
+
+    return await BleManager.writeCharacteristic(
+      c: batteryCharacteristic.qualCharacteristic(deviceId),
+      data: utf8.encode(dt),
+      withResponse: true,
+      ref: ref,
+    );
+  }
+
+  static Future<BatteryModel> readBattery(
+    String deviceId, {
+    required WidgetRef ref,
+  }) async {
+    await _sendGetBatterySignal(deviceId, ref: ref);
+    await Future.delayed(Duration(milliseconds: 200));
+    final dt = await BleManager.readCharacteristic(
+      batteryCharacteristic.qualCharacteristic(deviceId),
+      ref: ref,
+    );
+
+    return BatteryModel.fromBytes(dt);
+  }
+
+  static Stream<BatteryModel> listenToBattery(
+    String deviceId, {
+    required WidgetRef ref,
+  }) {
+    return BleManager.subscribeToCharacteristic(
+      batteryCharacteristic.qualCharacteristic(deviceId),
+      ref: ref,
+    ).map(BatteryModel.fromBytes);
+  }
+  // #endregion
+
   // #endregion
 
   // #region audio

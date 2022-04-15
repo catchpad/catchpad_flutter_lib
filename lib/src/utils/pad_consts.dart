@@ -104,8 +104,13 @@ const CpCharacteristic infoCharacteristic = CpCharacteristic(
   id: 'a4bf0dbb-b2ab-11ec-b909-DDDDDDDDDDD0',
   serviceId: infoServiceId,
 );
+
+const CpCharacteristic batteryCharacteristic = CpCharacteristic(
+  id: 'a4bf0dbb-b2ab-11ec-b909-DDDDDDDDDDD1',
+  serviceId: infoServiceId,
+);
 // #endregion
-// #region info
+// #region audio
 const String audioServiceId = '23cb9fe8-b2ab-11ec-b909-AAAAAAAAAAAA';
 
 const CpCharacteristic audioCharacteristic = CpCharacteristic(

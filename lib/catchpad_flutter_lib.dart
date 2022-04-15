@@ -16,6 +16,7 @@ export 'src/models/reactive_state.dart';
 export 'src/models/reactive_state.dart';
 export 'src/models/sides_colors_model.dart';
 export 'src/models/dev_info_model.dart';
+export 'src/models/battery_model.dart';
 export 'src/models/sensors/acc_gravity_model.dart';
 export 'src/models/sensors/acc_tap_model.dart';
 export 'src/models/sensors/events/distance_event.dart';
