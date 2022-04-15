@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:catchpad_flutter_lib/catchpad_flutter_lib.dart';
 import 'package:catchpad_flutter_lib/src/models/sounds/cp_sound_data.dart';
 import 'package:catchpad_flutter_lib/src/models/sounds/martilar15s.dart';
 import 'package:catchpad_flutter_lib/src/models/sounds/martilar_full.dart';
@@ -224,19 +225,23 @@ abstract class PadManager {
   }) async {
     assert(level >= 0.0 && level <= 1.0);
 
+    await ref.read(bleProv).requestConnectionPriority(
+          deviceId: deviceId,
+          priority: ConnectionPriority.highPerformance,
+        );
+
     await _turnAudioOn(ref, deviceId);
 
-    const data = cpSoundData;
+    const data = martilar15s;
 
     const wholeSize = 500;
-    const width = 2;
-    //250
+    const width = 1;
+
+    // 500
     const size = wholeSize ~/ width;
 
-    // [08, 1f, 2d, ...]
-    final st = data
-        .map((e) => (e * level).toInt().toRadixString(16).padLeft(width, '0'))
-        .toList();
+    // [08 -> 8, 1f -> 31, 2d -> 45, ...]
+    final st = data.map((e) => (e * level).toInt()).toList();
 
     final len = st.length;
 
@@ -244,6 +249,7 @@ abstract class PadManager {
     int indx = 0;
 
     final sw = Stopwatch();
+    final sums = <int>[];
 
     while (!b) {
       final start = indx * size;
@@ -251,17 +257,20 @@ abstract class PadManager {
 
       b = end == len;
 
-      // list of current 250
+      // list of current 500
       final ls = st.sublist(start, end);
 
       sw.start();
       await BleManager.writeCharacteristic(
         c: audioCharacteristic.qualCharacteristic(deviceId),
-        data: utf8.encode(ls.join()),
+        data: ls,
         withResponse: false,
         ref: ref,
       );
       sw.stop();
+      int s = sw.elapsedMilliseconds;
+      sums.add(s);
+      debugPrint('ms $indx: $s');
 
       indx++;
     }
@@ -270,6 +279,7 @@ abstract class PadManager {
 
     debugPrint(
         'played into total of ${sw.elapsedMilliseconds}ms, avg ${sw.elapsedMilliseconds / indx}ms');
+    debugPrint(sums.toString());
 
     return true;
   }
