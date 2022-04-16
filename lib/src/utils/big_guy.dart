@@ -1,5 +1,5 @@
-import 'dart:ui';
-
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:xrandom/xrandom.dart';
 
 /// this class is just here for general purposed
@@ -14,4 +14,17 @@ abstract class BigGuy {
   static String boolToNumString(bool b) => boolToInt(b).toString();
 
   static bool numStringToBool(String s) => intToBool(int.parse(s));
+
+  static void onPop(BuildContext context, VoidCallback onPop) {
+    final loc = GoRouter.of(context).location;
+
+    listener() async {
+      if (GoRouter.of(context).location == loc) {
+        onPop();
+        GoRouter.of(context).removeListener(listener);
+      }
+    }
+
+    GoRouter.of(context).addListener(listener);
+  }
 }
