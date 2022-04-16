@@ -244,8 +244,7 @@ abstract class PadManager {
     String deviceId, {
     required WidgetRef ref,
   }) async* {
-    await _sendGetBatterySignal(deviceId, ref: ref);
-
+    yield await readBattery(deviceId, ref: ref);
     yield* BleManager.subscribeToCharacteristic(
       batteryCharacteristic.qualCharacteristic(deviceId),
       ref: ref,
