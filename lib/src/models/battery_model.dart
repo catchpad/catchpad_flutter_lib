@@ -4,7 +4,14 @@ import 'package:catchpad_flutter_lib/catchpad_flutter_lib.dart';
 
 class BatteryModel {
   final double? voltage;
+
+  /// when plugged to a charger
   final bool isCharging;
+
+  /// when plugged to a charger, and the
+  /// battery is full.
+  ///
+  /// once unplugged, this will be false.
   final bool isCompleted;
 
   BatteryModel({
@@ -14,6 +21,11 @@ class BatteryModel {
   });
 
   int get percentage => voltageToPercentage(voltage);
+
+  /// will be used to determine if a game can be played
+  /// with this pad. we don't want the user to play
+  /// when the pad is plugged in.
+  bool get isActive => !isCharging && !isCompleted;
 
   static BatteryModel? fromBytes(List<int> bytes) {
     final st = String.fromCharCodes(bytes);
