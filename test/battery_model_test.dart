@@ -47,6 +47,20 @@ void main() {
           BatteryModel.voltagePercentageMap[key],
         );
       }
+
+      const st1 = '1/1/4130';
+      final bytes1 = st1.codeUnits;
+      final model1 = BatteryModel.fromBytes(bytes1);
+
+      // actually 94.4, but we're flooring
+      expect(model1?.percentage, 94);
+
+      const st2 = '1/1/3835';
+      final bytes2 = st2.codeUnits;
+      final model2 = BatteryModel.fromBytes(bytes2);
+
+      // actually 6.3, but we're flooring
+      expect(model2?.percentage, 49);
     },
   );
 }

@@ -89,14 +89,40 @@ class BatteryModel {
     return [s, b];
   }
 
-  int voltageToPercentage(double? vol) {
-    if (vol == null) {
+  int voltageToPercentage(double? v) {
+    if (v == null) {
       return 0;
     }
 
-    final key = closestNumMax(vol);
+    final vMin = closestNumMin(v);
+    final vMax = closestNumMax(v);
 
-    return voltagePercentageMap[key]!;
+    final lMin = voltagePercentageMap[vMin]!;
+    final lMax = voltagePercentageMap[vMax]!;
+
+    if (v == vMin) {
+      return lMin;
+    }
+
+    // vol = 4150
+    // minKey = 4100
+    // maxKey = 4200
+    // min = 92
+    // max = 100
+
+    return ((
+                //
+                (
+                        //
+                        (v - vMin) * (lMax - lMin)) /
+                    //
+
+                    (vMax - vMin)
+            //
+            ) +
+            //
+            lMin)
+        .toInt();
   }
 
   static const Map<int, int> voltagePercentageMap = {
