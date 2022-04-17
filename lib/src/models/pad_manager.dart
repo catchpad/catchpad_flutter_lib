@@ -1,22 +1,11 @@
 import 'dart:convert';
 import 'dart:math';
-import 'dart:ui';
 
-import 'package:catchpad_flutter_lib/catchpad_flutter_lib.dart';
-import 'package:catchpad_flutter_lib/src/models/battery_model.dart';
-import 'package:catchpad_flutter_lib/src/models/sounds/cp_sound_data.dart';
-import 'package:catchpad_flutter_lib/src/models/sounds/martilar15s.dart';
-import 'package:catchpad_flutter_lib/src/models/sounds/martilar_full.dart';
+import '../../catchpad_flutter_lib.dart';
+import 'sounds/martilar15s.dart';
 import 'package:flutter/rendering.dart';
 
-import 'dev_info_model.dart';
-
-import 'ble_manager.dart';
-import '../utils/pad_consts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../utils/big_guy.dart';
-import 'sides_colors_model.dart';
 
 export 'sides_colors_model.dart';
 
