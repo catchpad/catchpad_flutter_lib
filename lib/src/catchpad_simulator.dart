@@ -385,6 +385,17 @@ class CatchpadSimulator extends _FlutterReactiveBleExtender {
       ref: ref,
     );
   }
+
+  @override
+  Future<int> requestMtu({required String deviceId, required int mtu}) {
+    return Future.value(mtu);
+  }
+
+  @override
+  Future<void> requestConnectionPriority(
+      {required String deviceId, required ConnectionPriority priority}) {
+    return Future.value();
+  }
 }
 
 extension CPCharectaristic on QualifiedCharacteristic {
