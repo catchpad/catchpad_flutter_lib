@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:flutter/rendering.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../catchpad_flutter_lib.dart';
 import 'sounds/martilar15s.dart';
-import 'package:flutter/rendering.dart';
-
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 export 'sides_colors_model.dart';
 

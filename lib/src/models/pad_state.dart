@@ -1,51 +1,40 @@
-import 'dart:ui';
-
+import '../../catchpad_flutter_lib.dart';
 import 'package:flutter/foundation.dart';
-
-import '../utils/pad_consts.dart';
 
 @immutable
 class PadState {
   final String padId;
   final String name;
 
-  final Color? color;
+  final SidesColorsModel color;
+  final bool isCommand;
 
   final int? battery;
   final int? threshold;
   final int? timerStart;
 
-  const PadState({
+  PadState({
     required this.padId,
     required this.name,
-    required this.color,
+    this.isCommand = false,
+    SidesColorsModel? color,
     required this.battery,
     required this.threshold,
     required this.timerStart,
-  });
+  }) : color = color ?? SidesColorsModel.off();
 
-  // padId/name/color/battery/threshold/timerStart/responseTime
+  // padId/name/isComamnd/color/battery/threshold/timerStart/responseTime
   factory PadState.fromString(String s) {
     final sp = s.split(defaultSeperator);
-
-    Color? clr;
-    final clst = sp[2];
-    if (clst.toString() != null.toString()) {
-      final sp = clst.split(',');
-      final red = int.parse(sp[0]),
-          green = int.parse(sp[1]),
-          blue = int.parse(sp[2]);
-
-      clr = Color.fromARGB(255, red, green, blue);
-    }
 
     return PadState(
       padId: sp[0],
       name: sp[1],
-      color: clr,
-      battery: int.tryParse(sp[3]),
-      threshold: int.tryParse(sp[4]),
-      timerStart: int.tryParse(sp[5]),
+      isCommand: BigGuy.numStringToBool(sp[2]),
+      color: SidesColorsModel.fromString(sp.sublist(3, 7).join('/')),
+      battery: int.tryParse(sp[7]),
+      threshold: int.tryParse(sp[8]),
+      timerStart: int.tryParse(sp[9]),
     );
   }
 

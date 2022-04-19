@@ -49,6 +49,23 @@ class SidesColorsModel {
     );
   }
 
+  /// this is a simulator parser
+  /// we're gonna recieve something like `c1/c2/c3/c4`
+  /// and each color is a string that is like `r/g/b`
+  /// where rgb are between 0 and 255
+  factory SidesColorsModel.fromString(String st) {
+    final sp = st.split(defaultSeperator);
+
+    int g = 0;
+
+    return SidesColorsModel(
+      tl: SidesColorsColor.fromString(sp[g++]).toColor(),
+      bl: SidesColorsColor.fromString(sp[g++]).toColor(),
+      br: SidesColorsColor.fromString(sp[g++]).toColor(),
+      tr: SidesColorsColor.fromString(sp[g++]).toColor(),
+    );
+  }
+
   String colorOrNull(Color? c) {
     // if empty we should send '-1/-1/-1'
     if (c == null) {
@@ -64,8 +81,17 @@ class SidesColorsModel {
   /// the circles take command in reverse of clockwise order
   Iterable<Color?> get clrs => [tl, bl, br, tr];
 
+  bool colorEquals(Color? c1, Color? c2) {
+    return (c1 == null && c2 == null) ||
+        c1 != null &&
+            c2 != null &&
+            c1.red == c2.red &&
+            c1.green == c2.green &&
+            c1.blue == c2.blue;
+  }
+
   /// if true, we will send from the `all` characteristic
-  bool get allColorsSame => same || clrs.every((c) => c == tl);
+  bool get allColorsSame => same || clrs.every((c) => colorEquals(c, tl));
 
   @override
   String toString() {
@@ -108,12 +134,36 @@ class SidesColorsColor {
     this.b,
   );
 
+  Color toColor() {
+    return Color.fromARGB(255, r, g, b);
+  }
+
   Color to255Color() {
-    return Color.fromARGB(
-      255,
-      (r / 100 * 255).floor(),
-      (g / 100 * 255).floor(),
-      (b / 100 * 255).floor(),
+    int r1 = r, g1 = g, b1 = b;
+    r = (r / 100 * 255).floor();
+    g = (g / 100 * 255).floor();
+    b = (b / 100 * 255).floor();
+
+    final out = toColor();
+
+    r = r1;
+    g = g1;
+    b = b1;
+
+    return out;
+  }
+
+  factory SidesColorsColor.fromString(String st) {
+    return SidesColorsColor.fromList(st.split(','));
+  }
+
+  /// this is a simulator parser
+  /// we're gonna recieve something like `100/100/100`
+  factory SidesColorsColor.fromList(List<String> chars) {
+    return SidesColorsColor(
+      int.parse(chars[0]),
+      int.parse(chars[1]),
+      int.parse(chars[2]),
     );
   }
 }
