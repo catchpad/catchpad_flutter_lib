@@ -27,8 +27,12 @@ class AcceleremetorTapModel {
     );
   }
 
+  String toParseString() {
+    return [commandTime, actionTime, tapCounter].join(defaultSeperator);
+  }
+
   List<int> toBytes() {
-    final st = [commandTime, actionTime, tapCounter].join(defaultSeperator);
+    final st = toParseString();
     return utf8.encode(st);
   }
 

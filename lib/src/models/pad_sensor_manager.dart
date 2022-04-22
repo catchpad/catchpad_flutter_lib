@@ -23,6 +23,10 @@ enum AccSensorType { tap, gravity }
 
 enum SensorType { acc, dst, vel }
 
+/// well we have `SensorType` but, that does not include
+/// sub categories like tap and motion.
+enum UsedSensorsType { tap, motion, distance }
+
 /// as in the multimeter, the lower the number, the more accurate the reading
 enum ConfigScale {
   LIS2DH12_2g,

@@ -6,10 +6,10 @@ class ActivatedSensorsModel {
   final bool gravity;
   final bool distance;
 
-  ActivatedSensorsModel({
-    required this.tap,
-    required this.gravity,
-    required this.distance,
+  const ActivatedSensorsModel({
+    this.tap = false,
+    this.gravity = false,
+    this.distance = false,
   });
 
   factory ActivatedSensorsModel.fromString(String s) {
