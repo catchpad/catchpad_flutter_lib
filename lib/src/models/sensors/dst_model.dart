@@ -16,6 +16,7 @@ class DistanceModel {
   });
 
   factory DistanceModel.fromBytes(List<int> bytes) {
+    // format: command_time/action_time/distance
     final s = utf8.decode(bytes);
     final sp = s.split(defaultSeperator);
 
@@ -24,6 +25,11 @@ class DistanceModel {
       actionTime: int.parse(sp[1]),
       distance: int.parse(sp[2]),
     );
+  }
+
+  List<int> toBytes() {
+    final st = [commandTime, actionTime, distance].join(defaultSeperator);
+    return utf8.encode(st);
   }
 
   @override

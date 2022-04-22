@@ -16,6 +16,7 @@ class AcceleremetorTapModel {
   });
 
   factory AcceleremetorTapModel.fromBytes(List<int> bytes) {
+    // format: command_time/action_time/tap_counter
     final s = utf8.decode(bytes);
     final sp = s.split(defaultSeperator);
 
@@ -24,6 +25,11 @@ class AcceleremetorTapModel {
       actionTime: int.parse(sp[1]),
       tapCounter: int.parse(sp[2]),
     );
+  }
+
+  List<int> toBytes() {
+    final st = [commandTime, actionTime, tapCounter].join(defaultSeperator);
+    return utf8.encode(st);
   }
 
   @override

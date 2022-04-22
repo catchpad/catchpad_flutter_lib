@@ -6,6 +6,7 @@ import '../models/pad_sensor_manager.dart';
 
 const Duration responseTimeMistakeMargin = Duration(milliseconds: 20);
 const String defaultSeperator = '/';
+const String subSeperator = ',';
 const String defaultEmptyValue = '-1';
 
 // #region sensor defaults

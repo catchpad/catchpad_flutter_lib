@@ -377,10 +377,21 @@ class CatchpadSimulator extends _FlutterReactiveBleExtender {
     _ch = IOWebSocketChannel.connect(env.wsUri);
   }
 
+  // TODO: delete
   static Future<bool> simulateTouchEvent(WidgetRef ref, String deviceId) async {
     return await BleManager.writeCharacteristic(
       c: simulatorCharacteristic.qualCharacteristic(deviceId),
       data: touchEventCommand.codeUnits,
+      withResponse: true,
+      ref: ref,
+    );
+  }
+
+  static Future<bool> simulateTapEvent(WidgetRef ref, String deviceId,
+      {required AcceleremetorTapModel model}) async {
+    return await BleManager.writeCharacteristic(
+      c: accCharacteristic.qualCharacteristic(deviceId),
+      data: model.toBytes(),
       withResponse: true,
       ref: ref,
     );

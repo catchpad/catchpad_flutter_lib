@@ -236,7 +236,7 @@ abstract class PadSensorManager {
     required WidgetRef ref,
     required String deviceId,
   }) {
-    // SENSOR ID	/	SENSOR STATUS	/	SENSORTYPE	/	THRLOCK
+    // SENSOR TYPE NAME	/	SENSOR STATUS	/	ACC SENSOR TYPE	/	THRLOCK
     final dt = [
       BigGuy.sensorTypeToStr(sensorType),
       BigGuy.boolToInt(status),
