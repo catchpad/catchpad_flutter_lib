@@ -31,8 +31,6 @@ class PadState {
   final SidesColorsModel color;
   final bool isCommand;
 
-  final int? battery;
-  final int? threshold;
   final int? _timerStart;
 
   int get timerStart => _timerStart ?? -1;
@@ -44,15 +42,14 @@ class PadState {
     required this.name,
     this.isCommand = false,
     SidesColorsModel? color,
-    required this.battery,
-    required this.threshold,
     int? timerStart,
     required this.activatedSensors,
   })  : color = color ?? SidesColorsModel.off(),
         _timerStart = timerStart;
 
-  // padId / name / isComamnd / color / battery / threshold /
-  // timerStart / responseTime / activatedSensors
+  // padId / name / isComamnd / color /
+  // timerStart / responseTime /
+  // activatedSensors
   factory PadState.fromString(String s) {
     final sp = s.split(defaultSeperator);
 
@@ -61,10 +58,8 @@ class PadState {
       name: sp[1],
       isCommand: BigGuy.numStringToBool(sp[2]),
       color: SidesColorsModel.fromString(sp.sublist(3, 7).join('/')),
-      battery: int.tryParse(sp[7]),
-      threshold: int.tryParse(sp[8]),
-      timerStart: int.tryParse(sp[9]),
-      activatedSensors: ActivatedSensorsModel.fromString(sp[10]),
+      timerStart: int.tryParse(sp[7]),
+      activatedSensors: ActivatedSensorsModel.fromString(sp[8]),
     );
   }
 
@@ -79,6 +74,14 @@ class PadState {
   int get hashCode => padId.hashCode;
 
   @override
-  toString() =>
-      'PadState(padId: $padId, name: $name, color: $color, battery: $battery, threshold: $threshold, timerStart: $timerStart)';
+  toString() => '''
+    PadState {
+      padId: $padId,
+      name: $name,
+      isCommand: $isCommand,
+      color: $color,
+      timerStart: $timerStart,
+      activatedSensors: $activatedSensors,
+    }
+    ''';
 }

@@ -2,23 +2,14 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:catchpad_flutter_lib/catchpad_flutter_lib.dart';
-import 'package:catchpad_flutter_lib/src/models/sensors/dst_model.dart';
 
-import 'models/ble_manager.dart';
-import 'models/pad_state.dart';
-import 'models/sensors/acc_tap_model.dart';
-import 'utils/consts.dart';
-import 'utils/pad_consts.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 // ignore: implementation_imports
 import 'package:flutter_reactive_ble/src/discovered_devices_registry.dart'
     show DiscoveredDevicesRegistryImpl;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:web_socket_channel/io.dart';
-
-import 'provs/enviroment_prov.dart';
 
 abstract class _FlutterReactiveBleExtender implements FlutterReactiveBle {
   // so wtf is going on here? you ask..
@@ -379,16 +370,6 @@ class CatchpadSimulator extends _FlutterReactiveBleExtender {
     if (env == null) return;
 
     _ch = IOWebSocketChannel.connect(env.wsUri);
-  }
-
-  // TODO: delete
-  static Future<bool> simulateTouchEvent(WidgetRef ref, String deviceId) async {
-    return await BleManager.writeCharacteristic(
-      c: simulatorCharacteristic.qualCharacteristic(deviceId),
-      data: touchEventCommand.codeUnits,
-      withResponse: true,
-      ref: ref,
-    );
   }
 
   static Future<bool> simulateTapEvent(WidgetRef ref, String deviceId,
