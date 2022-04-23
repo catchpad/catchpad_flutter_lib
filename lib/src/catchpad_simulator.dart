@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:catchpad_flutter_lib/catchpad_flutter_lib.dart';
+import 'package:catchpad_flutter_lib/src/models/sensors/dst_model.dart';
 
 import 'models/ble_manager.dart';
 import 'models/pad_state.dart';
@@ -393,6 +394,19 @@ class CatchpadSimulator extends _FlutterReactiveBleExtender {
   static Future<bool> simulateTapEvent(WidgetRef ref, String deviceId,
       {required AcceleremetorTapModel model}) async {
     final dt = [UsedSensorsType.tap.index, model.toParseString()]
+        .join(defaultSeperator);
+
+    return await BleManager.writeCharacteristic(
+      c: simulatorCharacteristic.qualCharacteristic(deviceId),
+      data: utf8.encode(dt),
+      withResponse: true,
+      ref: ref,
+    );
+  }
+
+  static Future<bool> simulateDstEvent(WidgetRef ref, String deviceId,
+      {required DistanceModel model}) async {
+    final dt = [UsedSensorsType.distance.index, model.toParseString()]
         .join(defaultSeperator);
 
     return await BleManager.writeCharacteristic(

@@ -27,6 +27,10 @@ class DistanceModel {
     );
   }
 
+  String toParseString() {
+    return [commandTime, actionTime, distance].join(defaultSeperator);
+  }
+
   List<int> toBytes() {
     final st = [commandTime, actionTime, distance].join(defaultSeperator);
     return utf8.encode(st);

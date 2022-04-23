@@ -33,7 +33,9 @@ class PadState {
 
   final int? battery;
   final int? threshold;
-  final int? timerStart;
+  final int? _timerStart;
+
+  int get timerStart => _timerStart ?? -1;
 
   final ActivatedSensorsModel activatedSensors;
 
@@ -44,9 +46,10 @@ class PadState {
     SidesColorsModel? color,
     required this.battery,
     required this.threshold,
-    required this.timerStart,
+    int? timerStart,
     required this.activatedSensors,
-  }) : color = color ?? SidesColorsModel.off();
+  })  : color = color ?? SidesColorsModel.off(),
+        _timerStart = timerStart;
 
   // padId / name / isComamnd / color / battery / threshold /
   // timerStart / responseTime / activatedSensors
