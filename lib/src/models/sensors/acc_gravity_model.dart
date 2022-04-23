@@ -15,7 +15,7 @@ class AcceleremetorGravityModel {
   });
 
   factory AcceleremetorGravityModel.fromBytes(List<int> bytes) {
-    // format: x/y/z/temperature
+    // format: x / y / z / temperature
     final s = utf8.decode(bytes);
     final sp = s.split(defaultSeperator);
 
@@ -27,8 +27,12 @@ class AcceleremetorGravityModel {
     );
   }
 
+  String toParseString() {
+    return [x, y, z, temperature].join(defaultSeperator);
+  }
+
   List<int> toBytes() {
-    final st = [x, y, z, temperature].join(defaultSeperator);
+    final st = toParseString();
     return utf8.encode(st);
   }
 

@@ -385,6 +385,19 @@ class CatchpadSimulator extends _FlutterReactiveBleExtender {
     );
   }
 
+  static Future<bool> simulateMotionEvent(WidgetRef ref, String deviceId,
+      {required AcceleremetorGravityModel model}) async {
+    final dt = [UsedSensorsType.motion.index, model.toParseString()]
+        .join(defaultSeperator);
+
+    return await BleManager.writeCharacteristic(
+      c: simulatorCharacteristic.qualCharacteristic(deviceId),
+      data: utf8.encode(dt),
+      withResponse: true,
+      ref: ref,
+    );
+  }
+
   static Future<bool> simulateDstEvent(WidgetRef ref, String deviceId,
       {required DistanceModel model}) async {
     final dt = [UsedSensorsType.distance.index, model.toParseString()]
