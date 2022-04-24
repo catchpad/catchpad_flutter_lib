@@ -61,7 +61,7 @@ abstract class PadManager {
   }) {
     return ledColor(
       deviceId,
-      const SidesColorsModel(),
+      const SidesColorsModel(same: true),
       ref: ref,
       isCommand: true,
     );

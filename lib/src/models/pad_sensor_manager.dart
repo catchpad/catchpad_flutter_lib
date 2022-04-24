@@ -133,13 +133,36 @@ abstract class PadSensorManager {
     );
   }
 
-  static Future<bool> deactivateAcc({
+  static Future<bool> deactivateAccTap({
     required WidgetRef ref,
     required String deviceId,
   }) async {
+    return _deactivateAcc(
+      ref: ref,
+      deviceId: deviceId,
+      accSensorType: AccSensorType.tap,
+    );
+  }
+
+  static Future<bool> deactivateAccGravity({
+    required WidgetRef ref,
+    required String deviceId,
+  }) async {
+    return _deactivateAcc(
+      ref: ref,
+      deviceId: deviceId,
+      accSensorType: AccSensorType.gravity,
+    );
+  }
+
+  static Future<bool> _deactivateAcc({
+    required WidgetRef ref,
+    required String deviceId,
+    required AccSensorType accSensorType,
+  }) async {
     return _activate(
       sensorType: SensorType.acc,
-      accSensorType: AccSensorType.values[0],
+      accSensorType: accSensorType,
       status: false,
       ref: ref,
       deviceId: deviceId,
@@ -239,7 +262,7 @@ abstract class PadSensorManager {
     bool thrLock = false,
     required WidgetRef ref,
     required String deviceId,
-  }) {
+  }) async {
     // SENSOR TYPE NAME	/	SENSOR STATUS	/	ACC SENSOR TYPE	/	THRLOCK
     final dt = [
       BigGuy.sensorTypeToStr(sensorType),
@@ -252,11 +275,36 @@ abstract class PadSensorManager {
           .index,
       BigGuy.boolToInt(thrLock),
     ].join(defaultSeperator);
-    return BleManager.writeCharacteristic(
+    return await BleManager.writeCharacteristic(
       ref: ref,
       c: activateCharacteristic.qualCharacteristic(deviceId),
       data: utf8.encode(dt),
     );
+  }
+
+  static Future<bool> deactivateAll({
+    required WidgetRef ref,
+    required String deviceId,
+  }) =>
+      _deactivateAll(ref: ref, deviceId: deviceId);
+
+  static Future<bool> _deactivateAll({
+    required WidgetRef ref,
+    required String deviceId,
+  }) async {
+    final reqs = [deactivateAccTap, deactivateAccGravity, deactivateDst];
+
+    bool allTrue = true;
+
+    for (final req in reqs) {
+      final res = await req(ref: ref, deviceId: deviceId);
+
+      if (!res) {
+        allTrue = false;
+      }
+    }
+
+    return allTrue;
   }
   // #endregion
 
@@ -337,11 +385,20 @@ abstract class PadSensorManager {
   // #endregion
 
   // #region listeners
+
+  // #region distance
   static Stream<DistanceEvent> listenToDistance(
     String deviceId, {
     required WidgetRef ref,
-  }) {
-    return BleManager.subscribeToCharacteristic(
+  }) async* {
+    await _deactivateAll(
+      ref: ref,
+      deviceId: deviceId,
+    );
+
+    await activateDst(ref: ref, deviceId: deviceId);
+
+    yield* BleManager.subscribeToCharacteristic(
       dstCharacteristic.qualCharacteristic(deviceId),
       ref: ref,
     ).map(
@@ -352,11 +409,34 @@ abstract class PadSensorManager {
     );
   }
 
+  static Stream<DistanceEvent> listenToDistanceMulti(
+    Iterable<String> deviceIds, {
+    required WidgetRef ref,
+  }) {
+    return StreamGroup.merge(
+      deviceIds.map(
+        (deviceId) => listenToDistance(
+          deviceId,
+          ref: ref,
+        ),
+      ),
+    );
+  }
+  // #endregion
+
+  // #region motion
   static Stream<MotionEvent> listenToMotion(
     String deviceId, {
     required WidgetRef ref,
-  }) {
-    return BleManager.subscribeToCharacteristic(
+  }) async* {
+    await _deactivateAll(
+      ref: ref,
+      deviceId: deviceId,
+    );
+
+    await activateAccGravity(ref: ref, deviceId: deviceId);
+
+    yield* BleManager.subscribeToCharacteristic(
       accCharacteristic.qualCharacteristic(deviceId),
       ref: ref,
     ).map(
@@ -367,11 +447,34 @@ abstract class PadSensorManager {
     );
   }
 
+  static Stream<MotionEvent> listenToMotionMulti(
+    Iterable<String> deviceIds, {
+    required WidgetRef ref,
+  }) {
+    return StreamGroup.merge(
+      deviceIds.map(
+        (deviceId) => listenToMotion(
+          deviceId,
+          ref: ref,
+        ),
+      ),
+    );
+  }
+  // #endregion
+
+  // #region touch
   static Stream<TouchEvent> listenToTouch(
     String deviceId, {
     required WidgetRef ref,
-  }) {
-    return BleManager.subscribeToCharacteristic(
+  }) async* {
+    await _deactivateAll(
+      ref: ref,
+      deviceId: deviceId,
+    );
+
+    await activateAccTap(ref: ref, deviceId: deviceId);
+
+    yield* BleManager.subscribeToCharacteristic(
       accCharacteristic.qualCharacteristic(deviceId),
       ref: ref,
     ).map(
@@ -395,5 +498,7 @@ abstract class PadSensorManager {
       ),
     );
   }
+  // #endregion
+
   // #endregion
 }
