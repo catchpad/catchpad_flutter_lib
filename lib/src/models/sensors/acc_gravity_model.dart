@@ -37,7 +37,30 @@ class AcceleremetorGravityModel {
   }
 
   double get roll {
-    return atan2(y, z) * 57.3;
+    var r = atan2(y, z) * 57.3;
+
+    // TODO: this is a temporary thing.
+    // because of manually producing the pad,
+    // the sensor is not sensitive enough,
+    // so it is giving a wrong value.
+    {
+      r = 180 - r;
+      if (r > 180) {
+        r -= 360;
+      }
+    }
+
+    return r;
+  }
+
+  static double rl(double r) {
+    r = 180 - r;
+
+    if (r > 180) {
+      r -= 360;
+    }
+
+    return r;
   }
 
   double get pitch {
