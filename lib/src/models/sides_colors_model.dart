@@ -93,6 +93,30 @@ class SidesColorsModel {
   /// if true, we will send from the `all` characteristic
   bool get allColorsSame => same || clrs.every((c) => colorEquals(c, tl));
 
+  /// filter is between 0 and 1,
+  /// we multiply each color value we have by the filter
+  SidesColorsModel opacity(double filter) {
+    Color? withFilter(Color? c) {
+      if (c == null) {
+        return null;
+      }
+
+      return Color.fromARGB(
+        c.alpha,
+        (c.red * filter).floor(),
+        (c.green * filter).floor(),
+        (c.blue * filter).floor(),
+      );
+    }
+
+    return SidesColorsModel(
+      tr: withFilter(tr),
+      tl: withFilter(tl),
+      br: withFilter(br),
+      bl: withFilter(bl),
+    );
+  }
+
   @override
   String toString() {
     if (same) {
