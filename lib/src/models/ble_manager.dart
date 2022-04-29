@@ -6,11 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../provs/ble_prov.dart';
 
 abstract class BleManager {
-  static FlutterReactiveBle _inst(WidgetRef ref) =>
-      // TODO:
-      //
-      FlutterReactiveBle();
-  //  ref.read(bleProv);
+  static FlutterReactiveBle _inst(WidgetRef ref) => ref.read(bleProv);
 
   static Future<List<int>> readCharacteristic(
     QualifiedCharacteristic c, {
