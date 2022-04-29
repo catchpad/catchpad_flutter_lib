@@ -6,6 +6,7 @@ import '../../utils/pad_consts.dart';
 class AcceleremetorTapModel {
   final int commandTime, actionTime;
   final int tapCounter;
+  final bool isValid;
 
   Duration? get responseTime => BigGuy.responseTime(actionTime, commandTime);
 
@@ -13,6 +14,7 @@ class AcceleremetorTapModel {
     required this.commandTime,
     required this.actionTime,
     required this.tapCounter,
+    required this.isValid,
   });
 
   factory AcceleremetorTapModel.fromBytes(List<int> bytes) {
@@ -20,9 +22,15 @@ class AcceleremetorTapModel {
     final s = utf8.decode(bytes);
     final sp = s.split(defaultSeperator);
 
+    bool isV = true;
+
     // TODO: there is a problem in deactivate,
     // so we're recieving data from other sensors
     int parse(String s) {
+      final intV = int.tryParse(s);
+      if (intV == null) {
+        isV = false;
+      }
       return (double.tryParse(s) ?? 0.0).toInt();
     }
 
@@ -30,6 +38,7 @@ class AcceleremetorTapModel {
       commandTime: parse(sp[0]),
       actionTime: parse(sp[1]),
       tapCounter: parse(sp[2]),
+      isValid: isV,
     );
   }
 
