@@ -19,11 +19,15 @@ class AcceleremetorGravityModel {
     final s = utf8.decode(bytes);
     final sp = s.split(defaultSeperator);
 
+    double parse(String s) {
+      return (double.tryParse(s) ?? 0.0);
+    }
+
     return AcceleremetorGravityModel(
-      x: double.parse(sp[0]),
-      y: double.parse(sp[1]),
-      z: double.parse(sp[2]),
-      temperature: double.parse(sp[3]),
+      x: parse(sp[0]),
+      y: parse(sp[1]),
+      z: parse(sp[2]),
+      temperature: parse(sp[3]),
     );
   }
 

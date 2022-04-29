@@ -20,10 +20,16 @@ class DistanceModel {
     final s = utf8.decode(bytes);
     final sp = s.split(defaultSeperator);
 
+    // TODO: there is a problem in deactivate,
+    // so we're recieving data from other sensors
+    int parse(String s) {
+      return (double.tryParse(s) ?? 0.0).toInt();
+    }
+
     return DistanceModel(
-      commandTime: int.parse(sp[0]),
-      actionTime: int.parse(sp[1]),
-      distance: int.parse(sp[2]),
+      commandTime: parse(sp[0]),
+      actionTime: parse(sp[1]),
+      distance: parse(sp[2]),
     );
   }
 
