@@ -9,5 +9,5 @@ abstract class SensorEvent {
 
   bool get isValid;
 
-  String get deviceNameId => deviceId;
+  String get deviceNameId => deviceId.split('-')[1];
 }
