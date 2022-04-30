@@ -272,11 +272,6 @@ abstract class PadManager {
   }) async {
     assert(level >= 0.0 && level <= 1.0);
 
-    await ref.read(bleProv).requestConnectionPriority(
-          deviceId: deviceId,
-          priority: ConnectionPriority.highPerformance,
-        );
-
     await _turnAudioOn(ref, deviceId);
 
     const data = martilar15s;
