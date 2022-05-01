@@ -13,6 +13,8 @@ class EnviromentNotifier extends StateNotifier<EnviromentModel?> {
 
   void setEnviroment(EnviromentModel enviroment) => state = enviroment;
 
+  void deleteEnviroment() => state = null;
+
   void setEnviromentType(EnviromentType type) {
     setEnviroment(
       EnviromentModel(enviromentType: type),
