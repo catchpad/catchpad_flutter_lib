@@ -56,6 +56,82 @@ enum DataRate {
   LIS2DH12_ODR_5kHz376_LP_1kHz344_NM_HP,
 }
 
+class AccConfigModel {
+  final ConfigScale scale;
+  final ConfigMode mode;
+  final DataRate dataRate;
+
+  /// 0-127
+  final int threshold;
+
+  /// 0 - 99999 ms
+  final int timeout;
+
+  const AccConfigModel({
+    this.scale = defConfigScale,
+    this.mode = defConfigMode,
+    this.dataRate = defDataRate,
+    required this.threshold,
+    required this.timeout,
+  });
+}
+
+class DstConfigModel {
+  ///  0-2000
+  final int threshold;
+
+  /// 0 - 99999 ms
+  final int timeout;
+
+  const DstConfigModel({
+    required this.threshold,
+    required this.timeout,
+  });
+}
+
+class _SensorConfigModel {
+  final SensorType sensorType;
+
+  final ConfigScale? scale;
+  final ConfigMode? mode;
+  final DataRate? dataRate;
+
+  /// ACC: 0-127
+  /// DST: 0-2000
+  final int threshold;
+
+  /// 0 - 99999 ms
+  final int timeout;
+
+  const _SensorConfigModel({
+    required this.sensorType,
+    this.scale,
+    this.mode,
+    this.dataRate,
+    required this.threshold,
+    required this.timeout,
+  });
+
+  factory _SensorConfigModel.fromAccConfigModel(AccConfigModel accConfigModel) {
+    return _SensorConfigModel(
+      sensorType: SensorType.acc,
+      scale: accConfigModel.scale,
+      mode: accConfigModel.mode,
+      dataRate: accConfigModel.dataRate,
+      threshold: accConfigModel.threshold,
+      timeout: accConfigModel.timeout,
+    );
+  }
+
+  factory _SensorConfigModel.fromDstConfigModel(DstConfigModel dstConfigModel) {
+    return _SensorConfigModel(
+      sensorType: SensorType.dst,
+      threshold: dstConfigModel.threshold,
+      timeout: dstConfigModel.timeout,
+    );
+  }
+}
+
 abstract class PadSensorManager {
   // #region activate
 
@@ -310,27 +386,17 @@ abstract class PadSensorManager {
 
   // #region config
   static Future<bool> _config({
-    required SensorType sensorType,
     required String deviceId,
     required WidgetRef ref,
-    ConfigScale? scale = defConfigScale,
-    ConfigMode? mode = defConfigMode,
-    DataRate? dataRate = defDataRate,
-
-    /// ACC: 0-127
-    /// DST: 0-2000
-    required int threshold,
-
-    /// 0 - 99999 ms
-    required int timeout,
+    required _SensorConfigModel model,
   }) {
     final dt = [
-      BigGuy.sensorTypeToStr(sensorType),
-      scale?.index,
-      mode?.index,
-      dataRate?.index,
-      threshold,
-      timeout,
+      BigGuy.sensorTypeToStr(model.sensorType),
+      model.scale?.index,
+      model.mode?.index,
+      model.dataRate?.index,
+      model.threshold,
+      model.timeout,
     ].join(defaultSeperator);
 
     return BleManager.writeCharacteristic(
@@ -340,46 +406,26 @@ abstract class PadSensorManager {
     );
   }
 
-  static Future<bool> configAcc({
+  static Future<bool> configAccSensor({
     required String deviceId,
     required WidgetRef ref,
-    required ConfigScale scale,
-    required ConfigMode mode,
-    required DataRate dataRate,
-
-    /// 0-127
-    required int threshold,
-
-    /// 0 - 99999 ms
-    required int timeout,
+    required AccConfigModel model,
   }) =>
       _config(
-        sensorType: SensorType.acc,
         deviceId: deviceId,
         ref: ref,
-        scale: scale,
-        mode: mode,
-        dataRate: dataRate,
-        threshold: threshold,
-        timeout: timeout,
+        model: _SensorConfigModel.fromAccConfigModel(model),
       );
 
-  static Future<bool> configDst({
+  static Future<bool> configDstSensor({
     required String deviceId,
     required WidgetRef ref,
-
-    ///  0-2000
-    required int threshold,
-
-    /// 0 - 99999 ms
-    required int timeout,
+    required DstConfigModel model,
   }) =>
       _config(
-        sensorType: SensorType.dst,
         deviceId: deviceId,
         ref: ref,
-        threshold: threshold,
-        timeout: timeout,
+        model: _SensorConfigModel.fromDstConfigModel(model),
       );
 
   // #endregion
