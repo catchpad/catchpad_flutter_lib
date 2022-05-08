@@ -2,12 +2,17 @@
 
 import 'dart:convert';
 
+import '../enums/sensors/config/acc_sensor_type.dart';
+import '../enums/sensors/config/sensor_type.dart';
 import 'ble_manager.dart';
 import 'sensors/acc_gravity_model.dart';
 import 'sensors/acc_tap_model.dart';
 import '../utils/big_guy.dart';
 import '../utils/pad_consts.dart';
 
+import 'sensors/config/acc_config_model.dart';
+import 'sensors/config/dst_config_model.dart';
+import 'sensors/config/sensor_config_model.dart';
 import 'sensors/dst_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:async/async.dart' show StreamGroup;
@@ -15,122 +20,6 @@ import 'package:async/async.dart' show StreamGroup;
 import 'sensors/events/distance_event.dart';
 import 'sensors/events/motion_event.dart';
 import 'sensors/events/touch_event.dart';
-
-/// the Accelederometer sensor has 2 modes, gravity
-/// and tap. even though it streams on the same characteristic,
-/// the shape of data it streams is different.
-enum AccSensorType { tap, gravity }
-
-enum SensorType { acc, dst, vel }
-
-/// well we have `SensorType` but, that does not include
-/// sub categories like tap and motion.
-enum UsedSensorsType { tap, motion, distance }
-
-/// as in the multimeter, the lower the number, the more accurate the reading
-enum ConfigScale {
-  LIS2DH12_2g,
-  LIS2DH12_4g,
-  LIS2DH12_8g,
-  LIS2DH12_16g,
-}
-
-/// the higher the bitrate is, the more accurate the reading
-enum ConfigMode {
-  LIS2DH12_HR_12bit,
-  LIS2DH12_NM_10bit,
-}
-
-/// how many calculation in 1 second,
-/// keeping at 1khz is the most ideal
-enum DataRate {
-  LIS2DH12_POWER_DOWN,
-  LIS2DH12_ODR_1Hz,
-  LIS2DH12_ODR_10Hz,
-  LIS2DH12_ODR_25Hz,
-  LIS2DH12_ODR_50Hz,
-  LIS2DH12_ODR_100Hz,
-  LIS2DH12_ODR_200Hz,
-  LIS2DH12_ODR_400Hz,
-  LIS2DH12_ODR_1kHz620_LP,
-  LIS2DH12_ODR_5kHz376_LP_1kHz344_NM_HP,
-}
-
-class AccConfigModel {
-  final ConfigScale scale;
-  final ConfigMode mode;
-  final DataRate dataRate;
-
-  /// 0-127
-  final int threshold;
-
-  /// 0 - 99999 ms
-  final int timeout;
-
-  const AccConfigModel({
-    this.scale = defConfigScale,
-    this.mode = defConfigMode,
-    this.dataRate = defDataRate,
-    required this.threshold,
-    required this.timeout,
-  });
-}
-
-class DstConfigModel {
-  ///  0-2000
-  final int threshold;
-
-  /// 0 - 99999 ms
-  final int timeout;
-
-  const DstConfigModel({
-    required this.threshold,
-    required this.timeout,
-  });
-}
-
-class _SensorConfigModel {
-  final SensorType sensorType;
-
-  final ConfigScale? scale;
-  final ConfigMode? mode;
-  final DataRate? dataRate;
-
-  /// ACC: 0-127
-  /// DST: 0-2000
-  final int threshold;
-
-  /// 0 - 99999 ms
-  final int timeout;
-
-  const _SensorConfigModel({
-    required this.sensorType,
-    this.scale,
-    this.mode,
-    this.dataRate,
-    required this.threshold,
-    required this.timeout,
-  });
-
-  factory _SensorConfigModel.fromAccConfigModel(AccConfigModel accConfigModel) {
-    return _SensorConfigModel(
-      sensorType: SensorType.acc,
-      scale: accConfigModel.scale,
-      mode: accConfigModel.mode,
-      dataRate: accConfigModel.dataRate,
-      threshold: accConfigModel.threshold,
-      timeout: accConfigModel.timeout,
-    );
-  }
-
-  factory _SensorConfigModel.fromDstConfigModel(DstConfigModel dstConfigModel) {
-    return _SensorConfigModel(
-      sensorType: SensorType.dst,
-      threshold: dstConfigModel.threshold,
-      timeout: dstConfigModel.timeout,
-    );
-  }
-}
 
 abstract class PadSensorManager {
   // #region activate
@@ -388,7 +277,7 @@ abstract class PadSensorManager {
   static Future<bool> _config({
     required String deviceId,
     required WidgetRef ref,
-    required _SensorConfigModel model,
+    required SensorConfigModel model,
   }) {
     final dt = [
       BigGuy.sensorTypeToStr(model.sensorType),
@@ -414,7 +303,7 @@ abstract class PadSensorManager {
       _config(
         deviceId: deviceId,
         ref: ref,
-        model: _SensorConfigModel.fromAccConfigModel(model),
+        model: model.toSensorConfigModel(),
       );
 
   static Future<bool> configDstSensor({
@@ -425,7 +314,7 @@ abstract class PadSensorManager {
       _config(
         deviceId: deviceId,
         ref: ref,
-        model: _SensorConfigModel.fromDstConfigModel(model),
+        model: model.toSensorConfigModel(),
       );
 
   // #endregion

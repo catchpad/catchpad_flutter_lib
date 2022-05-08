@@ -2,6 +2,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../enums/enviroment_type.dart';
 
+export '../enums/enviroment_type.dart';
+
 part 'enviroment_model.freezed.dart';
 
 @freezed

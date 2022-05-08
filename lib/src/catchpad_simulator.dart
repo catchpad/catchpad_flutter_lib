@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:catchpad_flutter_lib/catchpad_flutter_lib.dart';
+import '../catchpad_flutter_lib.dart';
 
 import 'package:flutter/foundation.dart';
 
@@ -10,6 +10,8 @@ import 'package:flutter_reactive_ble/src/discovered_devices_registry.dart'
     show DiscoveredDevicesRegistryImpl;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:web_socket_channel/io.dart';
+
+import 'enums/sensors/config/used_sensor_type.dart';
 
 abstract class _FlutterReactiveBleExtender implements FlutterReactiveBle {
   // so wtf is going on here? you ask..

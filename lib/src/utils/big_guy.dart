@@ -1,4 +1,4 @@
-import '../models/pad_sensor_manager.dart';
+import '../enums/sensors/config/sensor_type.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:xrandom/xrandom.dart';

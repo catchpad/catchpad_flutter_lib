@@ -1,7 +1,8 @@
 export 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 export 'src/catchpad_simulator.dart';
-export 'src/enums/enviroment_type.dart';
+
+// #region models
 export 'src/models/ble_device_connector.dart';
 export 'src/models/ble_logger.dart';
 export 'src/models/ble_manager.dart';
@@ -17,13 +18,23 @@ export 'src/models/reactive_state.dart';
 export 'src/models/sides_colors_model.dart';
 export 'src/models/dev_info_model.dart';
 export 'src/models/battery_model.dart';
+// #endregion
+
+// #region sensors
 export 'src/models/sensors/acc_gravity_model.dart';
 export 'src/models/sensors/acc_tap_model.dart';
 export 'src/models/sensors/dst_model.dart';
+
 export 'src/models/sensors/events/distance_event.dart';
 export 'src/models/sensors/events/sensor_event.dart';
 export 'src/models/sensors/events/motion_event.dart';
 export 'src/models/sensors/events/touch_event.dart';
+
+export 'src/models/sensors/config/acc_config_model.dart';
+export 'src/models/sensors/config/dst_config_model.dart';
+// #endregion
+
+// #region providers
 export 'src/provs/ble_connection_state_prov.dart';
 export 'src/provs/ble_device_connector_prov.dart';
 export 'src/provs/ble_logger_prov.dart';
@@ -33,7 +44,11 @@ export 'src/provs/ble_scanner_prov.dart';
 export 'src/provs/ble_status_monitor_prov.dart';
 export 'src/provs/ble_status_prov.dart';
 export 'src/provs/enviroment_prov.dart';
+// #endregion
+
+// #region utils
 export 'src/utils/big_guy.dart';
 export 'src/utils/consts.dart';
 export 'src/utils/pad_consts.dart';
 export 'src/models/cp_main_Colors.dart';
+// #endregion

@@ -1,8 +1,10 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
+import '../enums/sensors/config/config_data_rate.dart';
+import '../enums/sensors/config/config_mode.dart';
+import '../enums/sensors/config/config_scale.dart';
 import '../models/cp_characteristic.dart';
-import '../models/pad_sensor_manager.dart';
 
 const Duration responseTimeMistakeMargin = Duration(milliseconds: 20);
 const String defaultSeperator = '/';
