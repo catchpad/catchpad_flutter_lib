@@ -2,21 +2,21 @@
 
 import 'dart:convert';
 
+import 'package:async/async.dart' show StreamGroup;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../enums/sensors/config/acc_sensor_type.dart';
 import '../enums/sensors/config/sensor_type.dart';
+import '../utils/big_guy.dart';
+import '../utils/pad_consts.dart';
 import 'ble_manager.dart';
 import 'sensors/acc_gravity_model.dart';
 import 'sensors/acc_tap_model.dart';
-import '../utils/big_guy.dart';
-import '../utils/pad_consts.dart';
-
 import 'sensors/config/acc_config_model.dart';
+import 'sensors/config/acc_interrupt_config_model.dart';
 import 'sensors/config/dst_config_model.dart';
 import 'sensors/config/sensor_config_model.dart';
 import 'sensors/dst_model.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:async/async.dart' show StreamGroup;
-
 import 'sensors/events/distance_event.dart';
 import 'sensors/events/motion_event.dart';
 import 'sensors/events/touch_event.dart';
@@ -286,7 +286,18 @@ abstract class PadSensorManager {
       model.dataRate?.index,
       model.threshold,
       model.timeout,
-    ].join(defaultSeperator);
+      if (model.sensorType != SensorType.dst) ...[
+        model.intScale?.index,
+        model.intMode?.index,
+        model.intDataRate?.index,
+        model.intThreshold,
+        model.intDuration,
+        model.intTimeout,
+        model.intSleepEnable == null
+            ? '-1'
+            : BigGuy.boolToNumString(model.intSleepEnable!),
+      ],
+    ].map((e) => e ?? '-1').join(defaultSeperator);
 
     return BleManager.writeCharacteristic(
       ref: ref,
@@ -299,6 +310,17 @@ abstract class PadSensorManager {
     required String deviceId,
     required WidgetRef ref,
     required AccConfigModel model,
+  }) =>
+      _config(
+        deviceId: deviceId,
+        ref: ref,
+        model: model.toSensorConfigModel(),
+      );
+
+  static Future<bool> configAccInterruptSensor({
+    required String deviceId,
+    required WidgetRef ref,
+    required AccInterruptConfigModel model,
   }) =>
       _config(
         deviceId: deviceId,

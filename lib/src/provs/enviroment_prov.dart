@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../enums/enviroment_type.dart';
 import '../models/enviroment_model.dart';
 
 final enviromentProv =

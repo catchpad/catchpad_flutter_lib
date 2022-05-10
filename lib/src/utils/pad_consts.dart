@@ -12,29 +12,47 @@ const String subSeperator = ',';
 const String defaultEmptyValue = '-1';
 
 // #region sensor defaults
-const ConfigScale defConfigScale = ConfigScale.LIS2DH12_4g;
-const ConfigMode defConfigMode = ConfigMode.LIS2DH12_NM_10bit;
+const ConfigScale defConfigScale = ConfigScale.LIS2DH12_2g;
+const ConfigMode defConfigMode = ConfigMode.LIS2DH12_HR_12bit;
 const DataRate defDataRate = DataRate.LIS2DH12_ODR_400Hz;
+
+const ConfigScale defConfigIntScale = ConfigScale.LIS2DH12_2g;
+const ConfigMode defConfigIntMode = ConfigMode.LIS2DH12_HR_12bit;
+const DataRate defIntDataRate = DataRate.LIS2DH12_ODR_400Hz;
+
+const bool defSleepEnable = true;
 
 const minDstThreshold = 0;
 const maxDstThreshold = 2000;
-const defDstThreshold = 20;
+const defDstThreshold = 40;
 
 const minAccThreshold = 0;
 const maxAccThreshold = 127;
-const defAccThreshold = 65;
+const defAccThreshold = 60;
+
+const minAccIntThreshold = 0;
+const maxAccIntThreshold = 127;
+const defAccIntThreshold = 10;
+
+const minAccIntDuration = 0;
+const maxAccIntDuration = 20;
+const defAccIntDuration = 5;
 
 const minTimeOut = 0;
 const maxTimeOut = 99999;
 const defTimeOut = 250;
 
-int get minAccTimeOut => minTimeOut;
-int get maxAccTimeOut => maxTimeOut;
-int get defAccTimeOut => defTimeOut;
+const int minAccTimeOut = minTimeOut;
+const int maxAccTimeOut = maxTimeOut;
+const int defAccTimeOut = defTimeOut;
 
-int get minDstTimeOut => minTimeOut;
-int get maxDstTimeOut => maxTimeOut;
-int get defDstTimeOut => defTimeOut;
+const int minDstTimeOut = minTimeOut;
+const int maxDstTimeOut = maxTimeOut;
+const int defDstTimeOut = defTimeOut;
+
+const int minAccIntTimeOut = 0;
+const int maxAccIntTimeOut = 20;
+const int defAccIntTimeOut = 20;
 // #endregion
 
 // #region main stuff

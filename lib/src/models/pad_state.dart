@@ -1,5 +1,8 @@
-import '../../catchpad_flutter_lib.dart';
 import 'package:flutter/foundation.dart';
+
+import '../utils/big_guy.dart';
+import '../utils/pad_consts.dart';
+import 'pad_manager.dart';
 
 class ActivatedSensorsModel {
   final bool tap;

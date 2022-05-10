@@ -1,10 +1,20 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../catchpad_flutter_lib.dart';
+import '../utils/big_guy.dart';
+import '../utils/pad_consts.dart';
+import 'battery_model.dart';
+import 'ble_manager.dart';
+import 'dev_info_model.dart';
+import 'pad_manager.dart';
+import 'pad_sensor_manager.dart';
+import 'sensors/config/acc_config_model.dart';
+import 'sensors/config/acc_interrupt_config_model.dart';
+import 'sensors/config/dst_config_model.dart';
 import 'sounds/martilar15s.dart';
 
 export 'sides_colors_model.dart';
@@ -117,6 +127,7 @@ abstract class PadManager {
     );
   }
 
+  /// restart the device
   static Future<bool> resetDevice(
     String deviceId, {
     required WidgetRef ref,
@@ -128,6 +139,49 @@ abstract class PadManager {
       withResponse: false,
       ref: ref,
     );
+  }
+
+  static Future<bool> resetDeviceSettings(
+    String deviceId, {
+    required WidgetRef ref,
+  }) async {
+    return (await Future.wait<bool>(
+      [
+        PadSensorManager.configAccSensor(
+          deviceId: deviceId,
+          ref: ref,
+          model: const AccConfigModel(
+            scale: defConfigScale,
+            mode: defConfigMode,
+            dataRate: defDataRate,
+            threshold: defAccThreshold,
+            timeout: defAccTimeOut,
+          ),
+        ),
+        PadSensorManager.configAccInterruptSensor(
+          deviceId: deviceId,
+          ref: ref,
+          model: const AccInterruptConfigModel(
+            scale: defConfigIntScale,
+            mode: defConfigIntMode,
+            dataRate: defIntDataRate,
+            threshold: defAccIntThreshold,
+            duration: defAccIntDuration,
+            timeout: defAccTimeOut,
+            sleepEnable: defSleepEnable,
+          ),
+        ),
+        PadSensorManager.configDstSensor(
+          deviceId: deviceId,
+          ref: ref,
+          model: const DstConfigModel(
+            threshold: defDstThreshold,
+            timeout: defDstTimeOut,
+          ),
+        ),
+      ],
+    ))
+        .every((element) => element == true);
   }
 
   static Future<bool> toggleDebug(

@@ -1,4 +1,5 @@
-import '../../../../catchpad_flutter_lib.dart';
+import '../acc_tap_model.dart';
+import 'sensor_event.dart';
 
 class TouchEvent extends SensorEvent {
   final AcceleremetorTapModel tap;

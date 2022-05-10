@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import '../catchpad_flutter_lib.dart';
-
 import 'package:flutter/foundation.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 // ignore: implementation_imports
 import 'package:flutter_reactive_ble/src/discovered_devices_registry.dart'
@@ -12,6 +11,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:web_socket_channel/io.dart';
 
 import 'enums/sensors/config/used_sensor_type.dart';
+import 'models/ble_manager.dart';
+import 'models/pad_state.dart';
+import 'models/sensors/acc_gravity_model.dart';
+import 'models/sensors/acc_tap_model.dart';
+import 'models/sensors/dst_model.dart';
+import 'provs/enviroment_prov.dart';
+import 'utils/consts.dart';
+import 'utils/pad_consts.dart';
 
 abstract class _FlutterReactiveBleExtender implements FlutterReactiveBle {
   // so wtf is going on here? you ask..

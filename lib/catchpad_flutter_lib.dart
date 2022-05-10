@@ -32,6 +32,7 @@ export 'src/models/sensors/events/touch_event.dart';
 
 export 'src/models/sensors/config/acc_config_model.dart';
 export 'src/models/sensors/config/dst_config_model.dart';
+export 'src/models/sensors/config/acc_interrupt_config_model.dart';
 // #endregion
 
 // #region providers

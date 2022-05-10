@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import '../../catchpad_flutter_lib.dart';
+import '../utils/big_guy.dart';
 
 class BatteryModel {
   final double? voltage;
