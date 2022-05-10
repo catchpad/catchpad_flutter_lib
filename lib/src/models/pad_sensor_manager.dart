@@ -309,24 +309,52 @@ abstract class PadSensorManager {
   static Future<bool> configAccSensor({
     required String deviceId,
     required WidgetRef ref,
-    required AccConfigModel model,
-  }) =>
-      _config(
-        deviceId: deviceId,
-        ref: ref,
-        model: model.toSensorConfigModel(),
-      );
+    AccConfigModel? model,
+    AccInterruptConfigModel? intModel,
+  }) {
+    assert(model != null || intModel != null);
 
-  static Future<bool> configAccInterruptSensor({
-    required String deviceId,
-    required WidgetRef ref,
-    required AccInterruptConfigModel model,
-  }) =>
-      _config(
-        deviceId: deviceId,
-        ref: ref,
-        model: model.toSensorConfigModel(),
+    final models = [
+      if (model != null) model.toSensorConfigModel(),
+      if (intModel != null) intModel.toSensorConfigModel(),
+    ];
+
+    var newModel = const SensorConfigModel(sensorType: SensorType.acc);
+
+    for (final m in models) {
+      newModel = newModel.copyWith(
+        scale: m.scale,
+        mode: m.mode,
+        dataRate: m.dataRate,
+        threshold: m.threshold,
+        timeout: m.timeout,
+        intScale: m.intScale,
+        intMode: m.intMode,
+        intDataRate: m.intDataRate,
+        intThreshold: m.intThreshold,
+        intDuration: m.intDuration,
+        intTimeout: m.intTimeout,
+        intSleepEnable: m.intSleepEnable,
       );
+    }
+
+    return _config(
+      deviceId: deviceId,
+      ref: ref,
+      model: newModel,
+    );
+  }
+
+  // static Future<bool> configAccInterruptSensor({
+  //   required String deviceId,
+  //   required WidgetRef ref,
+  //   required AccInterruptConfigModel model,
+  // }) =>
+  //     _config(
+  //       deviceId: deviceId,
+  //       ref: ref,
+  //       model: model.toSensorConfigModel(),
+  //     );
 
   static Future<bool> configDstSensor({
     required String deviceId,

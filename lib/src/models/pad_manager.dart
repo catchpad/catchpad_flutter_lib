@@ -145,43 +145,48 @@ abstract class PadManager {
     String deviceId, {
     required WidgetRef ref,
   }) async {
-    return (await Future.wait<bool>(
-      [
-        PadSensorManager.configAccSensor(
-          deviceId: deviceId,
-          ref: ref,
-          model: const AccConfigModel(
-            scale: defConfigScale,
-            mode: defConfigMode,
-            dataRate: defDataRate,
-            threshold: defAccThreshold,
-            timeout: defAccTimeOut,
+    final futures = [
+      () => PadSensorManager.configAccSensor(
+            deviceId: deviceId,
+            ref: ref,
+            model: const AccConfigModel(
+              scale: defConfigScale,
+              mode: defConfigMode,
+              dataRate: defDataRate,
+              threshold: defAccThreshold,
+              timeout: defAccTimeOut,
+            ),
+            intModel: const AccInterruptConfigModel(
+              scale: defConfigIntScale,
+              mode: defConfigIntMode,
+              dataRate: defIntDataRate,
+              threshold: defAccIntThreshold,
+              duration: defAccIntDuration,
+              timeout: defAccTimeOut,
+              sleepEnable: defSleepEnable,
+            ),
           ),
-        ),
-        PadSensorManager.configAccInterruptSensor(
-          deviceId: deviceId,
-          ref: ref,
-          model: const AccInterruptConfigModel(
-            scale: defConfigIntScale,
-            mode: defConfigIntMode,
-            dataRate: defIntDataRate,
-            threshold: defAccIntThreshold,
-            duration: defAccIntDuration,
-            timeout: defAccTimeOut,
-            sleepEnable: defSleepEnable,
+      () => PadSensorManager.configDstSensor(
+            deviceId: deviceId,
+            ref: ref,
+            model: const DstConfigModel(
+              threshold: defDstThreshold,
+              timeout: defDstTimeOut,
+            ),
           ),
-        ),
-        PadSensorManager.configDstSensor(
-          deviceId: deviceId,
-          ref: ref,
-          model: const DstConfigModel(
-            threshold: defDstThreshold,
-            timeout: defDstTimeOut,
-          ),
-        ),
-      ],
-    ))
-        .every((element) => element == true);
+    ];
+
+    bool ret = false;
+
+    for (var future in futures) {
+      final r = await future();
+
+      if (!r) {
+        ret = r;
+      }
+    }
+
+    return ret;
   }
 
   static Future<bool> toggleDebug(
