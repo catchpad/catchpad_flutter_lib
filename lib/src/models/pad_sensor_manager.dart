@@ -257,7 +257,15 @@ abstract class PadSensorManager {
     required WidgetRef ref,
     required String deviceId,
   }) async {
-    final reqs = [deactivateAccTap, deactivateAccGravity, deactivateDst];
+    final reqs = [
+      // only one acc deactivate
+      // is enough to deactivate
+      // both tap and gravity
+      // deactivateAccTap,
+      deactivateAccGravity,
+      //
+      deactivateDst,
+    ];
 
     bool allTrue = true;
 
