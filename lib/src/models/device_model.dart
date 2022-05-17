@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 typedef DeviceModel = DiscoveredDevice;
@@ -34,6 +36,24 @@ extension CpDiscoveredDevice on DiscoveredDevice {
         map[dev.id] = dev.deviceNameId;
         return map;
       },
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+    };
+  }
+
+  static DeviceModel fromJson(Map<String, dynamic> json) {
+    return DeviceModel(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      manufacturerData: Uint8List.fromList([]),
+      rssi: 0,
+      serviceData: const {},
+      serviceUuids: const [],
     );
   }
 }
