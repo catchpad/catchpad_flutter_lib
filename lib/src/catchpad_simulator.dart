@@ -272,10 +272,10 @@ class CatchpadSimulator extends _FlutterReactiveBleExtender {
         yield state;
       }
 
-      debugPrint('closing channel' + DateTime.now().toIso8601String());
+      debugPrint('closing channel${DateTime.now().toIso8601String()}');
     } catch (e) {
       debugPrint(
-          'Check your server is running' + DateTime.now().toIso8601String());
+          'Check your server is running${DateTime.now().toIso8601String()}');
       debugPrint(e.toString());
     } finally {
       await ch.sink.close();
@@ -305,11 +305,11 @@ class CatchpadSimulator extends _FlutterReactiveBleExtender {
         yield event;
       }
 
-      debugPrint('closing channel' + DateTime.now().toIso8601String());
+      debugPrint('closing channel${DateTime.now().toIso8601String()}');
       await ch.sink.close();
     } catch (e) {
       debugPrint(
-          'Check your server is running' + DateTime.now().toIso8601String());
+          'Check your server is running${DateTime.now().toIso8601String()}');
       debugPrint(e.toString());
     } finally {
       await ch.sink.close();

@@ -85,7 +85,7 @@ class AcceleremetorGravityModel {
       'temperature': temperature,
       'roll': roll,
       'pitch': pitch,
-    }.entries.map((e) => e.key + ': ' + e.value.toString()).join('\n');
+    }.entries.map((e) => '${e.key}: ${e.value}').join('\n');
   }
 
   factory AcceleremetorGravityModel.fromJson(Map<String, dynamic> json) =>

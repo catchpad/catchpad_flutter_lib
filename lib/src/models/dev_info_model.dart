@@ -40,14 +40,14 @@ class DevInfoModel {
   @override
   String toString() {
     return [
-      'CatchPad Id: ' + cpId,
-      'Mac Id: ' + macId,
-      'Sticker Type: ' + stickerType,
-      'Hardware Version: ' + hwVersion,
-      'Software Version: ' + swVersion,
-      'ACC Threshold: ' + accThr,
-      'DST Threshold: ' + dstThr,
-      'VEL Threshold: ' + velThr,
+      'CatchPad Id: $cpId',
+      'Mac Id: $macId',
+      'Sticker Type: $stickerType',
+      'Hardware Version: $hwVersion',
+      'Software Version: $swVersion',
+      'ACC Threshold: $accThr',
+      'DST Threshold: $dstThr',
+      'VEL Threshold: $velThr',
     ].join('\n');
   }
 }

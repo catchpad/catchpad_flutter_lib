@@ -73,7 +73,7 @@ class BleDeviceConnector extends ReactiveState<DeviceStatusMapEntry> {
     try {
       _logMessage('disconnecting to device: ${device.id}');
       await _connections[device]?.cancel();
-    } on Exception catch (e, _) {
+    } on Exception catch (e) {
       _logMessage("Error disconnecting from a device: $e");
     } finally {
       // Since [_connection] subscription is terminated, the "disconnected" state cannot be received and propagated

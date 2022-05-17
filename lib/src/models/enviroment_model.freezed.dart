@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'enviroment_model.dart';
@@ -11,24 +12,7 @@ part of 'enviroment_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
-
-/// @nodoc
-class _$EnviromentModelTearOff {
-  const _$EnviromentModelTearOff();
-
-  _EnviromentModel call(
-      {required EnviromentType enviromentType, String? ip, String? port}) {
-    return _EnviromentModel(
-      enviromentType: enviromentType,
-      ip: ip,
-      port: port,
-    );
-  }
-}
-
-/// @nodoc
-const $EnviromentModel = _$EnviromentModelTearOff();
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
 mixin _$EnviromentModel {
@@ -82,25 +66,25 @@ class _$EnviromentModelCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$EnviromentModelCopyWith<$Res>
+abstract class _$$_EnviromentModelCopyWith<$Res>
     implements $EnviromentModelCopyWith<$Res> {
-  factory _$EnviromentModelCopyWith(
-          _EnviromentModel value, $Res Function(_EnviromentModel) then) =
-      __$EnviromentModelCopyWithImpl<$Res>;
+  factory _$$_EnviromentModelCopyWith(
+          _$_EnviromentModel value, $Res Function(_$_EnviromentModel) then) =
+      __$$_EnviromentModelCopyWithImpl<$Res>;
   @override
   $Res call({EnviromentType enviromentType, String? ip, String? port});
 }
 
 /// @nodoc
-class __$EnviromentModelCopyWithImpl<$Res>
+class __$$_EnviromentModelCopyWithImpl<$Res>
     extends _$EnviromentModelCopyWithImpl<$Res>
-    implements _$EnviromentModelCopyWith<$Res> {
-  __$EnviromentModelCopyWithImpl(
-      _EnviromentModel _value, $Res Function(_EnviromentModel) _then)
-      : super(_value, (v) => _then(v as _EnviromentModel));
+    implements _$$_EnviromentModelCopyWith<$Res> {
+  __$$_EnviromentModelCopyWithImpl(
+      _$_EnviromentModel _value, $Res Function(_$_EnviromentModel) _then)
+      : super(_value, (v) => _then(v as _$_EnviromentModel));
 
   @override
-  _EnviromentModel get _value => super._value as _EnviromentModel;
+  _$_EnviromentModel get _value => super._value as _$_EnviromentModel;
 
   @override
   $Res call({
@@ -108,7 +92,7 @@ class __$EnviromentModelCopyWithImpl<$Res>
     Object? ip = freezed,
     Object? port = freezed,
   }) {
-    return _then(_EnviromentModel(
+    return _then(_$_EnviromentModel(
       enviromentType: enviromentType == freezed
           ? _value.enviromentType
           : enviromentType // ignore: cast_nullable_to_non_nullable
@@ -147,7 +131,7 @@ class _$_EnviromentModel extends _EnviromentModel {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _EnviromentModel &&
+            other is _$_EnviromentModel &&
             const DeepCollectionEquality()
                 .equals(other.enviromentType, enviromentType) &&
             const DeepCollectionEquality().equals(other.ip, ip) &&
@@ -163,25 +147,25 @@ class _$_EnviromentModel extends _EnviromentModel {
 
   @JsonKey(ignore: true)
   @override
-  _$EnviromentModelCopyWith<_EnviromentModel> get copyWith =>
-      __$EnviromentModelCopyWithImpl<_EnviromentModel>(this, _$identity);
+  _$$_EnviromentModelCopyWith<_$_EnviromentModel> get copyWith =>
+      __$$_EnviromentModelCopyWithImpl<_$_EnviromentModel>(this, _$identity);
 }
 
 abstract class _EnviromentModel extends EnviromentModel {
   factory _EnviromentModel(
-      {required EnviromentType enviromentType,
-      String? ip,
-      String? port}) = _$_EnviromentModel;
+      {required final EnviromentType enviromentType,
+      final String? ip,
+      final String? port}) = _$_EnviromentModel;
   _EnviromentModel._() : super._();
 
   @override
-  EnviromentType get enviromentType;
+  EnviromentType get enviromentType => throw _privateConstructorUsedError;
   @override
-  String? get ip;
+  String? get ip => throw _privateConstructorUsedError;
   @override
-  String? get port;
+  String? get port => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
-  _$EnviromentModelCopyWith<_EnviromentModel> get copyWith =>
+  _$$_EnviromentModelCopyWith<_$_EnviromentModel> get copyWith =>
       throw _privateConstructorUsedError;
 }

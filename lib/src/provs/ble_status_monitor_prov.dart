@@ -5,7 +5,7 @@ import 'ble_prov.dart';
 
 final bleStatusMonitorProv = StateProvider<BleStatusMonitor>(
   (ref) {
-    final _ble = ref.watch(bleProv);
-    return BleStatusMonitor(_ble);
+    final ble = ref.watch(bleProv);
+    return BleStatusMonitor(ble);
   },
 );

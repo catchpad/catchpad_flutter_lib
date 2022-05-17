@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'sensor_config_model.dart';
@@ -11,46 +12,7 @@ part of 'sensor_config_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
-
-/// @nodoc
-class _$SensorConfigModelTearOff {
-  const _$SensorConfigModelTearOff();
-
-  _SensorConfigModel call(
-      {required SensorType sensorType,
-      ConfigScale? scale,
-      ConfigMode? mode,
-      DataRate? dataRate,
-      int? threshold,
-      int? timeout,
-      ConfigScale? intScale,
-      ConfigMode? intMode,
-      DataRate? intDataRate,
-      int? intThreshold,
-      int? intTimeout,
-      int? intDuration,
-      bool? intSleepEnable}) {
-    return _SensorConfigModel(
-      sensorType: sensorType,
-      scale: scale,
-      mode: mode,
-      dataRate: dataRate,
-      threshold: threshold,
-      timeout: timeout,
-      intScale: intScale,
-      intMode: intMode,
-      intDataRate: intDataRate,
-      intThreshold: intThreshold,
-      intTimeout: intTimeout,
-      intDuration: intDuration,
-      intSleepEnable: intSleepEnable,
-    );
-  }
-}
-
-/// @nodoc
-const $SensorConfigModel = _$SensorConfigModelTearOff();
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
 mixin _$SensorConfigModel {
@@ -193,11 +155,11 @@ class _$SensorConfigModelCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$SensorConfigModelCopyWith<$Res>
+abstract class _$$_SensorConfigModelCopyWith<$Res>
     implements $SensorConfigModelCopyWith<$Res> {
-  factory _$SensorConfigModelCopyWith(
-          _SensorConfigModel value, $Res Function(_SensorConfigModel) then) =
-      __$SensorConfigModelCopyWithImpl<$Res>;
+  factory _$$_SensorConfigModelCopyWith(_$_SensorConfigModel value,
+          $Res Function(_$_SensorConfigModel) then) =
+      __$$_SensorConfigModelCopyWithImpl<$Res>;
   @override
   $Res call(
       {SensorType sensorType,
@@ -216,15 +178,15 @@ abstract class _$SensorConfigModelCopyWith<$Res>
 }
 
 /// @nodoc
-class __$SensorConfigModelCopyWithImpl<$Res>
+class __$$_SensorConfigModelCopyWithImpl<$Res>
     extends _$SensorConfigModelCopyWithImpl<$Res>
-    implements _$SensorConfigModelCopyWith<$Res> {
-  __$SensorConfigModelCopyWithImpl(
-      _SensorConfigModel _value, $Res Function(_SensorConfigModel) _then)
-      : super(_value, (v) => _then(v as _SensorConfigModel));
+    implements _$$_SensorConfigModelCopyWith<$Res> {
+  __$$_SensorConfigModelCopyWithImpl(
+      _$_SensorConfigModel _value, $Res Function(_$_SensorConfigModel) _then)
+      : super(_value, (v) => _then(v as _$_SensorConfigModel));
 
   @override
-  _SensorConfigModel get _value => super._value as _SensorConfigModel;
+  _$_SensorConfigModel get _value => super._value as _$_SensorConfigModel;
 
   @override
   $Res call({
@@ -242,7 +204,7 @@ class __$SensorConfigModelCopyWithImpl<$Res>
     Object? intDuration = freezed,
     Object? intSleepEnable = freezed,
   }) {
-    return _then(_SensorConfigModel(
+    return _then(_$_SensorConfigModel(
       sensorType: sensorType == freezed
           ? _value.sensorType
           : sensorType // ignore: cast_nullable_to_non_nullable
@@ -325,14 +287,14 @@ class _$_SensorConfigModel implements _SensorConfigModel {
   final ConfigMode? mode;
   @override
   final DataRate? dataRate;
-  @override
 
   /// ACC: 0-127
   /// DST: 0-2000
-  final int? threshold;
   @override
+  final int? threshold;
 
   /// 0 - 99999 ms
+  @override
   final int? timeout;
   @override
   final ConfigScale? intScale;
@@ -340,24 +302,24 @@ class _$_SensorConfigModel implements _SensorConfigModel {
   final ConfigMode? intMode;
   @override
   final DataRate? intDataRate;
-  @override
 
   /// ACC: 0-127
   /// DST: 0-2000
-  final int? intThreshold;
   @override
+  final int? intThreshold;
 
   /// 0 - 99999 ms
-  final int? intTimeout;
   @override
+  final int? intTimeout;
 
   /// ms
   /// 0 - 20 ms
   /// how long to wait for an interrupt
-  final int? intDuration;
   @override
+  final int? intDuration;
 
   /// wether to enable sleep mode
+  @override
   final bool? intSleepEnable;
 
   @override
@@ -369,7 +331,7 @@ class _$_SensorConfigModel implements _SensorConfigModel {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _SensorConfigModel &&
+            other is _$_SensorConfigModel &&
             const DeepCollectionEquality()
                 .equals(other.sensorType, sensorType) &&
             const DeepCollectionEquality().equals(other.scale, scale) &&
@@ -410,70 +372,71 @@ class _$_SensorConfigModel implements _SensorConfigModel {
 
   @JsonKey(ignore: true)
   @override
-  _$SensorConfigModelCopyWith<_SensorConfigModel> get copyWith =>
-      __$SensorConfigModelCopyWithImpl<_SensorConfigModel>(this, _$identity);
+  _$$_SensorConfigModelCopyWith<_$_SensorConfigModel> get copyWith =>
+      __$$_SensorConfigModelCopyWithImpl<_$_SensorConfigModel>(
+          this, _$identity);
 }
 
 abstract class _SensorConfigModel implements SensorConfigModel {
   const factory _SensorConfigModel(
-      {required SensorType sensorType,
-      ConfigScale? scale,
-      ConfigMode? mode,
-      DataRate? dataRate,
-      int? threshold,
-      int? timeout,
-      ConfigScale? intScale,
-      ConfigMode? intMode,
-      DataRate? intDataRate,
-      int? intThreshold,
-      int? intTimeout,
-      int? intDuration,
-      bool? intSleepEnable}) = _$_SensorConfigModel;
+      {required final SensorType sensorType,
+      final ConfigScale? scale,
+      final ConfigMode? mode,
+      final DataRate? dataRate,
+      final int? threshold,
+      final int? timeout,
+      final ConfigScale? intScale,
+      final ConfigMode? intMode,
+      final DataRate? intDataRate,
+      final int? intThreshold,
+      final int? intTimeout,
+      final int? intDuration,
+      final bool? intSleepEnable}) = _$_SensorConfigModel;
 
   @override
-  SensorType get sensorType;
+  SensorType get sensorType => throw _privateConstructorUsedError;
   @override
-  ConfigScale? get scale;
+  ConfigScale? get scale => throw _privateConstructorUsedError;
   @override
-  ConfigMode? get mode;
+  ConfigMode? get mode => throw _privateConstructorUsedError;
   @override
-  DataRate? get dataRate;
-  @override
-
-  /// ACC: 0-127
-  /// DST: 0-2000
-  int? get threshold;
-  @override
-
-  /// 0 - 99999 ms
-  int? get timeout;
-  @override
-  ConfigScale? get intScale;
-  @override
-  ConfigMode? get intMode;
-  @override
-  DataRate? get intDataRate;
+  DataRate? get dataRate => throw _privateConstructorUsedError;
   @override
 
   /// ACC: 0-127
   /// DST: 0-2000
-  int? get intThreshold;
+  int? get threshold => throw _privateConstructorUsedError;
   @override
 
   /// 0 - 99999 ms
-  int? get intTimeout;
+  int? get timeout => throw _privateConstructorUsedError;
+  @override
+  ConfigScale? get intScale => throw _privateConstructorUsedError;
+  @override
+  ConfigMode? get intMode => throw _privateConstructorUsedError;
+  @override
+  DataRate? get intDataRate => throw _privateConstructorUsedError;
+  @override
+
+  /// ACC: 0-127
+  /// DST: 0-2000
+  int? get intThreshold => throw _privateConstructorUsedError;
+  @override
+
+  /// 0 - 99999 ms
+  int? get intTimeout => throw _privateConstructorUsedError;
   @override
 
   /// ms
   /// 0 - 20 ms
   /// how long to wait for an interrupt
-  int? get intDuration;
+  int? get intDuration => throw _privateConstructorUsedError;
   @override
 
   /// wether to enable sleep mode
-  bool? get intSleepEnable;
+  bool? get intSleepEnable => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
-  _$SensorConfigModelCopyWith<_SensorConfigModel> get copyWith =>
+  _$$_SensorConfigModelCopyWith<_$_SensorConfigModel> get copyWith =>
       throw _privateConstructorUsedError;
 }

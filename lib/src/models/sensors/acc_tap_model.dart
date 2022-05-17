@@ -63,7 +63,7 @@ class AcceleremetorTapModel {
       'actionTime': actionTime,
       'tapCounter': tapCounter,
       'responseTime': responseTime,
-    }.entries.map((e) => e.key + ': ' + e.value.toString()).join('\n');
+    }.entries.map((e) => '${e.key}: ${e.value}').join('\n');
   }
 
   factory AcceleremetorTapModel.fromJson(Map<String, dynamic> json) =>

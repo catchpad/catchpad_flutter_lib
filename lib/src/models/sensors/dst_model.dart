@@ -54,7 +54,7 @@ class DistanceModel {
       'actionTime': actionTime,
       'distance': distance,
       'responseTime': responseTime,
-    }.entries.map((e) => e.key + ': ' + e.value.toString()).join('\n');
+    }.entries.map((e) => '${e.key}: ${e.value}').join('\n');
   }
 
   factory DistanceModel.fromJson(Map<String, dynamic> json) =>

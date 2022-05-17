@@ -46,10 +46,10 @@ class BatteryModel {
   @override
   String toString() {
     return [
-      'Voltage: ' + (voltage ?? 'null').toString(),
-      'Percentage: ' '%' + percentage.toString(),
-      'Is Charging: ' + (isCharging ? 'true' : 'false'),
-      'Is Completed: ' + (isCompleted ? 'true' : 'false'),
+      'Voltage: ${voltage ?? 'null'}',
+      'Percentage: %$percentage',
+      'Is Charging: ${isCharging ? 'true' : 'false'}',
+      'Is Completed: ${isCompleted ? 'true' : 'false'}',
     ].join('\n');
   }
 
