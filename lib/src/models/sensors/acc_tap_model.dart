@@ -1,8 +1,13 @@
 import 'dart:convert';
 
+import 'package:json_annotation/json_annotation.dart';
+
 import '../../utils/big_guy.dart';
 import '../../utils/pad_consts.dart';
 
+part 'acc_tap_model.g.dart';
+
+@JsonSerializable()
 class AcceleremetorTapModel {
   final int commandTime, actionTime;
   final int tapCounter;
@@ -60,4 +65,8 @@ class AcceleremetorTapModel {
       'responseTime': responseTime,
     }.entries.map((e) => e.key + ': ' + e.value.toString()).join('\n');
   }
+
+  factory AcceleremetorTapModel.fromJson(Map<String, dynamic> json) =>
+      _$AcceleremetorTapModelFromJson(json);
+  Map<String, dynamic> toJson() => _$AcceleremetorTapModelToJson(this);
 }

@@ -2,8 +2,13 @@ import 'dart:convert';
 
 import 'dart:math';
 
+import 'package:json_annotation/json_annotation.dart';
+
 import '../../utils/pad_consts.dart';
 
+part 'acc_gravity_model.g.dart';
+
+@JsonSerializable()
 class AcceleremetorGravityModel {
   final double x, y, z, temperature;
 
@@ -82,4 +87,8 @@ class AcceleremetorGravityModel {
       'pitch': pitch,
     }.entries.map((e) => e.key + ': ' + e.value.toString()).join('\n');
   }
+
+  factory AcceleremetorGravityModel.fromJson(Map<String, dynamic> json) =>
+      _$AcceleremetorGravityModelFromJson(json);
+  Map<String, dynamic> toJson() => _$AcceleremetorGravityModelToJson(this);
 }

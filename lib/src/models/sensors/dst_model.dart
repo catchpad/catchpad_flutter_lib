@@ -1,8 +1,13 @@
 import 'dart:convert';
 
+import 'package:freezed_annotation/freezed_annotation.dart';
+
 import '../../utils/big_guy.dart';
 import '../../utils/pad_consts.dart';
 
+part 'dst_model.g.dart';
+
+@JsonSerializable()
 class DistanceModel {
   final int commandTime, actionTime;
   final int distance;
@@ -51,4 +56,8 @@ class DistanceModel {
       'responseTime': responseTime,
     }.entries.map((e) => e.key + ': ' + e.value.toString()).join('\n');
   }
+
+  factory DistanceModel.fromJson(Map<String, dynamic> json) =>
+      _$DistanceModelFromJson(json);
+  Map<String, dynamic> toJson() => _$DistanceModelToJson(this);
 }
