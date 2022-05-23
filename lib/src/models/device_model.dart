@@ -12,6 +12,35 @@ extension CatchpadConnection on ConnectionStateUpdate {
 extension CpDiscoveredDevice on DiscoveredDevice {
   bool get isCPDevice => name.toLowerCase().contains('catchpad');
 
+  bool get isV1PresentationDevice {
+    final range = [25, 26, 27, 28, 29];
+
+    final any = range.any(
+      (i) {
+        return name.toLowerCase().startsWith('$i');
+      },
+    );
+
+    return any;
+  }
+
+  bool get isV2PresentationDevice {
+    final range = [35, 36, 37, 38, 39];
+    return range.any((i) => id.toLowerCase().startsWith('$i'));
+  }
+
+  String get deviceListingName {
+    if (isV1PresentationDevice) {
+      return 'Catchpad Prototip';
+    } else if (isV2PresentationDevice) {
+      return 'Catchpad';
+    } else if (isCPDevice) {
+      return 'Catchpad';
+    } else {
+      return 'Unknown';
+    }
+  }
+
   int? get deviceNumber {
     final d = deviceNameId;
     if (d == null) return null;

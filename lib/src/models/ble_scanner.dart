@@ -53,7 +53,11 @@ class BleScanner implements ReactiveState<BleScannerState> {
       // serviceUuids,
     ).listen(
       (device) {
-        if (!device.isCPDevice) return;
+        // if (!device.isCPDevice) return;
+
+        if (!device.isV1PresentationDevice && !device.isV2PresentationDevice) {
+          return;
+        }
 
         // dont add already added devices
         if (_devices.any((element) => element.id == device.id)) return;
