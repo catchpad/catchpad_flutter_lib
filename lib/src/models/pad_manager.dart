@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../catchpad_flutter_lib.dart';
 import '../utils/big_guy.dart';
 import '../utils/pad_consts.dart';
 import 'battery_model.dart';
@@ -87,12 +88,28 @@ abstract class PadManager {
     /// if null, it will flash forever
     Duration? duration,
   }) async {
-    final led = await _ledColor(
-      deviceId,
-      colorModel,
-      isCommand: isCommand,
-      ref: ref,
-    );
+    final devs = ref.read(bleConPr).keys;
+    final dev = devs.firstWhere((dev) => dev.id == deviceId);
+
+    final isV1 = dev.isV1PresentationDevice;
+
+    final bool led;
+
+    if (isV1) {
+      led = await _ledColorV1(
+        deviceId,
+        colorModel.tr!,
+        ref: ref,
+        isCommand: isCommand,
+      );
+    } else {
+      led = await _ledColor(
+        deviceId,
+        colorModel,
+        isCommand: isCommand,
+        ref: ref,
+      );
+    }
 
     if (duration != null) {
       await Future.delayed(duration);
@@ -103,6 +120,70 @@ abstract class PadManager {
     }
 
     return led;
+  }
+
+  static Future<bool> _ledColorV1(
+    String deviceId,
+    Color color, {
+    String? sides,
+    bool isCommand = false,
+    int? threshold,
+    required WidgetRef ref,
+  }) async {
+    bool _validateSides(String? sides) {
+      // if it's null, there's no assertion
+      if (sides == null) {
+        return false;
+      }
+
+      if (sides.length != 4 ||
+          !sides
+              .split('')
+              .every((element) => element != '0' || element != '1')) {
+        assert(false, 'Sides must be 4 digits and only contain 0s and 1s');
+
+        return false;
+      }
+
+      return true;
+    }
+
+    threshold ??= 0;
+
+    if (!_validateSides(sides)) {
+      sides = '1111';
+    }
+
+    // TODO
+    final dt = [
+      // deviceId,
+      '1',
+      color.red,
+      color.green,
+      color.blue,
+      sides,
+      BigGuy.boolToNumString(isCommand),
+      threshold,
+    ].join('/');
+
+    const String mainServiceId = '4fafc201-1fb5-459e-8fcc-c5c9c331914b',
+        mainCharacteristicId = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
+
+    Uuid mainServiceUuid = Uuid.parse(mainServiceId);
+    Uuid mainCharacteristicUuid = Uuid.parse(mainCharacteristicId);
+    QualifiedCharacteristic mainCharacteristic(String deviceId) =>
+        QualifiedCharacteristic(
+          characteristicId: mainCharacteristicUuid,
+          deviceId: deviceId,
+          serviceId: mainServiceUuid,
+        );
+
+    return await BleManager.writeCharacteristic(
+      c: mainCharacteristic(deviceId),
+      data: utf8.encode(dt),
+      withResponse: true,
+      ref: ref,
+    );
   }
 
   static Future<bool> _ledColor(

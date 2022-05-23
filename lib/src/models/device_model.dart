@@ -17,7 +17,7 @@ extension CpDiscoveredDevice on DiscoveredDevice {
 
     final any = range.any(
       (i) {
-        return name.toLowerCase().startsWith('$i');
+        return name.startsWith('$i');
       },
     );
 
@@ -26,7 +26,14 @@ extension CpDiscoveredDevice on DiscoveredDevice {
 
   bool get isV2PresentationDevice {
     final range = [35, 36, 37, 38, 39];
-    return range.any((i) => id.toLowerCase().startsWith('$i'));
+
+    final any = range.any(
+      (i) {
+        return name.startsWith('$i');
+      },
+    );
+
+    return any;
   }
 
   String get deviceListingName {
