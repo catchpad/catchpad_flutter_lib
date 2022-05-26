@@ -1,3 +1,5 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../../catchpad_flutter_lib.dart';
 
 class OldTouchEvent {
@@ -20,9 +22,10 @@ class OldTouchEvent {
     return OldTouchEvent._(deviceId, responseDuration);
   }
 
-  TouchEvent toTouchEvent() {
+  TouchEvent toTouchEvent(WidgetRef ref) {
+    final devs = ref.read(bleConPr).keys;
     return TouchEvent(
-      deviceNameId,
+      devs.firstWhere((e) => e.deviceNameId == deviceNameId).id,
       AcceleremetorTapModel(
         actionTime: responseTime.inMilliseconds - 1,
         commandTime: 1,
