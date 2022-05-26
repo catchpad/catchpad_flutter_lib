@@ -49,11 +49,15 @@ class BleConnectionStateNotifier extends StateNotifier<DeviceStatusMap> {
       }
     }
 
-    newM[device] ??= ConnectionStateUpdate(
-      connectionState: conState,
-      deviceId: device.id,
-      failure: null,
-    );
+    if (conState == DeviceConnectionState.connected) {
+      newM[device] ??= ConnectionStateUpdate(
+        connectionState: conState,
+        deviceId: device.id,
+        failure: null,
+      );
+    } else {
+      newM.remove(device);
+    }
 
     state = newM;
   }
