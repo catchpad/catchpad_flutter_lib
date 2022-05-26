@@ -179,16 +179,20 @@ abstract class PadManager {
     bool isCommand = false,
     required WidgetRef ref,
   }) async {
-    final isV1 = await getIsV1(ref, deviceId);
+    try {
+      final isV1 = await getIsV1(ref, deviceId);
 
-    if (isV1) {
-      return _oldLedColor(
-        deviceId,
-        colorModel.anyValidColor,
-        sides: '1111',
-        isCommand: isCommand,
-        ref: ref,
-      );
+      if (isV1) {
+        return _oldLedColor(
+          deviceId,
+          colorModel.anyValidColor,
+          sides: '1111',
+          isCommand: isCommand,
+          ref: ref,
+        );
+      }
+    } catch (e) {
+      return false;
     }
 
     final dt = [
