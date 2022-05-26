@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:async/async.dart' show StreamGroup;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../catchpad_flutter_lib.dart';
 import '../enums/sensors/config/acc_sensor_type.dart';
 import '../enums/sensors/config/sensor_type.dart';
 import '../utils/big_guy.dart';
@@ -19,6 +20,7 @@ import 'sensors/config/sensor_config_model.dart';
 import 'sensors/dst_model.dart';
 import 'sensors/events/distance_event.dart';
 import 'sensors/events/motion_event.dart';
+import 'sensors/events/old_touch_event.dart';
 import 'sensors/events/touch_event.dart';
 
 abstract class PadSensorManager {
@@ -228,6 +230,11 @@ abstract class PadSensorManager {
     required WidgetRef ref,
     required String deviceId,
   }) async {
+    final isV1 = await PadManager.getIsV1(ref, deviceId);
+    if (isV1) {
+      return true;
+    }
+
     // SENSOR TYPE NAME	/	SENSOR STATUS	/	ACC SENSOR TYPE	/	THRLOCK
     final dt = [
       BigGuy.sensorTypeToStr(sensorType),
@@ -460,6 +467,16 @@ abstract class PadSensorManager {
     String deviceId, {
     required WidgetRef ref,
   }) async* {
+    final isV1 = await PadManager.getIsV1(ref, deviceId);
+    if (isV1) {
+      yield* BleManager.subscribeToCharacteristic(
+        oldMainCharacteristic.qualCharacteristic(deviceId),
+        ref: ref,
+      ).map(
+        (e) => OldTouchEvent.fromBytes(e).toTouchEvent(),
+      );
+    }
+
     await _deactivateAll(
       ref: ref,
       deviceId: deviceId,

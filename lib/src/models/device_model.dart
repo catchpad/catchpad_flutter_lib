@@ -11,6 +11,8 @@ extension CatchpadConnection on ConnectionStateUpdate {
 
 extension CpDiscoveredDevice on DiscoveredDevice {
   bool get isCPDevice => name.toLowerCase().contains('catchpad');
+  bool get isV2 => name.toLowerCase().contains('cphw02');
+  bool get isV1 => !isV2;
 
   int? get deviceNumber {
     final d = deviceNameId;

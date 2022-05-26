@@ -63,6 +63,8 @@ List<Uuid> get serviceUuids => serviceIds.map(Uuid.parse).toList();
 
 // #endregion
 
+// #region new characteristics
+
 // #region simulator only
 const String simulatorServiceId = 'b3b7e8f4-9ab4-4d9b-80d4-bd61113a5017';
 
@@ -139,6 +141,18 @@ const CpCharacteristic audioCharacteristic = CpCharacteristic(
   serviceId: audioServiceId,
 );
 // #endregion
+// #endregion
+
+const String oldMainServiceId = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
+const oldMainCharacteristicId = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
+
+Uuid get oldMainServiceUuid => Uuid.parse(oldMainServiceId);
+Uuid get oldMainCharacteristicUuid => Uuid.parse(oldMainCharacteristicId);
+
+const CpCharacteristic oldMainCharacteristic = CpCharacteristic(
+  id: oldMainCharacteristicId,
+  serviceId: oldMainServiceId,
+);
 
 abstract class PadConsts {
   static const Color errorColor = Color(0xFFF44336);

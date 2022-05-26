@@ -5,6 +5,14 @@ import '../utils/pad_consts.dart';
 class SidesColorsModel {
   final Color? tr, tl, br, bl;
 
+  Color get anyValidColor {
+    if (tr != null) return tr!;
+    if (tl != null) return tl!;
+    if (br != null) return br!;
+    if (bl != null) return bl!;
+    return const Color(000);
+  }
+
   /// when we want to send a signal to keep the colors the same,
   /// usually used for `isCommand`
   final bool same;

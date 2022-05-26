@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../catchpad_flutter_lib.dart';
 import '../utils/big_guy.dart';
 import '../utils/pad_consts.dart';
 import 'battery_model.dart';
@@ -20,10 +21,27 @@ import 'sounds/martilar15s.dart';
 export 'sides_colors_model.dart';
 
 abstract class PadManager {
+  static Future<bool> getIsV1(WidgetRef ref, String devId) async {
+    final devs = ref.read(bleConPr).keys;
+
+    return devs.firstWhere((element) => element.id == devId).isV1;
+  }
+
   static Future<bool> toggleLight(
     String deviceId, {
     required WidgetRef ref,
   }) async {
+    final isV1 = await getIsV1(ref, deviceId);
+
+    if (isV1) {
+      return await BleManager.writeCharacteristic(
+        c: oldMainCharacteristic.qualCharacteristic(deviceId),
+        data: utf8.encode('C'),
+        withResponse: false,
+        ref: ref,
+      );
+    }
+
     return await ledColor(
       deviceId,
       const SidesColorsModel(
@@ -105,12 +123,74 @@ abstract class PadManager {
     return led;
   }
 
+  static Future<bool> _oldLedColor(
+    String deviceId,
+    Color color, {
+    String? sides,
+    bool isCommand = false,
+    int? threshold,
+    required WidgetRef ref,
+  }) async {
+    threshold ??= 0;
+
+    bool _validateSides(String? sides) {
+      // if it's null, there's no assertion
+      if (sides == null) {
+        return false;
+      }
+
+      if (sides.length != 4 ||
+          !sides
+              .split('')
+              .every((element) => element != '0' || element != '1')) {
+        assert(false, 'Sides must be 4 digits and only contain 0s and 1s');
+
+        return false;
+      }
+
+      return true;
+    }
+
+    if (!_validateSides(sides)) {
+      sides = '1111';
+    }
+
+    final dt = [
+      // deviceId,
+      '1',
+      color.red,
+      color.green,
+      color.blue,
+      sides,
+      BigGuy.boolToNumString(isCommand),
+      threshold,
+    ].join('/');
+    return await BleManager.writeCharacteristic(
+      c: oldMainCharacteristic.qualCharacteristic(deviceId),
+      data: utf8.encode(dt),
+      withResponse: true,
+      ref: ref,
+    );
+  }
+
   static Future<bool> _ledColor(
     String deviceId,
     SidesColorsModel colorModel, {
     bool isCommand = false,
     required WidgetRef ref,
   }) async {
+    final isV1 = await getIsV1(ref, deviceId);
+
+    if (isV1) {
+      return _oldLedColor(
+        deviceId,
+        colorModel.anyValidColor,
+        sides: '1111',
+        isCommand: isCommand,
+        ref: ref,
+      );
+    }
+
     final dt = [
       BigGuy.boolToNumString(isCommand),
       colorModel,
