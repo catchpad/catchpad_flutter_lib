@@ -91,6 +91,10 @@ abstract class PadSensorManager {
     required WidgetRef ref,
     required String deviceId,
   }) async {
+    await _deactivateAll(
+      deviceId: deviceId,
+      ref: ref,
+    );
     return _activate(
       sensorType: SensorType.acc,
       accSensorType: AccSensorType.tap,
@@ -477,12 +481,12 @@ abstract class PadSensorManager {
       );
     }
 
-    await _deactivateAll(
-      ref: ref,
-      deviceId: deviceId,
-    );
+    // await _deactivateAll(
+    //   ref: ref,
+    //   deviceId: deviceId,
+    // );
 
-    await activateAccTap(ref: ref, deviceId: deviceId);
+    // await activateAccTap(ref: ref, deviceId: deviceId);
 
     yield* BleManager.subscribeToCharacteristic(
       accCharacteristic.qualCharacteristic(deviceId),

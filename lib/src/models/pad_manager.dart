@@ -20,7 +20,7 @@ import 'sounds/martilar15s.dart';
 
 export 'sides_colors_model.dart';
 
-final isV2Running = false;
+final isV2Running = true;
 
 abstract class PadManager {
   static Future<bool> getIsV1(WidgetRef ref, String devId) async {
