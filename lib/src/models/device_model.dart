@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:catchpad_flutter_lib/catchpad_flutter_lib.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
 typedef DeviceModel = DiscoveredDevice;
@@ -10,8 +11,14 @@ extension CatchpadConnection on ConnectionStateUpdate {
 }
 
 extension CpDiscoveredDevice on DiscoveredDevice {
-  bool get isCPDevice => name.toLowerCase().contains('catchpad');
-  bool get isV2 => name.toLowerCase().contains('cphw02');
+  bool get isCPDevice => isV2Running || name.toLowerCase().contains('catchpad');
+  bool get isV2 {
+    return isV2Running;
+    return true;
+    // return false;
+    // return name.toLowerCase().contains('cphw02');
+  }
+
   bool get isV1 => !isV2;
 
   int? get deviceNumber {

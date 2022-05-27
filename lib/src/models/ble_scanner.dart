@@ -61,8 +61,6 @@ class BleScanner implements ReactiveState<BleScannerState> {
         _devices.add(device);
 
         _pushState();
-
-        // deviceConnector.connect(device);
       },
       onError: (Object e) => _logMessage(
         'Device scan fails with error: $e',

@@ -20,11 +20,19 @@ import 'sounds/martilar15s.dart';
 
 export 'sides_colors_model.dart';
 
+final isV2Running = false;
+
 abstract class PadManager {
   static Future<bool> getIsV1(WidgetRef ref, String devId) async {
+    return !isV2Running;
     final devs = ref.read(bleConPr).keys;
 
-    return devs.firstWhere((element) => element.id == devId).isV1;
+    DeviceModel? compat;
+    try {
+      compat = devs.firstWhere((element) => element.id == devId);
+    } catch (e) {}
+
+    return compat?.isV1 == true;
   }
 
   static Future<bool> toggleLight(
