@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../catchpad_flutter_lib.dart';
 import '../utils/big_guy.dart';
 import '../utils/pad_consts.dart';
 import 'battery_model.dart';
@@ -20,19 +19,19 @@ import 'sounds/martilar15s.dart';
 
 export 'sides_colors_model.dart';
 
-final isV2Running = true;
+const isV2Running = true;
 
 abstract class PadManager {
   static Future<bool> getIsV1(WidgetRef ref, String devId) async {
     return !isV2Running;
-    final devs = ref.read(bleConPr).keys;
+    // final devs = ref.read(bleConPr).keys;
 
-    DeviceModel? compat;
-    try {
-      compat = devs.firstWhere((element) => element.id == devId);
-    } catch (e) {}
+    // DeviceModel? compat;
+    // try {
+    //   compat = devs.firstWhere((element) => element.id == devId);
+    // } catch (e) {}
 
-    return compat?.isV1 == true;
+    // return compat?.isV1 == true;
   }
 
   static Future<bool> toggleLight(

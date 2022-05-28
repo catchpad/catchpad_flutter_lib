@@ -1,4 +1,6 @@
-import '../../../../catchpad_flutter_lib.dart';
+import '../../device_model.dart';
+import '../acc_tap_model.dart';
+import 'touch_event.dart';
 
 class OldTouchEvent {
   final String deviceNameId;

@@ -10,7 +10,7 @@ class SidesColorsModel {
     if (tl != null) return tl!;
     if (br != null) return br!;
     if (bl != null) return bl!;
-    return const Color(000);
+    return const Color(0x00000000);
   }
 
   /// when we want to send a signal to keep the colors the same,

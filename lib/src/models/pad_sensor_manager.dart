@@ -5,12 +5,12 @@ import 'dart:convert';
 import 'package:async/async.dart' show StreamGroup;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../catchpad_flutter_lib.dart';
 import '../enums/sensors/config/acc_sensor_type.dart';
 import '../enums/sensors/config/sensor_type.dart';
 import '../utils/big_guy.dart';
 import '../utils/pad_consts.dart';
 import 'ble_manager.dart';
+import 'pad_manager.dart';
 import 'sensors/acc_gravity_model.dart';
 import 'sensors/acc_tap_model.dart';
 import 'sensors/config/acc_config_model.dart';

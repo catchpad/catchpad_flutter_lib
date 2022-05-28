@@ -1,7 +1,8 @@
 import 'dart:typed_data';
 
-import 'package:catchpad_flutter_lib/catchpad_flutter_lib.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+
+import 'pad_manager.dart';
 
 typedef DeviceModel = DiscoveredDevice;
 typedef DevList = List<DeviceModel>;
@@ -14,8 +15,6 @@ extension CpDiscoveredDevice on DiscoveredDevice {
   bool get isCPDevice => isV2Running || name.toLowerCase().contains('catchpad');
   bool get isV2 {
     return isV2Running;
-    return true;
-    // return false;
     // return name.toLowerCase().contains('cphw02');
   }
 
