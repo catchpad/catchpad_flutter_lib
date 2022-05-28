@@ -99,7 +99,12 @@ class SidesColorsModel {
   }
 
   /// if true, we will send from the `all` characteristic
-  bool get allColorsSame => same || clrs.every((c) => colorEquals(c, tl));
+  bool get allColorsSame =>
+      // TODO: for now, allColor characteristic does not
+      // function properly (when we send isCommand = true, colors -1)
+      // so a temp fix would be to disable this.
+      false;
+  // same || clrs.every((c) => colorEquals(c, tl));
 
   /// filter is between 0 and 1,
   /// we multiply each color value we have by the filter
