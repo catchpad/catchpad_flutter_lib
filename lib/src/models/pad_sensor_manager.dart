@@ -10,6 +10,7 @@ import '../enums/sensors/config/sensor_type.dart';
 import '../utils/big_guy.dart';
 import '../utils/pad_consts.dart';
 import 'ble_manager.dart';
+import 'pad_manager.dart';
 import 'sensors/acc_gravity_model.dart';
 import 'sensors/acc_tap_model.dart';
 import 'sensors/config/acc_config_model.dart';
@@ -19,6 +20,7 @@ import 'sensors/config/sensor_config_model.dart';
 import 'sensors/dst_model.dart';
 import 'sensors/events/distance_event.dart';
 import 'sensors/events/motion_event.dart';
+import 'sensors/events/old_touch_event.dart';
 import 'sensors/events/touch_event.dart';
 
 abstract class PadSensorManager {
@@ -89,6 +91,10 @@ abstract class PadSensorManager {
     required WidgetRef ref,
     required String deviceId,
   }) async {
+    await _deactivateAll(
+      deviceId: deviceId,
+      ref: ref,
+    );
     return _activate(
       sensorType: SensorType.acc,
       accSensorType: AccSensorType.tap,
@@ -228,6 +234,11 @@ abstract class PadSensorManager {
     required WidgetRef ref,
     required String deviceId,
   }) async {
+    final isV1 = await PadManager.getIsV1(ref, deviceId);
+    if (isV1) {
+      return true;
+    }
+
     // SENSOR TYPE NAME	/	SENSOR STATUS	/	ACC SENSOR TYPE	/	THRLOCK
     final dt = [
       BigGuy.sensorTypeToStr(sensorType),
@@ -460,12 +471,22 @@ abstract class PadSensorManager {
     String deviceId, {
     required WidgetRef ref,
   }) async* {
-    await _deactivateAll(
-      ref: ref,
-      deviceId: deviceId,
-    );
+    final isV1 = await PadManager.getIsV1(ref, deviceId);
+    if (isV1) {
+      yield* BleManager.subscribeToCharacteristic(
+        oldMainCharacteristic.qualCharacteristic(deviceId),
+        ref: ref,
+      ).map(
+        (e) => OldTouchEvent.fromBytes(e).toTouchEvent(ref),
+      );
+    }
 
-    await activateAccTap(ref: ref, deviceId: deviceId);
+    // await _deactivateAll(
+    //   ref: ref,
+    //   deviceId: deviceId,
+    // );
+
+    // await activateAccTap(ref: ref, deviceId: deviceId);
 
     yield* BleManager.subscribeToCharacteristic(
       accCharacteristic.qualCharacteristic(deviceId),

@@ -3,7 +3,6 @@ import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
-
 // ignore: implementation_imports
 import 'package:flutter_reactive_ble/src/discovered_devices_registry.dart'
     show DiscoveredDevicesRegistryImpl;

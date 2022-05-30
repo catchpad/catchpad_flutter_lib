@@ -9,5 +9,14 @@ abstract class SensorEvent {
 
   bool get isValid;
 
-  String get deviceNameId => deviceId.split('-')[1];
+  String get deviceNameId {
+    final par = int.tryParse(deviceId);
+    if (par != null) {
+      return '$par';
+    }
+
+    var sp = deviceId.split('-');
+
+    return sp[1];
+  }
 }

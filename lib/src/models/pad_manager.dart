@@ -6,25 +6,41 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../catchpad_flutter_lib.dart';
-import '../utils/big_guy.dart';
-import '../utils/pad_consts.dart';
-import 'battery_model.dart';
-import 'ble_manager.dart';
-import 'dev_info_model.dart';
-import 'pad_manager.dart';
-import 'pad_sensor_manager.dart';
-import 'sensors/config/acc_config_model.dart';
-import 'sensors/config/acc_interrupt_config_model.dart';
-import 'sensors/config/dst_config_model.dart';
 import 'sounds/martilar15s.dart';
 
 export 'sides_colors_model.dart';
 
+const isV2Running = isSimRunning || true;
+const isSimRunning = false;
+
 abstract class PadManager {
+  static Future<bool> getIsV1(WidgetRef ref, String devId) async {
+    return !isV2Running;
+    // final devs = ref.read(bleConPr).keys;
+
+    // DeviceModel? compat;
+    // try {
+    //   compat = devs.firstWhere((element) => element.id == devId);
+    // } catch (e) {}
+
+    // return compat?.isV1 == true;
+  }
+
   static Future<bool> toggleLight(
     String deviceId, {
     required WidgetRef ref,
   }) async {
+    final isV1 = await getIsV1(ref, deviceId);
+
+    if (isV1) {
+      return await BleManager.writeCharacteristic(
+        c: oldMainCharacteristic.qualCharacteristic(deviceId),
+        data: utf8.encode('C'),
+        withResponse: false,
+        ref: ref,
+      );
+    }
+
     return await ledColor(
       deviceId,
       const SidesColorsModel(
@@ -96,7 +112,7 @@ abstract class PadManager {
     final bool led;
 
     if (isV1) {
-      led = await _ledColorV1(
+      led = await _oldLedColor(
         deviceId,
         colorModel.tr!,
         ref: ref,
@@ -122,7 +138,7 @@ abstract class PadManager {
     return led;
   }
 
-  static Future<bool> _ledColorV1(
+  static Future<bool> _oldLedColor(
     String deviceId,
     Color color, {
     String? sides,
@@ -130,6 +146,8 @@ abstract class PadManager {
     int? threshold,
     required WidgetRef ref,
   }) async {
+    threshold ??= 0;
+
     bool _validateSides(String? sides) {
       // if it's null, there's no assertion
       if (sides == null) {
@@ -148,13 +166,10 @@ abstract class PadManager {
       return true;
     }
 
-    threshold ??= 0;
-
     if (!_validateSides(sides)) {
       sides = '1111';
     }
 
-    // TODO
     final dt = [
       // deviceId,
       '1',
@@ -165,21 +180,8 @@ abstract class PadManager {
       BigGuy.boolToNumString(isCommand),
       threshold,
     ].join('/');
-
-    const String mainServiceId = '4fafc201-1fb5-459e-8fcc-c5c9c331914b',
-        mainCharacteristicId = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
-
-    Uuid mainServiceUuid = Uuid.parse(mainServiceId);
-    Uuid mainCharacteristicUuid = Uuid.parse(mainCharacteristicId);
-    QualifiedCharacteristic mainCharacteristic(String deviceId) =>
-        QualifiedCharacteristic(
-          characteristicId: mainCharacteristicUuid,
-          deviceId: deviceId,
-          serviceId: mainServiceUuid,
-        );
-
     return await BleManager.writeCharacteristic(
-      c: mainCharacteristic(deviceId),
+      c: oldMainCharacteristic.qualCharacteristic(deviceId),
       data: utf8.encode(dt),
       withResponse: true,
       ref: ref,
@@ -192,6 +194,22 @@ abstract class PadManager {
     bool isCommand = false,
     required WidgetRef ref,
   }) async {
+    try {
+      final isV1 = await getIsV1(ref, deviceId);
+
+      if (isV1) {
+        return _oldLedColor(
+          deviceId,
+          colorModel.anyValidColor,
+          sides: '1111',
+          isCommand: isCommand,
+          ref: ref,
+        );
+      }
+    } catch (e) {
+      return false;
+    }
+
     final dt = [
       BigGuy.boolToNumString(isCommand),
       colorModel,

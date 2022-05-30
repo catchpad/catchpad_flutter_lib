@@ -12,9 +12,9 @@ const String subSeperator = ',';
 const String defaultEmptyValue = '-1';
 
 // #region sensor defaults
-const ConfigScale defConfigScale = ConfigScale.LIS2DH12_2g;
+const ConfigScale defConfigScale = ConfigScale.LIS2DH12_16g;
 const ConfigMode defConfigMode = ConfigMode.LIS2DH12_HR_12bit;
-const DataRate defDataRate = DataRate.LIS2DH12_ODR_400Hz;
+const DataRate defDataRate = DataRate.LIS2DH12_ODR_1kHz620_LP;
 
 const ConfigScale defConfigIntScale = ConfigScale.LIS2DH12_2g;
 const ConfigMode defConfigIntMode = ConfigMode.LIS2DH12_HR_12bit;
@@ -28,7 +28,7 @@ const defDstThreshold = 40;
 
 const minAccThreshold = 0;
 const maxAccThreshold = 127;
-const defAccThreshold = 60;
+const defAccThreshold = 35;
 
 const minAccIntThreshold = 0;
 const maxAccIntThreshold = 127;
@@ -40,7 +40,7 @@ const defAccIntDuration = 5;
 
 const minTimeOut = 0;
 const maxTimeOut = 99999;
-const defTimeOut = 250;
+const defTimeOut = 100;
 
 const int minAccTimeOut = minTimeOut;
 const int maxAccTimeOut = maxTimeOut;
@@ -62,6 +62,8 @@ const List<String> serviceIds = [ledServiceId, adminServiceId, sensorServiceId];
 List<Uuid> get serviceUuids => serviceIds.map(Uuid.parse).toList();
 
 // #endregion
+
+// #region new characteristics
 
 // #region simulator only
 const String simulatorServiceId = 'b3b7e8f4-9ab4-4d9b-80d4-bd61113a5017';
@@ -139,6 +141,18 @@ const CpCharacteristic audioCharacteristic = CpCharacteristic(
   serviceId: audioServiceId,
 );
 // #endregion
+// #endregion
+
+const String oldMainServiceId = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
+const oldMainCharacteristicId = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
+
+Uuid get oldMainServiceUuid => Uuid.parse(oldMainServiceId);
+Uuid get oldMainCharacteristicUuid => Uuid.parse(oldMainCharacteristicId);
+
+const CpCharacteristic oldMainCharacteristic = CpCharacteristic(
+  id: oldMainCharacteristicId,
+  serviceId: oldMainServiceId,
+);
 
 abstract class PadConsts {
   static const Color errorColor = Color(0xFFF44336);

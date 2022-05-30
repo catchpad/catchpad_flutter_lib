@@ -5,6 +5,14 @@ import '../utils/pad_consts.dart';
 class SidesColorsModel {
   final Color? tr, tl, br, bl;
 
+  Color get anyValidColor {
+    if (tr != null) return tr!;
+    if (tl != null) return tl!;
+    if (br != null) return br!;
+    if (bl != null) return bl!;
+    return const Color(0x00000000);
+  }
+
   /// when we want to send a signal to keep the colors the same,
   /// usually used for `isCommand`
   final bool same;
@@ -91,7 +99,12 @@ class SidesColorsModel {
   }
 
   /// if true, we will send from the `all` characteristic
-  bool get allColorsSame => same || clrs.every((c) => colorEquals(c, tl));
+  bool get allColorsSame =>
+      // TODO: for now, allColor characteristic does not
+      // function properly (when we send isCommand = true, colors -1)
+      // so a temp fix would be to disable this.
+      false;
+  // same || clrs.every((c) => colorEquals(c, tl));
 
   /// filter is between 0 and 1,
   /// we multiply each color value we have by the filter

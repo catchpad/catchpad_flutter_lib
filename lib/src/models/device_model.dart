@@ -2,6 +2,8 @@ import 'dart:typed_data';
 
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
+import 'pad_manager.dart';
+
 typedef DeviceModel = DiscoveredDevice;
 typedef DevList = List<DeviceModel>;
 
@@ -10,7 +12,13 @@ extension CatchpadConnection on ConnectionStateUpdate {
 }
 
 extension CpDiscoveredDevice on DiscoveredDevice {
-  bool get isCPDevice => name.toLowerCase().contains('catchpad');
+  bool get isCPDevice => isV2Running || name.toLowerCase().contains('catchpad');
+  bool get isV2 {
+    return isV2Running;
+    // return name.toLowerCase().contains('cphw02');
+  }
+
+  bool get isV1 => !isV2;
 
   bool get isV1PresentationDevice {
     final range = [25, 26, 27, 28, 29];

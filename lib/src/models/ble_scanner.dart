@@ -4,7 +4,6 @@ import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../provs/ble_device_connector_prov.dart';
 import '../utils/consts.dart';
 import 'device_model.dart';
 import 'reactive_state.dart';
@@ -20,6 +19,7 @@ class BleScanner implements ReactiveState<BleScannerState> {
 
   bool _isScanning = false;
 
+  // ignore: unused_field
   final StateProviderRef _ref;
   final FlutterReactiveBle _ble;
   final void Function(String message) _logMessage;
@@ -35,7 +35,7 @@ class BleScanner implements ReactiveState<BleScannerState> {
   }
 
   void startScan() async {
-    final deviceConnector = _ref.watch(bleDeviceConnectorProv);
+    // final deviceConnector = _ref.watch(bleDeviceConnectorProv);
 
     if (_isScanning) {
       await stopScan();
@@ -65,8 +65,6 @@ class BleScanner implements ReactiveState<BleScannerState> {
         _devices.add(device);
 
         _pushState();
-
-        deviceConnector.connect(device);
       },
       onError: (Object e) => _logMessage(
         'Device scan fails with error: $e',
