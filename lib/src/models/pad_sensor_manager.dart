@@ -477,7 +477,7 @@ abstract class PadSensorManager {
         oldMainCharacteristic.qualCharacteristic(deviceId),
         ref: ref,
       ).map(
-        (e) => OldTouchEvent.fromBytes(e).toTouchEvent(),
+        (e) => OldTouchEvent.fromBytes(e).toTouchEvent(ref),
       );
     }
 
