@@ -28,20 +28,35 @@ class BleScanner implements ReactiveState<BleScannerState> {
     return _stateStreamController!.stream;
   }
 
+
+
   void updateDeviceInfo(DeviceModel newDev) {
     final d = <DeviceModel>{};
 
     for (var dev in _devices) {
       if (dev.id == newDev.id) {
+
         d.add(newDev);
       } else {
         d.add(dev);
       }
     }
-
+    _devices.clear();
     _devices = Set<DeviceModel>.from(d);
 
     _pushState();
+  }
+
+  void deleteDevices(List<String> deadList) async {
+    pauseScan();
+    _lastdevices.clear();
+    for (var deadId in deadList) {
+      if (_devices.map((e) => e.id).contains(deadId)) {
+        _devices.removeWhere((element) => element.id == deadId);
+      }
+    }
+    _pushState();
+    resumeScan();
   }
 
   void refreshScan({required List<DiscoveredDevice> connectedDevices}) async {
@@ -79,9 +94,13 @@ class BleScanner implements ReactiveState<BleScannerState> {
     _lastdevices.clear();
   }
 
+
+
+
   void hardRefreshScan(
       {required List<DiscoveredDevice> connectedDevices}) async {
     pauseScan();
+
     for (var condev in connectedDevices) {
       if (!_devices.map((e) => e.id).contains(condev.id)) {
         _devices.remove(condev);
@@ -89,7 +108,7 @@ class BleScanner implements ReactiveState<BleScannerState> {
     }
     debugPrint('${_devices.map((e) => e.name)}');
     debugPrint('${_lastdevices.map((e) => e.name)}');
-    _lastdevices.clear();
+
     _pushState();
     resumeScan();
   }
@@ -113,7 +132,7 @@ class BleScanner implements ReactiveState<BleScannerState> {
       withServices: [], requireLocationServicesEnabled: true,
       // serviceUuids,
     ).listen(
-      (device) {
+          (device) {
         // if (!device.isCPDevice) return;
 
         // dont add already added devices

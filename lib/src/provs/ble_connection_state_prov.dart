@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -11,7 +12,7 @@ typedef DeviceStatusMap = Map<DeviceModel, ConnectionStateUpdate>;
 typedef DeviceStatusMapEntry = MapEntry<DeviceModel, ConnectionStateUpdate>;
 
 final bleConenctionStateProv = StreamProvider<DeviceStatusMap>(
-  (ref) async* {
+      (ref) async* {
     final con = ref.watch(bleDeviceConnectorProv);
 
     final st = con.state;
@@ -23,14 +24,25 @@ final bleConenctionStateProv = StreamProvider<DeviceStatusMap>(
 );
 
 final bleConPr =
-    StateNotifierProvider<BleConnectionStateNotifier, DeviceStatusMap>(
-  (ref) {
+StateNotifierProvider<BleConnectionStateNotifier, DeviceStatusMap>(
+      (ref) {
     return BleConnectionStateNotifier();
   },
 );
 
 class BleConnectionStateNotifier extends StateNotifier<DeviceStatusMap> {
   BleConnectionStateNotifier() : super({});
+
+  void deleteFromId(String deviceModelId)  {
+    DeviceStatusMap newM = {};
+    newM = state;
+    DeviceModel chooseDeviceModel = state.keys.firstWhere((element) => element.id == deviceModelId);
+
+    debugPrint("Choose Device Model:${chooseDeviceModel.id} Map: $newM");
+    newM.remove(chooseDeviceModel);
+    state = newM;
+    debugPrint(" After Map: $newM");
+  }
 
   void updateDevice(DeviceModel d, DeviceConnectionState conState) =>
       update(d, conState);
@@ -49,6 +61,7 @@ class BleConnectionStateNotifier extends StateNotifier<DeviceStatusMap> {
       }
     }
 
+
     if (conState == DeviceConnectionState.connected) {
       newM[device] ??= ConnectionStateUpdate(
         connectionState: conState,
@@ -64,8 +77,8 @@ class BleConnectionStateNotifier extends StateNotifier<DeviceStatusMap> {
 }
 
 final connectedDevicesProv =
-    StateNotifierProvider<ConnectedDevicesNotifier, DevList>(
-  (ref) {
+StateNotifierProvider<ConnectedDevicesNotifier, DevList>(
+      (ref) {
     return ConnectedDevicesNotifier();
   },
 );
