@@ -256,6 +256,25 @@ abstract class PadManager {
     );
   }
 
+
+  static Future<bool> setSleepMode(String deviceId,{
+    required WidgetRef ref,
+    required bool sleepModeOnCustom,
+    bool withResponse = false
+  }) async {
+    //12-14
+    var slpMode = sleepModeOnCustom ? '1' : '0';
+
+    final dt = 'ACC/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/-1/$slpMode/-1/-1';
+
+    return await BleManager.writeCharacteristic(
+      c: accCharacteristic.qualCharacteristic(deviceId),
+      data: utf8.encode(dt),
+      withResponse: withResponse,
+      ref: ref,
+    );
+  }
+
   //otaContiuneFlag
   static Future<bool> otaContiuneFlag(String deviceId, {
     required WidgetRef ref,
@@ -534,7 +553,7 @@ abstract class PadManager {
       await Future.doWhile(
             () async {
           // keep the dart event loop running
-          await Future.delayed(Duration.zero);
+          await Future.delayed(const Duration(milliseconds: 5));
 
           final dt = await BleManager.readCharacteristic(
             batteryCharacteristic.qualCharacteristic(deviceId),
