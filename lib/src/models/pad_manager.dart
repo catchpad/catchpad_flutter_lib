@@ -21,6 +21,8 @@ export 'sides_colors_model.dart';
 // TODO: seperate every service to its own file (e.g. led, audio, etc.)
 abstract class PadManager {
 
+
+
   static Future<bool> toggleLight(String deviceId, {
     required WidgetRef ref,
   }) async {
@@ -593,8 +595,16 @@ abstract class PadManager {
 
   static Stream<BatteryModel> listenToBattery(String deviceId, {
     required WidgetRef ref,
+    ProviderBase? base,
   }) async* {
     final batt = await readBattery(deviceId, ref: ref);
+
+    if(base != null)
+    {
+      final isExist =  ref.exists(base);
+      logger.i("Is Exist:$isExist");
+    }
+
     if (batt != null) {
       yield batt;
       yield* BleManager.subscribeToCharacteristic(
