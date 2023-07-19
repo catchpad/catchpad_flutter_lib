@@ -37,7 +37,7 @@ class DevInfoModel {
 
     debugPrint("Sp:${sp.toList()}");
 
-    return sp.toList() != ['?'] ? DevInfoModel(
+    return ( sp.toList().length != 1) ? DevInfoModel(
       cpId: sp[4],
       macId: sp[1],
       bleName: sp[6],
@@ -55,7 +55,7 @@ class DevInfoModel {
       hwVersion: defaultValue,
       swVersion: defaultValue,
       noTm: defaultValue,
-      variantId: defaultValue,
+      variantId: "1",
 
     );
   }
