@@ -26,9 +26,13 @@ class BleDeviceConnector extends ReactiveState<DeviceStatusMapEntry> {
       _connections = {};
 
   Future<void> connect(DeviceModel device) async {
+
     logger.i('Start connecting to ${device.id}');
 
-    final st = _ble.connectToDevice(id: device.id);
+    final st = _ble.connectToDevice(
+        id: device.id
+    );
+
 
     _updateStat(
         MapEntry<DiscoveredDevice, ConnectionStateUpdate> update) async {

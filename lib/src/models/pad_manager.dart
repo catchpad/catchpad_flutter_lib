@@ -511,6 +511,9 @@ abstract class PadManager {
       ref: ref,
       bleName: name,
       cpSN: cpSN,
+      variantId: variantId,
+      stickerId: stickerId,
+      noTM: noTM,
     );
   }
 

@@ -35,7 +35,6 @@ class DevInfoModel {
 
     const defaultValue = "9999999";
 
-    debugPrint("Sp:${sp.toList()}");
 
     return ( sp.toList().length != 1) ? DevInfoModel(
       cpId: sp[4],

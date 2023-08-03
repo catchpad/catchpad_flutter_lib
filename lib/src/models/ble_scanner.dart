@@ -144,7 +144,7 @@ class BleScanner implements ReactiveState<BleScannerState> {
           _devices.add(device);
           if (_pushedStateOnce) {
             _pushState();
-            Future.delayed(const Duration(seconds: 5))
+            Future.delayed(const Duration(seconds: 3))
                 .then((value) => _pushedStateOnce = false);
           }
         }

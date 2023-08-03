@@ -165,7 +165,7 @@
     },
     {
       "name": "flutter_reactive_ble",
-      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/flutter_reactive_ble-5.0.3",
+      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/flutter_reactive_ble-5.1.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -357,13 +357,13 @@
     },
     {
       "name": "reactive_ble_mobile",
-      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/reactive_ble_mobile-5.0.3",
+      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/reactive_ble_mobile-5.1.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "reactive_ble_platform_interface",
-      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/reactive_ble_platform_interface-5.0.3",
+      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/reactive_ble_platform_interface-5.1.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -548,7 +548,7 @@
       "languageVersion": "2.17"
     }
   ],
-  "generated": "2023-06-19T09:19:33.767863Z",
+  "generated": "2023-08-03T19:48:54.197035Z",
   "generator": "pub",
   "generatorVersion": "3.0.5"
 }
