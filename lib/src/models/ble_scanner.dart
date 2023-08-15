@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../catchpad_flutter_lib_init.dart';
 import '../provs/ble_prov.dart';
+import '../provs/timer_sleep_state_prov.dart';
 import 'device_model.dart';
 import 'reactive_state.dart';
 
@@ -18,6 +19,8 @@ class BleScanner implements ReactiveState<BleScannerState> {
   StreamController<BleScannerState>? _stateStreamController;
   bool _pushedStateOnce = true;
 
+  Map<String, int> lastSeenMapDevices = {};
+
   StreamSubscription? _subscription;
 
   var _devices = <DeviceModel>{};
@@ -28,14 +31,11 @@ class BleScanner implements ReactiveState<BleScannerState> {
     return _stateStreamController!.stream;
   }
 
-
-
   void updateDeviceInfo(DeviceModel newDev) {
     final d = <DeviceModel>{};
 
     for (var dev in _devices) {
       if (dev.id == newDev.id) {
-
         d.add(newDev);
       } else {
         d.add(dev);
@@ -94,9 +94,6 @@ class BleScanner implements ReactiveState<BleScannerState> {
     _lastdevices.clear();
   }
 
-
-
-
   void hardRefreshScan(
       {required List<DiscoveredDevice> connectedDevices}) async {
     pauseScan();
@@ -132,22 +129,42 @@ class BleScanner implements ReactiveState<BleScannerState> {
       withServices: [], requireLocationServicesEnabled: true,
       // serviceUuids,
     ).listen(
-          (device) {
+      (device) {
         // if (!device.isCPDevice) return;
-
+        ref
+            .read(sleepDetectedByTimerNotifierProv.notifier)
+            .updateOrAddLastSeen(ref, device.id);
         // dont add already added devices
         if (device.isCPDevice) {
           _lastdevices.add(device);
+
+          for (var perDevice in _devices) {
+            final needRemove = ref.read(sleepDetectedByTimerNotifierProv.notifier).checkNeedRemoveFromDevice(ref, perDevice.id);
+            if(needRemove) {
+              _devices.removeWhere((element) => element.id == perDevice.id);
+              if (_pushedStateOnce) {
+                _pushState();
+                Future.delayed(const Duration(seconds: 3))
+                    .then((value) => _pushedStateOnce = false);
+              }
+            }
+          }
+
           if (_devices.any((element) => element.id == device.id)) {
             return;
           }
+
           _devices.add(device);
+
+
+
           if (_pushedStateOnce) {
             _pushState();
             Future.delayed(const Duration(seconds: 3))
                 .then((value) => _pushedStateOnce = false);
           }
         }
+
       },
       onError: (Object e) => logger.e(
         'Device scan fails with error: $e',
