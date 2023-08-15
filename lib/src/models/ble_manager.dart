@@ -42,7 +42,7 @@ abstract class BleManager {
     required bool withResponse,
   }) async {
     FlutterReactiveBle inst;
-    debugPrint('its in writeCharacteristic ${String.fromCharCodes(data)}');
+
 
     try {
       inst = _inst(ref);
@@ -53,6 +53,9 @@ abstract class BleManager {
     }
 
     try {
+
+
+
       if (withResponse) {
         await inst.writeCharacteristicWithResponse(c, value: data);
       } else {
