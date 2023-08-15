@@ -95,18 +95,15 @@ class BleScanner implements ReactiveState<BleScannerState> {
   }
 
 
+
+
   void hardRefreshScan(
-      {required List<DiscoveredDevice> connectedDevices,required List<DiscoveredDevice> disconnectedDevice}) async {
+      {required List<DiscoveredDevice> connectedDevices}) async {
     pauseScan();
 
     for (var condev in connectedDevices) {
       if (!_devices.map((e) => e.id).contains(condev.id)) {
         _devices.remove(condev);
-      }
-    }
-    for (var disDev in disconnectedDevice) {
-      if (!_devices.map((e) => e.id).contains(disDev.id)) {
-        _devices.remove(disDev);
       }
     }
     debugPrint('${_devices.map((e) => e.name)}');
