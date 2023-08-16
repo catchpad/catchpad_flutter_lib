@@ -1,3 +1,4 @@
+import 'package:catchpad_flutter_lib/catchpad_flutter_lib.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,6 +19,7 @@ final bleConenctionStateProv = StreamProvider<DeviceStatusMap>(
     final st = con.state;
 
     await for (final el in st) {
+      logger.i("DeviceStatusMap: $el");
       ref.read(bleConPr.notifier).updateEntry(el);
     }
   },
@@ -60,7 +62,6 @@ class BleConnectionStateNotifier extends StateNotifier<DeviceStatusMap> {
         newM[item.key] = item.value;
       }
     }
-
 
     if (conState == DeviceConnectionState.connected) {
       newM[device] ??= ConnectionStateUpdate(

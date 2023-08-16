@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:catchpad_flutter_lib/catchpad_flutter_lib.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -88,9 +89,12 @@ class BleScanner implements ReactiveState<BleScannerState> {
       }
     } */
 
+    _devices.forEach((element) {
+    });
+
     _pushState();
-    debugPrint('${_devices.map((e) => e.name)}');
-    debugPrint('${lastdevices.map((e) => e.name)}');
+    debugPrint('11111${_devices.map((e) => e.name)}');
+    debugPrint('11111${lastdevices.map((e) => e.name)}');
     _lastdevices.clear();
   }
 
@@ -103,8 +107,8 @@ class BleScanner implements ReactiveState<BleScannerState> {
         _devices.remove(condev);
       }
     }
-    debugPrint('${_devices.map((e) => e.name)}');
-    debugPrint('${_lastdevices.map((e) => e.name)}');
+    debugPrint('22222${_devices.map((e) => e.name)}');
+    debugPrint('22222${_lastdevices.map((e) => e.name)}');
 
     _pushState();
     resumeScan();
@@ -129,33 +133,40 @@ class BleScanner implements ReactiveState<BleScannerState> {
       withServices: [], requireLocationServicesEnabled: true,
       // serviceUuids,
     ).listen(
-      (device) {
-        // if (!device.isCPDevice) return;
+          (device) {
+
+
+
+
         ref
             .read(sleepDetectedByTimerNotifierProv.notifier)
             .updateOrAddLastSeen(ref, device.id);
-        // dont add already added devices
+
+
+        _devices.forEach((dev) {
+
+          final needRemove =
+          ref.read(sleepDetectedByTimerNotifierProv.notifier)
+              .checkNeedRemoveFromDevice(ref, dev.id);
+
+          if (needRemove ) {
+            _devices.removeWhere((element) => element.id == dev.id);
+          }
+
+        });
+
+
+
+
+
         if (device.isCPDevice) {
           _lastdevices.add(device);
-
-          for (var perDevice in _devices) {
-            final needRemove = ref.read(sleepDetectedByTimerNotifierProv.notifier).checkNeedRemoveFromDevice(ref, perDevice.id);
-            if(needRemove) {
-              _devices.removeWhere((element) => element.id == perDevice.id);
-              if (_pushedStateOnce) {
-                _pushState();
-                Future.delayed(const Duration(seconds: 3))
-                    .then((value) => _pushedStateOnce = false);
-              }
-            }
-          }
 
           if (_devices.any((element) => element.id == device.id)) {
             return;
           }
 
           _devices.add(device);
-
 
 
           if (_pushedStateOnce) {
@@ -165,10 +176,14 @@ class BleScanner implements ReactiveState<BleScannerState> {
           }
         }
 
+
+
+
       },
-      onError: (Object e) => logger.e(
-        'Device scan fails with error: $e',
-      ),
+      onError: (Object e) =>
+          logger.e(
+            'Device scan fails with error: $e',
+          ),
       onDone: () {
         logger.d('Device scan is done.');
       },
