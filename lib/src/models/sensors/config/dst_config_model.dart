@@ -1,3 +1,4 @@
+import 'package:catchpad_flutter_lib/catchpad_flutter_lib.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../enums/sensors/config/config_data_rate.dart';
@@ -33,6 +34,15 @@ class DstConfigModel with _$DstConfigModel {
   }
 
   SensorConfigModel toSensorConfigModel() {
+
+    var localMode = ConfigMode.values[1];
+    logger.i("thresholdCm: $thresholdCm");
+    if(thresholdCm! < 30 ) {
+      localMode = ConfigMode.values[2];
+    }else{
+      localMode = ConfigMode.values[1];
+    }
+
     return SensorConfigModel(
         sensorType: SensorType.dst,
         threshold: threshold,
@@ -41,7 +51,7 @@ class DstConfigModel with _$DstConfigModel {
         // -1's for the following values for DST, so we can
         // only send 0 or 1 for now.
         scale: ConfigScale.values[0],
-        mode: ConfigMode.values[1],
+        mode: localMode,
         dataRate: DataRate.values[0],
         limitValue: limitValue);
   }

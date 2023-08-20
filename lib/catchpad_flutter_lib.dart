@@ -40,6 +40,8 @@ export 'src/provs/ble_scan_prov.dart';
 export 'src/provs/ble_scanner_prov.dart';
 export 'src/provs/ble_status_monitor_prov.dart';
 export 'src/provs/ble_status_prov.dart';
+export 'src/provs/ble_auto_connect_prov.dart';
+export 'src/provs/sleep_detec_prov.dart';
 export 'src/provs/enviroment_prov.dart';
 // #endregion
 // #region utils

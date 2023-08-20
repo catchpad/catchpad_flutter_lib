@@ -19,8 +19,26 @@ final bleConenctionStateProv = StreamProvider<DeviceStatusMap>(
     final st = con.state;
 
     await for (final el in st) {
-      logger.i("DeviceStatusMap: $el");
+
       ref.read(bleConPr.notifier).updateEntry(el);
+
+      // Auto connect.We check if we are in any game we trying connect again to pad.
+      // And we adding to RandomlyDiscoveredList list that disconnected pad
+
+      if(ref.read(bleAutoConnectStateNotifierProv) &&
+          el.value.connectionState == DeviceConnectionState.disconnected){
+
+        ref.read(bleAutoConnectStateNotifierProv.notifier)
+            .addDiscoveredDevice(el.key);
+
+        final deviceConnector = ref.read(bleDeviceConnectorProv);
+
+        deviceConnector.connect(el.key).then((value){
+          ref.read(bleAutoConnectStateNotifierProv.notifier)
+              .removeDiscoveredDevice(el.key);
+        });
+      }
+
     }
   },
 );
@@ -77,8 +95,7 @@ class BleConnectionStateNotifier extends StateNotifier<DeviceStatusMap> {
   }
 }
 
-final connectedDevicesProv =
-StateNotifierProvider<ConnectedDevicesNotifier, DevList>(
+final connectedDevicesProv = StateNotifierProvider<ConnectedDevicesNotifier, DevList>(
       (ref) {
     return ConnectedDevicesNotifier();
   },
@@ -101,4 +118,5 @@ class ConnectedDevicesNotifier extends StateNotifier<DevList> {
     ls.add(d);
     state = ls;
   }
+
 }

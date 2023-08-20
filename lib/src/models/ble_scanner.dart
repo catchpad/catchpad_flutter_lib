@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../catchpad_flutter_lib_init.dart';
 import '../provs/ble_prov.dart';
-import '../provs/timer_sleep_state_prov.dart';
+import '../provs/sleep_detec_prov.dart';
 import 'device_model.dart';
 import 'reactive_state.dart';
 
@@ -67,8 +67,10 @@ class BleScanner implements ReactiveState<BleScannerState> {
     }
     final orgdevs = Set<DiscoveredDevice>.from(_devices);
     final intersections = lastdevices.intersection(orgdevs);
-    for (var intersec in intersections) {
-      if (!lastdevices.any((lastdev) => lastdev.id == intersec.id)) {
+    for (var intersec in intersections)
+    {
+      if (!lastdevices.any((lastdev) => lastdev.id == intersec.id))
+      {
         _devices.remove(intersec);
       }
     }
@@ -89,8 +91,6 @@ class BleScanner implements ReactiveState<BleScannerState> {
       }
     } */
 
-    _devices.forEach((element) {
-    });
 
     _pushState();
     debugPrint('11111${_devices.map((e) => e.name)}');
@@ -128,22 +128,18 @@ class BleScanner implements ReactiveState<BleScannerState> {
 
   void startScan() async {
     init();
-    logger.i('Start ble discovery');
     _subscription = _ble.scanForDevices(
       withServices: [], requireLocationServicesEnabled: true,
       // serviceUuids,
     ).listen(
           (device) {
 
-
-
-
         ref
             .read(sleepDetectedByTimerNotifierProv.notifier)
             .updateOrAddLastSeen(ref, device.id);
 
 
-        _devices.forEach((dev) {
+        for (var dev in _devices) {
 
           final needRemove =
           ref.read(sleepDetectedByTimerNotifierProv.notifier)
@@ -153,10 +149,7 @@ class BleScanner implements ReactiveState<BleScannerState> {
             _devices.removeWhere((element) => element.id == dev.id);
           }
 
-        });
-
-
-
+        }
 
 
         if (device.isCPDevice) {
