@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:catchpad_flutter_lib/src/provs/ble_current_subscribes_prov.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -43,7 +44,6 @@ abstract class BleManager {
   }) async {
     FlutterReactiveBle inst;
 
-
     try {
       inst = _inst(ref);
     } catch (e) {
@@ -53,9 +53,6 @@ abstract class BleManager {
     }
 
     try {
-
-
-
       if (withResponse) {
         await inst.writeCharacteristicWithResponse(c, value: data);
       } else {
@@ -73,6 +70,9 @@ abstract class BleManager {
     QualifiedCharacteristic c, {
     required WidgetRef ref,
   }) {
+
+    ref.read(currentQualifiedManagerProv.notifier).add(ref, c);
+
     return _inst(ref).subscribeToCharacteristic(c);
   }
 }

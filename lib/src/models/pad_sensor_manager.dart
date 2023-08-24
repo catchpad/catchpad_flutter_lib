@@ -66,8 +66,7 @@ abstract class PadSensorManager {
     required WidgetRef ref,
     required String deviceId,
   }) async {
-    await _deactivateAll(
-        deviceId: deviceId, ref: ref);
+    await _deactivateAll(deviceId: deviceId, ref: ref);
     return _activate(
       sensorType: SensorType.acc,
       accSensorType: AccSensorType.force,
@@ -81,8 +80,7 @@ abstract class PadSensorManager {
     required WidgetRef ref,
     required String deviceId,
   }) async {
-    await _deactivateAll(
-        deviceId: deviceId, ref: ref);
+    await _deactivateAll(deviceId: deviceId, ref: ref);
     return _activate(
       sensorType: SensorType.acc,
       accSensorType: AccSensorType.gravity,
@@ -94,8 +92,7 @@ abstract class PadSensorManager {
 
   static Future<bool> activateAccTap(
       {required WidgetRef ref, required String deviceId}) async {
-    await _deactivateAll(
-        deviceId: deviceId, ref: ref);
+    await _deactivateAll(deviceId: deviceId, ref: ref);
     return _activate(
       sensorType: SensorType.acc,
       accSensorType: AccSensorType.tap,
@@ -273,10 +270,10 @@ abstract class PadSensorManager {
       BigGuy.sensorTypeToStr(sensorType),
       BigGuy.boolToInt(status),
       (accSensorType
-          // we have to send a value for the acc sensor type
-          // even if it is not used.
-          ??
-          AccSensorType.values[0])
+              // we have to send a value for the acc sensor type
+              // even if it is not used.
+              ??
+              AccSensorType.values[0])
           .index,
       BigGuy.boolToInt(thrLock),
     ].join(defaultSeperator);
@@ -289,13 +286,11 @@ abstract class PadSensorManager {
   }
 
   static Future<bool> deactivateAll(
-      {required WidgetRef ref,
-        required String deviceId}) =>
+          {required WidgetRef ref, required String deviceId}) =>
       _deactivateAll(ref: ref, deviceId: deviceId);
 
   static Future<bool> _deactivateAll(
-      {required WidgetRef ref,
-        required String deviceId}) async {
+      {required WidgetRef ref, required String deviceId}) async {
     final reqs = [
       // only one acc deactivate
       // is enough to deactivate
@@ -317,6 +312,7 @@ abstract class PadSensorManager {
     await Future.delayed(const Duration(milliseconds: 100));
     return allTrue;
   }
+
   // #endregion
 
   // #region config
@@ -344,8 +340,8 @@ abstract class PadSensorManager {
             : BigGuy.boolToNumString(model.intSleepEnable!),
       ],
       if (model.sensorType == SensorType.dst) ...[model.limitValue],
-      if (model.sensorType == SensorType.acc) '200',//timeoutdt
-      if (model.sensorType == SensorType.acc) '60'  //thrValuedt
+      if (model.sensorType == SensorType.acc) '200', //timeoutdt
+      if (model.sensorType == SensorType.acc) '60' //thrValuedt
     ].map((e) => e ?? '-1').join(defaultSeperator);
 
     return BleManager.writeCharacteristic(
@@ -420,21 +416,25 @@ abstract class PadSensorManager {
 
   // #region distance
   static Stream<DistanceEvent> listenToDistance(
-      String deviceId, {
-        required WidgetRef ref,
-      }) async* {
+    String deviceId, {
+    required WidgetRef ref,
+  }) async* {
+    //BleDeviceConnector Check Status
+
+
     yield* BleManager.subscribeToCharacteristic(
       dstCharacteristic.qualCharacteristic(deviceId),
       ref: ref,
     ).map(
-          (bytes) {
+      (bytes) {
         return DistanceEvent(
           deviceId,
           DistanceModel.fromBytes(bytes),
         );
       },
     ).where(
-          (event) {
+      (event) {
+
         // TODO: temporarily, the hardware is giving us
         // some innocent surprises of negative values
         // sometimes 😇. @fatih says that the source is
@@ -446,30 +446,31 @@ abstract class PadSensorManager {
   }
 
   static Stream<DistanceEvent> listenToDistanceMulti(
-      Iterable<String> deviceIds, {
-        required WidgetRef ref,
-      }) {
+    Iterable<String> deviceIds, {
+    required WidgetRef ref,
+  }) {
     return StreamGroup.merge(
       deviceIds.map(
-            (deviceId) => listenToDistance(
+        (deviceId) => listenToDistance(
           deviceId,
           ref: ref,
         ),
       ),
     );
   }
+
   // #endregion
 
   // #region motion
   static Stream<MotionEvent> listenToMotion(
-      String deviceId, {
-        required WidgetRef ref,
-      }) async* {
+    String deviceId, {
+    required WidgetRef ref,
+  }) async* {
     yield* BleManager.subscribeToCharacteristic(
       accCharacteristic.qualCharacteristic(deviceId),
       ref: ref,
     ).map(
-          (bytes) => MotionEvent(
+      (bytes) => MotionEvent(
         deviceId,
         AcceleremetorGravityModel.fromBytes(bytes),
       ),
@@ -477,30 +478,31 @@ abstract class PadSensorManager {
   }
 
   static Stream<MotionEvent> listenToMotionMulti(
-      Iterable<String> deviceIds, {
-        required WidgetRef ref,
-      }) {
+    Iterable<String> deviceIds, {
+    required WidgetRef ref,
+  }) {
     return StreamGroup.merge(
       deviceIds.map(
-            (deviceId) => listenToMotion(
+        (deviceId) => listenToMotion(
           deviceId,
           ref: ref,
         ),
       ),
     );
   }
+
   // #endregion
 
   // #region touch
   static Stream<TouchEvent> listenToTouch(
-      String deviceId, {
-        required WidgetRef ref,
-      }) async* {
+    String deviceId, {
+    required WidgetRef ref,
+  }) async* {
     yield* BleManager.subscribeToCharacteristic(
       accCharacteristic.qualCharacteristic(deviceId),
       ref: ref,
     ).map(
-          (bytes) => TouchEvent(
+      (bytes) => TouchEvent(
         deviceId,
         AcceleremetorTapModel.fromBytes(bytes),
       ),
@@ -508,12 +510,12 @@ abstract class PadSensorManager {
   }
 
   static Stream<TouchEvent> listenToTouchMulti(
-      Iterable<String> deviceIds, {
-        required WidgetRef ref,
-      }) {
+    Iterable<String> deviceIds, {
+    required WidgetRef ref,
+  }) {
     return StreamGroup.merge(
       deviceIds.map(
-            (deviceId) => listenToTouch(
+        (deviceId) => listenToTouch(
           deviceId,
           ref: ref,
         ),

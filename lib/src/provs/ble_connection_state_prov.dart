@@ -1,10 +1,7 @@
 import 'package:catchpad_flutter_lib/catchpad_flutter_lib.dart';
+import 'package:catchpad_flutter_lib/src/provs/ble_current_subscribes_prov.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../models/device_model.dart';
-import 'ble_device_connector_prov.dart';
 
 typedef DeviceStatusMapProvider = StateProvider<DeviceStatusMap>;
 
@@ -13,39 +10,40 @@ typedef DeviceStatusMap = Map<DeviceModel, ConnectionStateUpdate>;
 typedef DeviceStatusMapEntry = MapEntry<DeviceModel, ConnectionStateUpdate>;
 
 final bleConenctionStateProv = StreamProvider<DeviceStatusMap>(
-      (ref) async* {
+  (ref) async* {
     final con = ref.watch(bleDeviceConnectorProv);
 
     final st = con.state;
 
     await for (final el in st) {
-
       ref.read(bleConPr.notifier).updateEntry(el);
 
       // Auto connect.We check if we are in any game we trying connect again to pad.
       // And we adding to RandomlyDiscoveredList list that disconnected pad
 
-      if(ref.read(bleAutoConnectStateNotifierProv) &&
-          el.value.connectionState == DeviceConnectionState.disconnected){
+      if (ref.read(bleAutoConnectStateNotifierProv) &&
+          el.value.connectionState == DeviceConnectionState.disconnected) {
+        ref.read(bleAutoConnectStateNotifierProv.notifier).changState(false);
 
-        ref.read(bleAutoConnectStateNotifierProv.notifier)
+        ref
+            .read(randomlyDisconnectedDevProv.notifier)
             .addDiscoveredDevice(el.key);
 
         final deviceConnector = ref.read(bleDeviceConnectorProv);
 
-        deviceConnector.connect(el.key).then((value){
-          ref.read(bleAutoConnectStateNotifierProv.notifier)
-              .removeDiscoveredDevice(el.key);
+        deviceConnector.connect(el.key).then((value) {
+          ref.read(currentQualifiedManagerProv.notifier).refreshSubscribes();
         });
-      }
 
+        ref.read(bleAutoConnectStateNotifierProv.notifier).changState(true);
+      }
     }
   },
 );
 
 final bleConPr =
-StateNotifierProvider<BleConnectionStateNotifier, DeviceStatusMap>(
-      (ref) {
+    StateNotifierProvider<BleConnectionStateNotifier, DeviceStatusMap>(
+  (ref) {
     return BleConnectionStateNotifier();
   },
 );
@@ -53,15 +51,15 @@ StateNotifierProvider<BleConnectionStateNotifier, DeviceStatusMap>(
 class BleConnectionStateNotifier extends StateNotifier<DeviceStatusMap> {
   BleConnectionStateNotifier() : super({});
 
-  void deleteFromId(String deviceModelId)  {
+  void deleteFromId(String deviceModelId) {
     DeviceStatusMap newM = {};
-    newM = state;
-    DeviceModel chooseDeviceModel = state.keys.firstWhere((element) => element.id == deviceModelId);
 
-    debugPrint("Choose Device Model:${chooseDeviceModel.id} Map: $newM");
+    newM = state;
+
+    DeviceModel chooseDeviceModel =
+        state.keys.firstWhere((element) => element.id == deviceModelId);
     newM.remove(chooseDeviceModel);
     state = newM;
-    debugPrint(" After Map: $newM");
   }
 
   void updateDevice(DeviceModel d, DeviceConnectionState conState) =>
@@ -95,8 +93,9 @@ class BleConnectionStateNotifier extends StateNotifier<DeviceStatusMap> {
   }
 }
 
-final connectedDevicesProv = StateNotifierProvider<ConnectedDevicesNotifier, DevList>(
-      (ref) {
+final connectedDevicesProv =
+    StateNotifierProvider<ConnectedDevicesNotifier, DevList>(
+  (ref) {
     return ConnectedDevicesNotifier();
   },
 );
@@ -118,5 +117,4 @@ class ConnectedDevicesNotifier extends StateNotifier<DevList> {
     ls.add(d);
     state = ls;
   }
-
 }

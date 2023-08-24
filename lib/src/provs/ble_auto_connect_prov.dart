@@ -19,24 +19,37 @@ final bleAutoConnectStateNotifierProv =
   (_) => BleAutoConnectStateNotifier(false),
 );
 
+final randomlyDisconnectedDevProv = StateNotifierProvider<
+    AutoConnectListControlNotifier,
+    RandomlyDisconnectedDevice>((ref) {
+  return AutoConnectListControlNotifier([]);
+});
+
 typedef RandomlyDisconnectedDevice = List<DiscoveredDevice>;
 
 class BleAutoConnectStateNotifier extends StateNotifier<bool> {
   BleAutoConnectStateNotifier(bool state) : super(false);
-
-
-  /// This list is used when want randomly select a device in the game.
-  /// If it device in this list, we will not select it.
-  final RandomlyDisconnectedDevice _randomlyDisconnectedDevice = [];
-
   changState(bool val) => state = val;
+}
 
-  addDiscoveredDevice(DiscoveredDevice device) =>
-      _randomlyDisconnectedDevice.add(device);
 
-  removeDiscoveredDevice(DiscoveredDevice device) =>
-      _randomlyDisconnectedDevice.remove(device);
+class AutoConnectListControlNotifier
+    extends StateNotifier<RandomlyDisconnectedDevice> {
+  AutoConnectListControlNotifier(RandomlyDisconnectedDevice state) : super([]);
 
-  RandomlyDisconnectedDevice get randomlyDisconnectedDevice =>
-      _randomlyDisconnectedDevice;
+  void changState(RandomlyDisconnectedDevice val) => state = val;
+
+
+  addDiscoveredDevice(DiscoveredDevice device) {
+    if (!state.contains(device)) {
+      state = [...state, device];
+    }
+  }
+
+
+  removeDiscoveredDevice(DiscoveredDevice device) {
+    state = state.where((element) => element != device).toList();
+  }
+
+
 }

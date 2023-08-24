@@ -7,6 +7,8 @@ final bleStatusProv = StreamProvider<BleStatus?>(
   (ref) {
     final monitor = ref.watch(bleStatusMonitorProv);
 
+
+
     return monitor.state;
   },
 );
