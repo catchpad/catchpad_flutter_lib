@@ -35,7 +35,8 @@ export 'src/models/sides_colors_model.dart';
 // #region providers
 export 'src/provs/ble_connection_state_prov.dart';
 export 'src/provs/ble_device_connector_prov.dart';
-export 'src/provs/ble_prov.dart';
+export 'src/provs/ble_device_connector_prov.dart';
+export 'src/provs/connecting_state_controls_prov.dart';
 export 'src/provs/ble_scan_prov.dart';
 export 'src/provs/ble_scanner_prov.dart';
 export 'src/provs/ble_status_monitor_prov.dart';

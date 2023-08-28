@@ -1,5 +1,6 @@
 
 
+import 'package:catchpad_flutter_lib/catchpad_flutter_lib.dart';
 import 'package:flutter/cupertino.dart';
 
 class DevInfoModel {
@@ -35,10 +36,11 @@ class DevInfoModel {
 
     const defaultValue = "9999999";
 
+    logger.w("DevInfoModel.fromBytes: $sp");
 
     return ( sp.toList().length != 1) ? DevInfoModel(
       cpId: sp[4],
-      macId: sp[1],
+      macId: sp[5],
       bleName: sp[6],
       stickerType: sp[7],
       hwVersion: sp[0],

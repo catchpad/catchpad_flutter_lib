@@ -1,7 +1,8 @@
 import 'package:catchpad_flutter_lib/catchpad_flutter_lib.dart';
 import 'package:catchpad_flutter_lib/src/provs/ble_current_subscribes_prov.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'connecting_state_controls_prov.dart';
 
 typedef DeviceStatusMapProvider = StateProvider<DeviceStatusMap>;
 
@@ -14,6 +15,11 @@ final bleConenctionStateProv = StreamProvider<DeviceStatusMap>(
     final con = ref.watch(bleDeviceConnectorProv);
 
     final st = con.state;
+
+    final anyConnecting = await st.any((element) =>
+        element.value.connectionState == DeviceConnectionState.connecting);
+
+    ref.read(connectingStateControlProv.notifier).changeState(anyConnecting);
 
     await for (final el in st) {
       ref.read(bleConPr.notifier).updateEntry(el);
