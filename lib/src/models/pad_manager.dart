@@ -400,7 +400,7 @@ abstract class PadManager {
     return await BleManager.writeCharacteristic(
       c: adminCharacteristic.qualCharacteristic(deviceId),
       data: utf8.encode(dt),
-      withResponse: true,
+      withResponse: false,
       ref: ref,
     );
   }
@@ -414,7 +414,7 @@ abstract class PadManager {
     return await BleManager.writeCharacteristic(
       c: infoCharacteristic.qualCharacteristic(deviceId),
       data: utf8.encode(dt),
-      withResponse: true,
+      withResponse: false,
       ref: ref,
     );
   }
@@ -466,20 +466,20 @@ abstract class PadManager {
 
   static Future<bool> requestErrorLog(String deviceId, {
     required WidgetRef ref,
-    withResponse =  true,
+    withResponse =  false,
   }) async {
     const dt = '?';
     return await BleManager.writeCharacteristic(
       c: errorLog.qualCharacteristic(deviceId),
       data: utf8.encode(dt),
-      withResponse: true,
+      withResponse: false,
       ref: ref,
     );
   }
   //readErrorLog
   static Future<List<int>?> readErrorLog(String deviceId, {
     required WidgetRef ref,
-    withResponse =  true,
+    withResponse =  false,
   }) async {
     return await BleManager.readCharacteristic(
         errorLog.qualCharacteristic(deviceId),
@@ -526,7 +526,7 @@ abstract class PadManager {
     return await BleManager.writeCharacteristic(
       c: batteryCharacteristic.qualCharacteristic(deviceId),
       data: utf8.encode(dt),
-      withResponse: true,
+      withResponse: false,
       ref: ref,
     );
   }
@@ -596,16 +596,21 @@ abstract class PadManager {
     }
   }
 
+
   static Stream<BatteryModel> listenToBattery(String deviceId, {
     required WidgetRef ref,
     ProviderBase? base,
+    bool needRead = true,
   }) async* {
-    final batt = await readBattery(deviceId, ref: ref);
+     BatteryModel? batt;
+     if(needRead){
+       batt =  await readBattery(deviceId, ref: ref);
+     }
 
     if(base != null)
     {
       final isExist =  ref.exists(base);
-      logger.i("Is Exist:$isExist");
+      logger.i("Is Exist: $isExist");
     }
 
     if (batt != null) {

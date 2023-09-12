@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'sensor_config_model.dart';
 
@@ -56,7 +56,8 @@ mixin _$SensorConfigModel {
 abstract class $SensorConfigModelCopyWith<$Res> {
   factory $SensorConfigModelCopyWith(
           SensorConfigModel value, $Res Function(SensorConfigModel) then) =
-      _$SensorConfigModelCopyWithImpl<$Res>;
+      _$SensorConfigModelCopyWithImpl<$Res, SensorConfigModel>;
+  @useResult
   $Res call(
       {SensorType sensorType,
       ConfigScale? scale,
@@ -75,17 +76,19 @@ abstract class $SensorConfigModelCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$SensorConfigModelCopyWithImpl<$Res>
+class _$SensorConfigModelCopyWithImpl<$Res, $Val extends SensorConfigModel>
     implements $SensorConfigModelCopyWith<$Res> {
   _$SensorConfigModelCopyWithImpl(this._value, this._then);
 
-  final SensorConfigModel _value;
   // ignore: unused_field
-  final $Res Function(SensorConfigModel) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? sensorType = freezed,
+    Object? sensorType = null,
     Object? scale = freezed,
     Object? mode = freezed,
     Object? dataRate = freezed,
@@ -101,63 +104,63 @@ class _$SensorConfigModelCopyWithImpl<$Res>
     Object? intSleepEnable = freezed,
   }) {
     return _then(_value.copyWith(
-      sensorType: sensorType == freezed
+      sensorType: null == sensorType
           ? _value.sensorType
           : sensorType // ignore: cast_nullable_to_non_nullable
               as SensorType,
-      scale: scale == freezed
+      scale: freezed == scale
           ? _value.scale
           : scale // ignore: cast_nullable_to_non_nullable
               as ConfigScale?,
-      mode: mode == freezed
+      mode: freezed == mode
           ? _value.mode
           : mode // ignore: cast_nullable_to_non_nullable
               as ConfigMode?,
-      dataRate: dataRate == freezed
+      dataRate: freezed == dataRate
           ? _value.dataRate
           : dataRate // ignore: cast_nullable_to_non_nullable
               as DataRate?,
-      limitValue: limitValue == freezed
+      limitValue: freezed == limitValue
           ? _value.limitValue
           : limitValue // ignore: cast_nullable_to_non_nullable
               as int?,
-      threshold: threshold == freezed
+      threshold: freezed == threshold
           ? _value.threshold
           : threshold // ignore: cast_nullable_to_non_nullable
               as int?,
-      timeout: timeout == freezed
+      timeout: freezed == timeout
           ? _value.timeout
           : timeout // ignore: cast_nullable_to_non_nullable
               as int?,
-      intScale: intScale == freezed
+      intScale: freezed == intScale
           ? _value.intScale
           : intScale // ignore: cast_nullable_to_non_nullable
               as ConfigScale?,
-      intMode: intMode == freezed
+      intMode: freezed == intMode
           ? _value.intMode
           : intMode // ignore: cast_nullable_to_non_nullable
               as ConfigMode?,
-      intDataRate: intDataRate == freezed
+      intDataRate: freezed == intDataRate
           ? _value.intDataRate
           : intDataRate // ignore: cast_nullable_to_non_nullable
               as DataRate?,
-      intThreshold: intThreshold == freezed
+      intThreshold: freezed == intThreshold
           ? _value.intThreshold
           : intThreshold // ignore: cast_nullable_to_non_nullable
               as int?,
-      intTimeout: intTimeout == freezed
+      intTimeout: freezed == intTimeout
           ? _value.intTimeout
           : intTimeout // ignore: cast_nullable_to_non_nullable
               as int?,
-      intDuration: intDuration == freezed
+      intDuration: freezed == intDuration
           ? _value.intDuration
           : intDuration // ignore: cast_nullable_to_non_nullable
               as int?,
-      intSleepEnable: intSleepEnable == freezed
+      intSleepEnable: freezed == intSleepEnable
           ? _value.intSleepEnable
           : intSleepEnable // ignore: cast_nullable_to_non_nullable
               as bool?,
-    ));
+    ) as $Val);
   }
 }
 
@@ -168,6 +171,7 @@ abstract class _$$_SensorConfigModelCopyWith<$Res>
           $Res Function(_$_SensorConfigModel) then) =
       __$$_SensorConfigModelCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {SensorType sensorType,
       ConfigScale? scale,
@@ -187,18 +191,16 @@ abstract class _$$_SensorConfigModelCopyWith<$Res>
 
 /// @nodoc
 class __$$_SensorConfigModelCopyWithImpl<$Res>
-    extends _$SensorConfigModelCopyWithImpl<$Res>
+    extends _$SensorConfigModelCopyWithImpl<$Res, _$_SensorConfigModel>
     implements _$$_SensorConfigModelCopyWith<$Res> {
   __$$_SensorConfigModelCopyWithImpl(
       _$_SensorConfigModel _value, $Res Function(_$_SensorConfigModel) _then)
-      : super(_value, (v) => _then(v as _$_SensorConfigModel));
+      : super(_value, _then);
 
-  @override
-  _$_SensorConfigModel get _value => super._value as _$_SensorConfigModel;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? sensorType = freezed,
+    Object? sensorType = null,
     Object? scale = freezed,
     Object? mode = freezed,
     Object? dataRate = freezed,
@@ -214,59 +216,59 @@ class __$$_SensorConfigModelCopyWithImpl<$Res>
     Object? intSleepEnable = freezed,
   }) {
     return _then(_$_SensorConfigModel(
-      sensorType: sensorType == freezed
+      sensorType: null == sensorType
           ? _value.sensorType
           : sensorType // ignore: cast_nullable_to_non_nullable
               as SensorType,
-      scale: scale == freezed
+      scale: freezed == scale
           ? _value.scale
           : scale // ignore: cast_nullable_to_non_nullable
               as ConfigScale?,
-      mode: mode == freezed
+      mode: freezed == mode
           ? _value.mode
           : mode // ignore: cast_nullable_to_non_nullable
               as ConfigMode?,
-      dataRate: dataRate == freezed
+      dataRate: freezed == dataRate
           ? _value.dataRate
           : dataRate // ignore: cast_nullable_to_non_nullable
               as DataRate?,
-      limitValue: limitValue == freezed
+      limitValue: freezed == limitValue
           ? _value.limitValue
           : limitValue // ignore: cast_nullable_to_non_nullable
               as int?,
-      threshold: threshold == freezed
+      threshold: freezed == threshold
           ? _value.threshold
           : threshold // ignore: cast_nullable_to_non_nullable
               as int?,
-      timeout: timeout == freezed
+      timeout: freezed == timeout
           ? _value.timeout
           : timeout // ignore: cast_nullable_to_non_nullable
               as int?,
-      intScale: intScale == freezed
+      intScale: freezed == intScale
           ? _value.intScale
           : intScale // ignore: cast_nullable_to_non_nullable
               as ConfigScale?,
-      intMode: intMode == freezed
+      intMode: freezed == intMode
           ? _value.intMode
           : intMode // ignore: cast_nullable_to_non_nullable
               as ConfigMode?,
-      intDataRate: intDataRate == freezed
+      intDataRate: freezed == intDataRate
           ? _value.intDataRate
           : intDataRate // ignore: cast_nullable_to_non_nullable
               as DataRate?,
-      intThreshold: intThreshold == freezed
+      intThreshold: freezed == intThreshold
           ? _value.intThreshold
           : intThreshold // ignore: cast_nullable_to_non_nullable
               as int?,
-      intTimeout: intTimeout == freezed
+      intTimeout: freezed == intTimeout
           ? _value.intTimeout
           : intTimeout // ignore: cast_nullable_to_non_nullable
               as int?,
-      intDuration: intDuration == freezed
+      intDuration: freezed == intDuration
           ? _value.intDuration
           : intDuration // ignore: cast_nullable_to_non_nullable
               as int?,
-      intSleepEnable: intSleepEnable == freezed
+      intSleepEnable: freezed == intSleepEnable
           ? _value.intSleepEnable
           : intSleepEnable // ignore: cast_nullable_to_non_nullable
               as bool?,
@@ -349,49 +351,53 @@ class _$_SensorConfigModel implements _SensorConfigModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_SensorConfigModel &&
-            const DeepCollectionEquality()
-                .equals(other.sensorType, sensorType) &&
-            const DeepCollectionEquality().equals(other.scale, scale) &&
-            const DeepCollectionEquality().equals(other.mode, mode) &&
-            const DeepCollectionEquality().equals(other.dataRate, dataRate) &&
-            const DeepCollectionEquality()
-                .equals(other.limitValue, limitValue) &&
-            const DeepCollectionEquality().equals(other.threshold, threshold) &&
-            const DeepCollectionEquality().equals(other.timeout, timeout) &&
-            const DeepCollectionEquality().equals(other.intScale, intScale) &&
-            const DeepCollectionEquality().equals(other.intMode, intMode) &&
-            const DeepCollectionEquality()
-                .equals(other.intDataRate, intDataRate) &&
-            const DeepCollectionEquality()
-                .equals(other.intThreshold, intThreshold) &&
-            const DeepCollectionEquality()
-                .equals(other.intTimeout, intTimeout) &&
-            const DeepCollectionEquality()
-                .equals(other.intDuration, intDuration) &&
-            const DeepCollectionEquality()
-                .equals(other.intSleepEnable, intSleepEnable));
+            (identical(other.sensorType, sensorType) ||
+                other.sensorType == sensorType) &&
+            (identical(other.scale, scale) || other.scale == scale) &&
+            (identical(other.mode, mode) || other.mode == mode) &&
+            (identical(other.dataRate, dataRate) ||
+                other.dataRate == dataRate) &&
+            (identical(other.limitValue, limitValue) ||
+                other.limitValue == limitValue) &&
+            (identical(other.threshold, threshold) ||
+                other.threshold == threshold) &&
+            (identical(other.timeout, timeout) || other.timeout == timeout) &&
+            (identical(other.intScale, intScale) ||
+                other.intScale == intScale) &&
+            (identical(other.intMode, intMode) || other.intMode == intMode) &&
+            (identical(other.intDataRate, intDataRate) ||
+                other.intDataRate == intDataRate) &&
+            (identical(other.intThreshold, intThreshold) ||
+                other.intThreshold == intThreshold) &&
+            (identical(other.intTimeout, intTimeout) ||
+                other.intTimeout == intTimeout) &&
+            (identical(other.intDuration, intDuration) ||
+                other.intDuration == intDuration) &&
+            (identical(other.intSleepEnable, intSleepEnable) ||
+                other.intSleepEnable == intSleepEnable));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(sensorType),
-      const DeepCollectionEquality().hash(scale),
-      const DeepCollectionEquality().hash(mode),
-      const DeepCollectionEquality().hash(dataRate),
-      const DeepCollectionEquality().hash(limitValue),
-      const DeepCollectionEquality().hash(threshold),
-      const DeepCollectionEquality().hash(timeout),
-      const DeepCollectionEquality().hash(intScale),
-      const DeepCollectionEquality().hash(intMode),
-      const DeepCollectionEquality().hash(intDataRate),
-      const DeepCollectionEquality().hash(intThreshold),
-      const DeepCollectionEquality().hash(intTimeout),
-      const DeepCollectionEquality().hash(intDuration),
-      const DeepCollectionEquality().hash(intSleepEnable));
+      sensorType,
+      scale,
+      mode,
+      dataRate,
+      limitValue,
+      threshold,
+      timeout,
+      intScale,
+      intMode,
+      intDataRate,
+      intThreshold,
+      intTimeout,
+      intDuration,
+      intSleepEnable);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_SensorConfigModelCopyWith<_$_SensorConfigModel> get copyWith =>
       __$$_SensorConfigModelCopyWithImpl<_$_SensorConfigModel>(
           this, _$identity);

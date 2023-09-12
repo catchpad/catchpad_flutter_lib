@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'enviroment_model.dart';
 
@@ -29,39 +29,42 @@ mixin _$EnviromentModel {
 abstract class $EnviromentModelCopyWith<$Res> {
   factory $EnviromentModelCopyWith(
           EnviromentModel value, $Res Function(EnviromentModel) then) =
-      _$EnviromentModelCopyWithImpl<$Res>;
+      _$EnviromentModelCopyWithImpl<$Res, EnviromentModel>;
+  @useResult
   $Res call({EnviromentType enviromentType, String? ip, String? port});
 }
 
 /// @nodoc
-class _$EnviromentModelCopyWithImpl<$Res>
+class _$EnviromentModelCopyWithImpl<$Res, $Val extends EnviromentModel>
     implements $EnviromentModelCopyWith<$Res> {
   _$EnviromentModelCopyWithImpl(this._value, this._then);
 
-  final EnviromentModel _value;
   // ignore: unused_field
-  final $Res Function(EnviromentModel) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? enviromentType = freezed,
+    Object? enviromentType = null,
     Object? ip = freezed,
     Object? port = freezed,
   }) {
     return _then(_value.copyWith(
-      enviromentType: enviromentType == freezed
+      enviromentType: null == enviromentType
           ? _value.enviromentType
           : enviromentType // ignore: cast_nullable_to_non_nullable
               as EnviromentType,
-      ip: ip == freezed
+      ip: freezed == ip
           ? _value.ip
           : ip // ignore: cast_nullable_to_non_nullable
               as String?,
-      port: port == freezed
+      port: freezed == port
           ? _value.port
           : port // ignore: cast_nullable_to_non_nullable
               as String?,
-    ));
+    ) as $Val);
   }
 }
 
@@ -72,36 +75,35 @@ abstract class _$$_EnviromentModelCopyWith<$Res>
           _$_EnviromentModel value, $Res Function(_$_EnviromentModel) then) =
       __$$_EnviromentModelCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({EnviromentType enviromentType, String? ip, String? port});
 }
 
 /// @nodoc
 class __$$_EnviromentModelCopyWithImpl<$Res>
-    extends _$EnviromentModelCopyWithImpl<$Res>
+    extends _$EnviromentModelCopyWithImpl<$Res, _$_EnviromentModel>
     implements _$$_EnviromentModelCopyWith<$Res> {
   __$$_EnviromentModelCopyWithImpl(
       _$_EnviromentModel _value, $Res Function(_$_EnviromentModel) _then)
-      : super(_value, (v) => _then(v as _$_EnviromentModel));
+      : super(_value, _then);
 
-  @override
-  _$_EnviromentModel get _value => super._value as _$_EnviromentModel;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? enviromentType = freezed,
+    Object? enviromentType = null,
     Object? ip = freezed,
     Object? port = freezed,
   }) {
     return _then(_$_EnviromentModel(
-      enviromentType: enviromentType == freezed
+      enviromentType: null == enviromentType
           ? _value.enviromentType
           : enviromentType // ignore: cast_nullable_to_non_nullable
               as EnviromentType,
-      ip: ip == freezed
+      ip: freezed == ip
           ? _value.ip
           : ip // ignore: cast_nullable_to_non_nullable
               as String?,
-      port: port == freezed
+      port: freezed == port
           ? _value.port
           : port // ignore: cast_nullable_to_non_nullable
               as String?,
@@ -132,21 +134,18 @@ class _$_EnviromentModel extends _EnviromentModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_EnviromentModel &&
-            const DeepCollectionEquality()
-                .equals(other.enviromentType, enviromentType) &&
-            const DeepCollectionEquality().equals(other.ip, ip) &&
-            const DeepCollectionEquality().equals(other.port, port));
+            (identical(other.enviromentType, enviromentType) ||
+                other.enviromentType == enviromentType) &&
+            (identical(other.ip, ip) || other.ip == ip) &&
+            (identical(other.port, port) || other.port == port));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(enviromentType),
-      const DeepCollectionEquality().hash(ip),
-      const DeepCollectionEquality().hash(port));
+  int get hashCode => Object.hash(runtimeType, enviromentType, ip, port);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_EnviromentModelCopyWith<_$_EnviromentModel> get copyWith =>
       __$$_EnviromentModelCopyWithImpl<_$_EnviromentModel>(this, _$identity);
 }

@@ -7,5 +7,6 @@ final connectingStateControlProv =
 class ConnectingStateControlNotifier extends StateNotifier<bool> {
   ConnectingStateControlNotifier(bool state) : super(false);
 
-  void changeState(bool value) => state = value;
+  void changeState(bool value, WidgetRef ref) => state = value;
+
 }

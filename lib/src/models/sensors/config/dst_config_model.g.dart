@@ -10,7 +10,7 @@ _$_DstConfigModel _$$_DstConfigModelFromJson(Map<String, dynamic> json) =>
     _$_DstConfigModel(
       threshold: json['threshold'] as int?,
       timeout: json['timeout'] as int?,
-      limitValue: json['limitValue'] as int? ?? 6,
+      limitValue: json['limitValue'] as int? ?? 3,
     );
 
 Map<String, dynamic> _$$_DstConfigModelToJson(_$_DstConfigModel instance) =>

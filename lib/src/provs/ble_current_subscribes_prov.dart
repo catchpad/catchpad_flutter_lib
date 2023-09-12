@@ -14,22 +14,13 @@ class CurrentQualifiedManagerNotifier
       : super({});
 
   WidgetRef? ref;
-
   void add(WidgetRef customRef, QualifiedCharacteristic q) {
     state.add(q);
     ref = customRef;
   }
 
   void refreshSubscribes() {
-    for (var perQualified in state) {
 
-      StreamGroup.mergeBroadcast([ BleManager
-          .subscribeToCharacteristic(
-          perQualified,
-          ref: ref!
-      ),]);
-
-    }
   }
 
   void deleteAll(WidgetRef ref) => state.clear();

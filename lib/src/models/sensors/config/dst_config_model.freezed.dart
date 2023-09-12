@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'dst_config_model.dart';
 
@@ -39,19 +39,22 @@ mixin _$DstConfigModel {
 abstract class $DstConfigModelCopyWith<$Res> {
   factory $DstConfigModelCopyWith(
           DstConfigModel value, $Res Function(DstConfigModel) then) =
-      _$DstConfigModelCopyWithImpl<$Res>;
+      _$DstConfigModelCopyWithImpl<$Res, DstConfigModel>;
+  @useResult
   $Res call({int? threshold, int? timeout, int? limitValue});
 }
 
 /// @nodoc
-class _$DstConfigModelCopyWithImpl<$Res>
+class _$DstConfigModelCopyWithImpl<$Res, $Val extends DstConfigModel>
     implements $DstConfigModelCopyWith<$Res> {
   _$DstConfigModelCopyWithImpl(this._value, this._then);
 
-  final DstConfigModel _value;
   // ignore: unused_field
-  final $Res Function(DstConfigModel) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? threshold = freezed,
@@ -59,19 +62,19 @@ class _$DstConfigModelCopyWithImpl<$Res>
     Object? limitValue = freezed,
   }) {
     return _then(_value.copyWith(
-      threshold: threshold == freezed
+      threshold: freezed == threshold
           ? _value.threshold
           : threshold // ignore: cast_nullable_to_non_nullable
               as int?,
-      timeout: timeout == freezed
+      timeout: freezed == timeout
           ? _value.timeout
           : timeout // ignore: cast_nullable_to_non_nullable
               as int?,
-      limitValue: limitValue == freezed
+      limitValue: freezed == limitValue
           ? _value.limitValue
           : limitValue // ignore: cast_nullable_to_non_nullable
               as int?,
-    ));
+    ) as $Val);
   }
 }
 
@@ -82,20 +85,19 @@ abstract class _$$_DstConfigModelCopyWith<$Res>
           _$_DstConfigModel value, $Res Function(_$_DstConfigModel) then) =
       __$$_DstConfigModelCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call({int? threshold, int? timeout, int? limitValue});
 }
 
 /// @nodoc
 class __$$_DstConfigModelCopyWithImpl<$Res>
-    extends _$DstConfigModelCopyWithImpl<$Res>
+    extends _$DstConfigModelCopyWithImpl<$Res, _$_DstConfigModel>
     implements _$$_DstConfigModelCopyWith<$Res> {
   __$$_DstConfigModelCopyWithImpl(
       _$_DstConfigModel _value, $Res Function(_$_DstConfigModel) _then)
-      : super(_value, (v) => _then(v as _$_DstConfigModel));
+      : super(_value, _then);
 
-  @override
-  _$_DstConfigModel get _value => super._value as _$_DstConfigModel;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? threshold = freezed,
@@ -103,15 +105,15 @@ class __$$_DstConfigModelCopyWithImpl<$Res>
     Object? limitValue = freezed,
   }) {
     return _then(_$_DstConfigModel(
-      threshold: threshold == freezed
+      threshold: freezed == threshold
           ? _value.threshold
           : threshold // ignore: cast_nullable_to_non_nullable
               as int?,
-      timeout: timeout == freezed
+      timeout: freezed == timeout
           ? _value.timeout
           : timeout // ignore: cast_nullable_to_non_nullable
               as int?,
-      limitValue: limitValue == freezed
+      limitValue: freezed == limitValue
           ? _value.limitValue
           : limitValue // ignore: cast_nullable_to_non_nullable
               as int?,
@@ -122,7 +124,7 @@ class __$$_DstConfigModelCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_DstConfigModel extends _DstConfigModel {
-  const _$_DstConfigModel({this.threshold, this.timeout, this.limitValue = 6})
+  const _$_DstConfigModel({this.threshold, this.timeout, this.limitValue = 3})
       : super._();
 
   factory _$_DstConfigModel.fromJson(Map<String, dynamic> json) =>
@@ -151,22 +153,20 @@ class _$_DstConfigModel extends _DstConfigModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_DstConfigModel &&
-            const DeepCollectionEquality().equals(other.threshold, threshold) &&
-            const DeepCollectionEquality().equals(other.timeout, timeout) &&
-            const DeepCollectionEquality()
-                .equals(other.limitValue, limitValue));
+            (identical(other.threshold, threshold) ||
+                other.threshold == threshold) &&
+            (identical(other.timeout, timeout) || other.timeout == timeout) &&
+            (identical(other.limitValue, limitValue) ||
+                other.limitValue == limitValue));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(threshold),
-      const DeepCollectionEquality().hash(timeout),
-      const DeepCollectionEquality().hash(limitValue));
+  int get hashCode => Object.hash(runtimeType, threshold, timeout, limitValue);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_DstConfigModelCopyWith<_$_DstConfigModel> get copyWith =>
       __$$_DstConfigModelCopyWithImpl<_$_DstConfigModel>(this, _$identity);
 

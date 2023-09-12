@@ -38,6 +38,7 @@ const _$ConfigScaleEnumMap = {
 };
 
 const _$ConfigModeEnumMap = {
+  ConfigMode.defaultMode: 'defaultMode',
   ConfigMode.LIS2DH12_HR_12bit: 'LIS2DH12_HR_12bit',
   ConfigMode.LIS2DH12_NM_10bit: 'LIS2DH12_NM_10bit',
 };

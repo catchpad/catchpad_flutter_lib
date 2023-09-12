@@ -1,8 +1,7 @@
-import 'package:catchpad_flutter_lib/catchpad_flutter_lib.dart';
-import 'package:catchpad_flutter_lib/src/provs/ble_current_subscribes_prov.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'dart:io';
 
-import 'connecting_state_controls_prov.dart';
+import 'package:catchpad_flutter_lib/catchpad_flutter_lib.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 typedef DeviceStatusMapProvider = StateProvider<DeviceStatusMap>;
 
@@ -15,11 +14,6 @@ final bleConenctionStateProv = StreamProvider<DeviceStatusMap>(
     final con = ref.watch(bleDeviceConnectorProv);
 
     final st = con.state;
-
-    final anyConnecting = await st.any((element) =>
-        element.value.connectionState == DeviceConnectionState.connecting);
-
-    ref.read(connectingStateControlProv.notifier).changeState(anyConnecting);
 
     await for (final el in st) {
       ref.read(bleConPr.notifier).updateEntry(el);
@@ -37,12 +31,16 @@ final bleConenctionStateProv = StreamProvider<DeviceStatusMap>(
 
         final deviceConnector = ref.read(bleDeviceConnectorProv);
 
-        deviceConnector.connect(el.key).then((value) {
-          ref.read(currentQualifiedManagerProv.notifier).refreshSubscribes();
-        });
+        deviceConnector.connect(el.key);
 
         ref.read(bleAutoConnectStateNotifierProv.notifier).changState(true);
       }
+
+      /// Clear cache if device is connected
+      if (el.value.connectionState == DeviceConnectionState.connected  && Platform.isAndroid) {
+        ref.read(bleProv).clearGattCache(el.key.id);
+      }
+
     }
   },
 );

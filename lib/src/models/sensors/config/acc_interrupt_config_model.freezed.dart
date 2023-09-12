@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'acc_interrupt_config_model.dart';
 
@@ -51,7 +51,8 @@ mixin _$AccInterruptConfigModel {
 abstract class $AccInterruptConfigModelCopyWith<$Res> {
   factory $AccInterruptConfigModelCopyWith(AccInterruptConfigModel value,
           $Res Function(AccInterruptConfigModel) then) =
-      _$AccInterruptConfigModelCopyWithImpl<$Res>;
+      _$AccInterruptConfigModelCopyWithImpl<$Res, AccInterruptConfigModel>;
+  @useResult
   $Res call(
       {ConfigScale? scale,
       ConfigMode? mode,
@@ -63,14 +64,17 @@ abstract class $AccInterruptConfigModelCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$AccInterruptConfigModelCopyWithImpl<$Res>
+class _$AccInterruptConfigModelCopyWithImpl<$Res,
+        $Val extends AccInterruptConfigModel>
     implements $AccInterruptConfigModelCopyWith<$Res> {
   _$AccInterruptConfigModelCopyWithImpl(this._value, this._then);
 
-  final AccInterruptConfigModel _value;
   // ignore: unused_field
-  final $Res Function(AccInterruptConfigModel) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? scale = freezed,
@@ -82,35 +86,35 @@ class _$AccInterruptConfigModelCopyWithImpl<$Res>
     Object? sleepEnable = freezed,
   }) {
     return _then(_value.copyWith(
-      scale: scale == freezed
+      scale: freezed == scale
           ? _value.scale
           : scale // ignore: cast_nullable_to_non_nullable
               as ConfigScale?,
-      mode: mode == freezed
+      mode: freezed == mode
           ? _value.mode
           : mode // ignore: cast_nullable_to_non_nullable
               as ConfigMode?,
-      dataRate: dataRate == freezed
+      dataRate: freezed == dataRate
           ? _value.dataRate
           : dataRate // ignore: cast_nullable_to_non_nullable
               as DataRate?,
-      threshold: threshold == freezed
+      threshold: freezed == threshold
           ? _value.threshold
           : threshold // ignore: cast_nullable_to_non_nullable
               as int?,
-      duration: duration == freezed
+      duration: freezed == duration
           ? _value.duration
           : duration // ignore: cast_nullable_to_non_nullable
               as int?,
-      timeout: timeout == freezed
+      timeout: freezed == timeout
           ? _value.timeout
           : timeout // ignore: cast_nullable_to_non_nullable
               as int?,
-      sleepEnable: sleepEnable == freezed
+      sleepEnable: freezed == sleepEnable
           ? _value.sleepEnable
           : sleepEnable // ignore: cast_nullable_to_non_nullable
               as bool?,
-    ));
+    ) as $Val);
   }
 }
 
@@ -121,6 +125,7 @@ abstract class _$$_AccInterruptConfigModelCopyWith<$Res>
           $Res Function(_$_AccInterruptConfigModel) then) =
       __$$_AccInterruptConfigModelCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {ConfigScale? scale,
       ConfigMode? mode,
@@ -133,16 +138,14 @@ abstract class _$$_AccInterruptConfigModelCopyWith<$Res>
 
 /// @nodoc
 class __$$_AccInterruptConfigModelCopyWithImpl<$Res>
-    extends _$AccInterruptConfigModelCopyWithImpl<$Res>
+    extends _$AccInterruptConfigModelCopyWithImpl<$Res,
+        _$_AccInterruptConfigModel>
     implements _$$_AccInterruptConfigModelCopyWith<$Res> {
   __$$_AccInterruptConfigModelCopyWithImpl(_$_AccInterruptConfigModel _value,
       $Res Function(_$_AccInterruptConfigModel) _then)
-      : super(_value, (v) => _then(v as _$_AccInterruptConfigModel));
+      : super(_value, _then);
 
-  @override
-  _$_AccInterruptConfigModel get _value =>
-      super._value as _$_AccInterruptConfigModel;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? scale = freezed,
@@ -154,31 +157,31 @@ class __$$_AccInterruptConfigModelCopyWithImpl<$Res>
     Object? sleepEnable = freezed,
   }) {
     return _then(_$_AccInterruptConfigModel(
-      scale: scale == freezed
+      scale: freezed == scale
           ? _value.scale
           : scale // ignore: cast_nullable_to_non_nullable
               as ConfigScale?,
-      mode: mode == freezed
+      mode: freezed == mode
           ? _value.mode
           : mode // ignore: cast_nullable_to_non_nullable
               as ConfigMode?,
-      dataRate: dataRate == freezed
+      dataRate: freezed == dataRate
           ? _value.dataRate
           : dataRate // ignore: cast_nullable_to_non_nullable
               as DataRate?,
-      threshold: threshold == freezed
+      threshold: freezed == threshold
           ? _value.threshold
           : threshold // ignore: cast_nullable_to_non_nullable
               as int?,
-      duration: duration == freezed
+      duration: freezed == duration
           ? _value.duration
           : duration // ignore: cast_nullable_to_non_nullable
               as int?,
-      timeout: timeout == freezed
+      timeout: freezed == timeout
           ? _value.timeout
           : timeout // ignore: cast_nullable_to_non_nullable
               as int?,
-      sleepEnable: sleepEnable == freezed
+      sleepEnable: freezed == sleepEnable
           ? _value.sleepEnable
           : sleepEnable // ignore: cast_nullable_to_non_nullable
               as bool?,
@@ -239,30 +242,27 @@ class _$_AccInterruptConfigModel extends _AccInterruptConfigModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_AccInterruptConfigModel &&
-            const DeepCollectionEquality().equals(other.scale, scale) &&
-            const DeepCollectionEquality().equals(other.mode, mode) &&
-            const DeepCollectionEquality().equals(other.dataRate, dataRate) &&
-            const DeepCollectionEquality().equals(other.threshold, threshold) &&
-            const DeepCollectionEquality().equals(other.duration, duration) &&
-            const DeepCollectionEquality().equals(other.timeout, timeout) &&
-            const DeepCollectionEquality()
-                .equals(other.sleepEnable, sleepEnable));
+            (identical(other.scale, scale) || other.scale == scale) &&
+            (identical(other.mode, mode) || other.mode == mode) &&
+            (identical(other.dataRate, dataRate) ||
+                other.dataRate == dataRate) &&
+            (identical(other.threshold, threshold) ||
+                other.threshold == threshold) &&
+            (identical(other.duration, duration) ||
+                other.duration == duration) &&
+            (identical(other.timeout, timeout) || other.timeout == timeout) &&
+            (identical(other.sleepEnable, sleepEnable) ||
+                other.sleepEnable == sleepEnable));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(scale),
-      const DeepCollectionEquality().hash(mode),
-      const DeepCollectionEquality().hash(dataRate),
-      const DeepCollectionEquality().hash(threshold),
-      const DeepCollectionEquality().hash(duration),
-      const DeepCollectionEquality().hash(timeout),
-      const DeepCollectionEquality().hash(sleepEnable));
+  int get hashCode => Object.hash(runtimeType, scale, mode, dataRate, threshold,
+      duration, timeout, sleepEnable);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_AccInterruptConfigModelCopyWith<_$_AccInterruptConfigModel>
       get copyWith =>
           __$$_AccInterruptConfigModelCopyWithImpl<_$_AccInterruptConfigModel>(

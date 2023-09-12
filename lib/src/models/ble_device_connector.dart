@@ -1,10 +1,10 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../catchpad_flutter_lib_init.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
-
 import '../provs/ble_connection_state_prov.dart';
 import '../provs/ble_prov.dart';
 import 'device_model.dart';
@@ -26,13 +26,23 @@ class BleDeviceConnector extends ReactiveState<DeviceStatusMapEntry> {
       _connections = {};
 
   Future<void> connect(DeviceModel device) async {
-
     logger.i('Start connecting to ${device.id}');
 
     final st = _ble.connectToDevice(
-        id: device.id
+      id: device.id,
     );
 
+
+    /// Android only
+    if (Platform.isAndroid)
+    {
+
+      _ble.requestConnectionPriority(
+          deviceId: device.id,
+          priority: ConnectionPriority.highPerformance
+      );
+
+    }
 
     _updateStat(
         MapEntry<DiscoveredDevice, ConnectionStateUpdate> update) async {

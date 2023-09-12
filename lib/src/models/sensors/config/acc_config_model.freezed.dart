@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'acc_config_model.dart';
 
@@ -40,7 +40,8 @@ mixin _$AccConfigModel {
 abstract class $AccConfigModelCopyWith<$Res> {
   factory $AccConfigModelCopyWith(
           AccConfigModel value, $Res Function(AccConfigModel) then) =
-      _$AccConfigModelCopyWithImpl<$Res>;
+      _$AccConfigModelCopyWithImpl<$Res, AccConfigModel>;
+  @useResult
   $Res call(
       {ConfigScale? scale,
       ConfigMode? mode,
@@ -50,14 +51,16 @@ abstract class $AccConfigModelCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$AccConfigModelCopyWithImpl<$Res>
+class _$AccConfigModelCopyWithImpl<$Res, $Val extends AccConfigModel>
     implements $AccConfigModelCopyWith<$Res> {
   _$AccConfigModelCopyWithImpl(this._value, this._then);
 
-  final AccConfigModel _value;
   // ignore: unused_field
-  final $Res Function(AccConfigModel) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? scale = freezed,
@@ -67,27 +70,27 @@ class _$AccConfigModelCopyWithImpl<$Res>
     Object? timeout = freezed,
   }) {
     return _then(_value.copyWith(
-      scale: scale == freezed
+      scale: freezed == scale
           ? _value.scale
           : scale // ignore: cast_nullable_to_non_nullable
               as ConfigScale?,
-      mode: mode == freezed
+      mode: freezed == mode
           ? _value.mode
           : mode // ignore: cast_nullable_to_non_nullable
               as ConfigMode?,
-      dataRate: dataRate == freezed
+      dataRate: freezed == dataRate
           ? _value.dataRate
           : dataRate // ignore: cast_nullable_to_non_nullable
               as DataRate?,
-      threshold: threshold == freezed
+      threshold: freezed == threshold
           ? _value.threshold
           : threshold // ignore: cast_nullable_to_non_nullable
               as int?,
-      timeout: timeout == freezed
+      timeout: freezed == timeout
           ? _value.timeout
           : timeout // ignore: cast_nullable_to_non_nullable
               as int?,
-    ));
+    ) as $Val);
   }
 }
 
@@ -98,6 +101,7 @@ abstract class _$$_AccConfigModelCopyWith<$Res>
           _$_AccConfigModel value, $Res Function(_$_AccConfigModel) then) =
       __$$_AccConfigModelCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {ConfigScale? scale,
       ConfigMode? mode,
@@ -108,15 +112,13 @@ abstract class _$$_AccConfigModelCopyWith<$Res>
 
 /// @nodoc
 class __$$_AccConfigModelCopyWithImpl<$Res>
-    extends _$AccConfigModelCopyWithImpl<$Res>
+    extends _$AccConfigModelCopyWithImpl<$Res, _$_AccConfigModel>
     implements _$$_AccConfigModelCopyWith<$Res> {
   __$$_AccConfigModelCopyWithImpl(
       _$_AccConfigModel _value, $Res Function(_$_AccConfigModel) _then)
-      : super(_value, (v) => _then(v as _$_AccConfigModel));
+      : super(_value, _then);
 
-  @override
-  _$_AccConfigModel get _value => super._value as _$_AccConfigModel;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? scale = freezed,
@@ -126,23 +128,23 @@ class __$$_AccConfigModelCopyWithImpl<$Res>
     Object? timeout = freezed,
   }) {
     return _then(_$_AccConfigModel(
-      scale: scale == freezed
+      scale: freezed == scale
           ? _value.scale
           : scale // ignore: cast_nullable_to_non_nullable
               as ConfigScale?,
-      mode: mode == freezed
+      mode: freezed == mode
           ? _value.mode
           : mode // ignore: cast_nullable_to_non_nullable
               as ConfigMode?,
-      dataRate: dataRate == freezed
+      dataRate: freezed == dataRate
           ? _value.dataRate
           : dataRate // ignore: cast_nullable_to_non_nullable
               as DataRate?,
-      threshold: threshold == freezed
+      threshold: freezed == threshold
           ? _value.threshold
           : threshold // ignore: cast_nullable_to_non_nullable
               as int?,
-      timeout: timeout == freezed
+      timeout: freezed == timeout
           ? _value.timeout
           : timeout // ignore: cast_nullable_to_non_nullable
               as int?,
@@ -185,25 +187,23 @@ class _$_AccConfigModel extends _AccConfigModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_AccConfigModel &&
-            const DeepCollectionEquality().equals(other.scale, scale) &&
-            const DeepCollectionEquality().equals(other.mode, mode) &&
-            const DeepCollectionEquality().equals(other.dataRate, dataRate) &&
-            const DeepCollectionEquality().equals(other.threshold, threshold) &&
-            const DeepCollectionEquality().equals(other.timeout, timeout));
+            (identical(other.scale, scale) || other.scale == scale) &&
+            (identical(other.mode, mode) || other.mode == mode) &&
+            (identical(other.dataRate, dataRate) ||
+                other.dataRate == dataRate) &&
+            (identical(other.threshold, threshold) ||
+                other.threshold == threshold) &&
+            (identical(other.timeout, timeout) || other.timeout == timeout));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(scale),
-      const DeepCollectionEquality().hash(mode),
-      const DeepCollectionEquality().hash(dataRate),
-      const DeepCollectionEquality().hash(threshold),
-      const DeepCollectionEquality().hash(timeout));
+  int get hashCode =>
+      Object.hash(runtimeType, scale, mode, dataRate, threshold, timeout);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_AccConfigModelCopyWith<_$_AccConfigModel> get copyWith =>
       __$$_AccConfigModelCopyWithImpl<_$_AccConfigModel>(this, _$identity);
 

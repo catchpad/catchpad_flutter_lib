@@ -35,7 +35,7 @@ export 'src/models/sides_colors_model.dart';
 // #region providers
 export 'src/provs/ble_connection_state_prov.dart';
 export 'src/provs/ble_device_connector_prov.dart';
-export 'src/provs/ble_device_connector_prov.dart';
+
 export 'src/provs/ble_prov.dart';
 export 'src/provs/connecting_state_controls_prov.dart';
 export 'src/provs/ble_scan_prov.dart';
@@ -45,7 +45,15 @@ export 'src/provs/ble_status_prov.dart';
 export 'src/provs/ble_auto_connect_prov.dart';
 export 'src/provs/sleep_detec_prov.dart';
 export 'src/provs/enviroment_prov.dart';
+ // #sub_region providers - trace
+ export 'src/provs/trace/byte_trace_active_prov.dart';
+
+ // #sub_end_region providers - trace
+
 // #endregion
+
+
+
 // #region utils
 export 'src/utils/big_guy.dart';
 export 'src/utils/consts.dart';
