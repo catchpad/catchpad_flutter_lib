@@ -435,6 +435,30 @@ class CatchpadSimulator extends _FlutterReactiveBleExtender {
       {required String deviceId, required ConnectionPriority priority}) {
     return Future.value();
   }
+
+  @override
+  Future<void> discoverAllServices(String deviceId) {
+    // TODO: implement discoverAllServices
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Service>> getDiscoveredServices(String deviceId) {
+    // TODO: implement getDiscoveredServices
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Iterable<Characteristic>> resolve(QualifiedCharacteristic characteristic) {
+    // TODO: implement resolve
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Characteristic> resolveSingle(QualifiedCharacteristic characteristic) {
+    // TODO: implement resolveSingle
+    throw UnimplementedError();
+  }
 }
 
 extension CPCharectaristic on QualifiedCharacteristic {
