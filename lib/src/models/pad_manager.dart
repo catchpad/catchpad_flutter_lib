@@ -414,7 +414,7 @@ abstract class PadManager {
     return await BleManager.writeCharacteristic(
       c: infoCharacteristic.qualCharacteristic(deviceId),
       data: utf8.encode(dt),
-      withResponse: false,
+      withResponse: true,
       ref: ref,
     );
   }

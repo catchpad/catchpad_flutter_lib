@@ -74,6 +74,9 @@ class BleScanner implements ReactiveState<BleScannerState> {
         _devices.remove(intersec);
       }
     }
+
+
+
     /* if (connectedDevices.isNotEmpty) {
       debugPrint('${connectedDevices.map((e) => e.name)}');
       for (var condev in connectedDevices) {
@@ -95,7 +98,7 @@ class BleScanner implements ReactiveState<BleScannerState> {
     _pushState();
     debugPrint('11111${_devices.map((e) => e.name)}');
     debugPrint('11111${lastdevices.map((e) => e.name)}');
-    _lastdevices.clear();
+    _devices.clear();
   }
 
   void hardRefreshScan(
