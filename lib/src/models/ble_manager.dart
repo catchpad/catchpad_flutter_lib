@@ -12,12 +12,13 @@ abstract class BleManager {
   static FlutterReactiveBle _inst(WidgetRef ref) => ref.read(bleProv);
 
   static Future<List<int>?> readCharacteristic(
-      QualifiedCharacteristic c, {
-        required WidgetRef ref,
-      }) async {
+    QualifiedCharacteristic c, {
+    required WidgetRef ref,
+  }) async {
     FlutterReactiveBle inst;
 
     try {
+      if (!ref.context.mounted) return [];
       inst = _inst(ref);
     } catch (e) {
       logger.e(e);
@@ -45,6 +46,7 @@ abstract class BleManager {
     FlutterReactiveBle inst;
 
     try {
+      if (!ref.context.mounted) return false;
       inst = _inst(ref);
     } catch (e) {
       debugPrint('its in writeCharacteristic and failed');
@@ -59,7 +61,9 @@ abstract class BleManager {
         await inst.writeCharacteristicWithoutResponse(c, value: data);
       }
     } catch (e) {
-      logger.e(c.characteristicId.toString()+data.toString()+withResponse.toString());
+      logger.e(c.characteristicId.toString() +
+          data.toString() +
+          withResponse.toString());
       return false;
     }
 
@@ -67,10 +71,9 @@ abstract class BleManager {
   }
 
   static Stream<List<int>> subscribeToCharacteristic(
-      QualifiedCharacteristic c, {
-        required WidgetRef ref,
-      }) {
-
+    QualifiedCharacteristic c, {
+    required WidgetRef ref,
+  }) {
     ref.read(currentQualifiedManagerProv.notifier).add(ref, c);
 
     return _inst(ref).subscribeToCharacteristic(c);

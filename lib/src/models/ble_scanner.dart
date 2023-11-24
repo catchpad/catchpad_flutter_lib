@@ -96,8 +96,7 @@ class BleScanner implements ReactiveState<BleScannerState> {
 
 
     _pushState();
-    debugPrint('11111${_devices.map((e) => e.name)}');
-    debugPrint('11111${lastdevices.map((e) => e.name)}');
+
     _devices.clear();
   }
 
@@ -110,8 +109,7 @@ class BleScanner implements ReactiveState<BleScannerState> {
         _devices.remove(condev);
       }
     }
-    debugPrint('22222${_devices.map((e) => e.name)}');
-    debugPrint('22222${_lastdevices.map((e) => e.name)}');
+
 
     _pushState();
     resumeScan();

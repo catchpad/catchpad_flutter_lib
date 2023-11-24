@@ -93,6 +93,13 @@ const CpCharacteristic adminCharacteristic = CpCharacteristic(
 // #region sensors
 const String sensorServiceId = '722d9150-b2ab-11ec-b909-000000000000';
 
+
+
+const CpCharacteristic fsrCharacteristic = CpCharacteristic(
+  id: '83e7f7e6-b2ab-11ec-b111-000000000003',
+  serviceId: sensorServiceId,
+);
+
 const CpCharacteristic accCharacteristic = CpCharacteristic(
   id: '7af57456-b2ab-11ec-b909-000000000001',
   serviceId: sensorServiceId,
@@ -112,6 +119,16 @@ const CpCharacteristic configCharacteristic = CpCharacteristic(
   id: '8a19169a-b2ab-11ec-b909-00000000000C',
   serviceId: sensorServiceId,
 );
+const CpCharacteristic nfcCharacteristic = CpCharacteristic(
+  id: '83e7f7e6-b2ab-11ec-b111-000000000001',
+  serviceId: sensorServiceId,
+);
+
+const CpCharacteristic vibrationCharacteristic = CpCharacteristic(
+  id: '83e7f7e6-b2ab-11ec-b111-000000000002',
+  serviceId: sensorServiceId,
+);
+
 // #endregion
 
 // #region info
