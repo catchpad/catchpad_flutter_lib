@@ -4,6 +4,9 @@ import 'package:catchpad_flutter_lib/catchpad_flutter_lib.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+final bleConnectionCheckProvider =
+StateNotifierProvider<BleConnectionCheckStateControlNotifier, bool>(
+        (_) => BleConnectionCheckStateControlNotifier(false));
 class BleConnectionCheckStateControlNotifier extends StateNotifier<bool> {
   BleConnectionCheckStateControlNotifier(bool state) : super(false);
 
