@@ -833,6 +833,19 @@ abstract class PadManager {
     );
   }
 
+  //Hey catchpad we are still connected.
+  static Future<bool> setConnectionFlagTrue(String deviceId,
+      {required WidgetRef ref,
+        bool withResponse = false}) async {
+    const dt = '?/1';
+    return await BleManager.writeCharacteristic(
+      c: infoCharacteristic.qualCharacteristic(deviceId),
+      data: utf8.encode(dt),
+      withResponse: withResponse,
+      ref: ref,
+    );
+  }
+
 }
 
 /// where to print the debug info
