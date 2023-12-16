@@ -19,7 +19,6 @@ export 'src/models/pad_manager.dart';
 export 'src/models/pad_sensor_manager.dart';
 export 'src/models/pad_state.dart';
 export 'src/models/reactive_state.dart';
-export 'src/models/reactive_state.dart';
 // #region sensors
 export 'src/models/sensors/acc_gravity_model.dart';
 export 'src/models/sensors/acc_tap_model.dart';

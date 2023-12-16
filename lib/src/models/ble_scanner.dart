@@ -2,14 +2,7 @@ import 'dart:async';
 
 import 'package:catchpad_flutter_lib/catchpad_flutter_lib.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../catchpad_flutter_lib_init.dart';
-import '../provs/ble_prov.dart';
-import '../provs/sleep_detec_prov.dart';
-import 'device_model.dart';
-import 'reactive_state.dart';
 
 class BleScanner implements ReactiveState<BleScannerState> {
   BleScanner(this.ref) : _ble = ref.watch(bleProv);
@@ -29,12 +22,13 @@ class BleScanner implements ReactiveState<BleScannerState> {
 
   @override
   Stream<BleScannerState> get state {
+    logger.i("Get State!!");
     return _stateStreamController!.stream;
   }
 
   void updateDeviceInfo(DeviceModel newDev) {
     final d = <DeviceModel>{};
-
+    logger.i("New Device:${newDev.name}");
     for (var dev in _devices) {
       if (dev.id == newDev.id) {
         d.add(newDev);
@@ -44,11 +38,12 @@ class BleScanner implements ReactiveState<BleScannerState> {
     }
     _devices.clear();
     _devices = Set<DeviceModel>.from(d);
-
     _pushState();
   }
 
   void deleteDevices(List<String> deadList) async {
+    logger.i("Delete Device: $deadList");
+
     pauseScan();
     _lastdevices.clear();
     for (var deadId in deadList) {
@@ -61,21 +56,21 @@ class BleScanner implements ReactiveState<BleScannerState> {
   }
 
   void refreshScan({required List<DiscoveredDevice> connectedDevices}) async {
+    logger.i("refreshScan: ${connectedDevices}");
+
     final lastdevices = Set<DiscoveredDevice>.from(_lastdevices);
     for (var condev in connectedDevices) {
+      logger.i("Remove.... $lastdevices $connectedDevices");
       lastdevices.removeWhere((lastdev) => lastdev.id == condev.id);
     }
     final orgdevs = Set<DiscoveredDevice>.from(_devices);
     final intersections = lastdevices.intersection(orgdevs);
-    for (var intersec in intersections)
-    {
-      if (!lastdevices.any((lastdev) => lastdev.id == intersec.id))
-      {
+    for (var intersec in intersections) {
+      if (!lastdevices.any((lastdev) => lastdev.id == intersec.id)) {
+        logger.i("Intersec: $intersec");
         _devices.remove(intersec);
       }
     }
-
-
 
     /* if (connectedDevices.isNotEmpty) {
       debugPrint('${connectedDevices.map((e) => e.name)}');
@@ -94,14 +89,15 @@ class BleScanner implements ReactiveState<BleScannerState> {
       }
     } */
 
-
     _pushState();
 
-    _devices.clear();
+    _lastdevices.clear();
+
   }
 
   void hardRefreshScan(
       {required List<DiscoveredDevice> connectedDevices}) async {
+    logger.i("hardRefreshScan: $connectedDevices");
     pauseScan();
 
     for (var condev in connectedDevices) {
@@ -110,12 +106,12 @@ class BleScanner implements ReactiveState<BleScannerState> {
       }
     }
 
-
     _pushState();
     resumeScan();
   }
 
   void pauseScan() {
+    logger.i("pauseScan:");
     if (_subscription != null) {
       _subscription?.pause();
     }
@@ -124,13 +120,16 @@ class BleScanner implements ReactiveState<BleScannerState> {
   void resumeScan() {
     if (_subscription != null) {
       _subscription?.resume();
+      logger.i("Resume - Scan");
     }
   }
 
   void startScan() async {
+    logger.i("Start Scan");
     init();
     _subscription = _ble.scanForDevices(
-      withServices: [], requireLocationServicesEnabled: true,
+      withServices: [],
+      requireLocationServicesEnabled: true,
       // serviceUuids,
     ).listen(
           (device) {
@@ -139,21 +138,21 @@ class BleScanner implements ReactiveState<BleScannerState> {
             .read(sleepDetectedByTimerNotifierProv.notifier)
             .updateOrAddLastSeen(ref, device.id);
 
-
         for (var dev in _devices) {
 
-          final needRemove =
-          ref.read(sleepDetectedByTimerNotifierProv.notifier)
+          final needRemove = ref
+              .read(sleepDetectedByTimerNotifierProv.notifier)
               .checkNeedRemoveFromDevice(ref, dev.id);
 
-          if (needRemove ) {
+          if (needRemove) {
+            logger.i("REMOVE ${device.name}");
             _devices.removeWhere((element) => element.id == dev.id);
           }
 
         }
 
-
         if (device.isCPDevice) {
+          //TODO SET UNWEIRD COLLECT DEVICES MULTİPLE TİME ON SAME ID
           _lastdevices.add(device);
 
           if (_devices.any((element) => element.id == device.id)) {
@@ -161,23 +160,19 @@ class BleScanner implements ReactiveState<BleScannerState> {
           }
 
           _devices.add(device);
-
-
-          if (_pushedStateOnce) {
+          logger.i("ADD: ${device.name} $_pushedStateOnce");
+          logger.i("Pushed State Once: ${device.name}");
+          if(_pushedStateOnce){
             _pushState();
             Future.delayed(const Duration(seconds: 3))
                 .then((value) => _pushedStateOnce = false);
           }
+
         }
-
-
-
-
       },
-      onError: (Object e) =>
-          logger.e(
-            'Device scan fails with error: $e',
-          ),
+      onError: (Object e) => logger.e(
+        'Device scan fails with error: $e',
+      ),
       onDone: () {
         logger.d('Device scan is done.');
       },
@@ -191,6 +186,7 @@ class BleScanner implements ReactiveState<BleScannerState> {
   }
 
   void _pushState() {
+    logger.i("Pushh!!! $_devices $isClosed ${_subscription != null}");
     if (!isClosed) {
       _stateStreamController!.add(
         BleScannerState(
@@ -218,6 +214,7 @@ class BleScanner implements ReactiveState<BleScannerState> {
   }
 
   Future<void> dispose() async {
+    logger.i("Dispose!!1");
     _pushState();
 
     // I've commented out these lines, because
@@ -250,6 +247,7 @@ class BleScanner implements ReactiveState<BleScannerState> {
   }
 
   void init() {
+    logger.i("Init!!1");
     _stateStreamController ??= StreamController();
   }
 }

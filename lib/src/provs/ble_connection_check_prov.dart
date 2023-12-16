@@ -80,6 +80,7 @@ class BleConnectionCheckStateControlNotifier extends StateNotifier<bool> {
 
   void startListenToBlePauseState(WidgetRef ref) {
     final scan = ref.watch(bleScanStreamProv);
+
     scan.when(
         data: (data) {
           final conMap = ref.watch(bleConPr);

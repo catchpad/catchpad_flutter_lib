@@ -792,7 +792,6 @@ abstract class PadManager {
 
     final dt = '1/$power';
 
-    print(dt.toString() + '<---');
     return await BleManager.writeCharacteristic(
       c: vibrationCharacteristic.qualCharacteristic(deviceId),
       data: utf8.encode(dt),
@@ -836,6 +835,7 @@ abstract class PadManager {
   //Hey catchpad we are still connected.
   static Future<bool> setConnectionFlagTrue(String deviceId,
       {required WidgetRef ref,
+        //Todo: enable disable mode!
         bool withResponse = false}) async {
     const dt = '?/1';
     return await BleManager.writeCharacteristic(
