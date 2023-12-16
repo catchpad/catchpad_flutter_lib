@@ -22,13 +22,13 @@ class BleScanner implements ReactiveState<BleScannerState> {
 
   @override
   Stream<BleScannerState> get state {
-    logger.i("Get State!!");
+    //logger.i("Get State!!");
     return _stateStreamController!.stream;
   }
 
   void updateDeviceInfo(DeviceModel newDev) {
     final d = <DeviceModel>{};
-    logger.i("New Device:${newDev.name}");
+    //logger.i("New Device:${newDev.name}");
     for (var dev in _devices) {
       if (dev.id == newDev.id) {
         d.add(newDev);
@@ -42,7 +42,7 @@ class BleScanner implements ReactiveState<BleScannerState> {
   }
 
   void deleteDevices(List<String> deadList) async {
-    logger.i("Delete Device: $deadList");
+    //logger.i("Delete Device: $deadList");
 
     pauseScan();
     _lastdevices.clear();
@@ -56,18 +56,18 @@ class BleScanner implements ReactiveState<BleScannerState> {
   }
 
   void refreshScan({required List<DiscoveredDevice> connectedDevices}) async {
-    logger.i("refreshScan: ${connectedDevices}");
+    //logger.i("refreshScan: ${connectedDevices}");
 
     final lastdevices = Set<DiscoveredDevice>.from(_lastdevices);
     for (var condev in connectedDevices) {
-      logger.i("Remove.... $lastdevices $connectedDevices");
+      //logger.i("Remove.... $lastdevices $connectedDevices");
       lastdevices.removeWhere((lastdev) => lastdev.id == condev.id);
     }
     final orgdevs = Set<DiscoveredDevice>.from(_devices);
     final intersections = lastdevices.intersection(orgdevs);
     for (var intersec in intersections) {
       if (!lastdevices.any((lastdev) => lastdev.id == intersec.id)) {
-        logger.i("Intersec: $intersec");
+        //logger.i("Intersec: $intersec");
         _devices.remove(intersec);
       }
     }
@@ -97,7 +97,7 @@ class BleScanner implements ReactiveState<BleScannerState> {
 
   void hardRefreshScan(
       {required List<DiscoveredDevice> connectedDevices}) async {
-    logger.i("hardRefreshScan: $connectedDevices");
+    //logger.i("hardRefreshScan: $connectedDevices");
     pauseScan();
 
     for (var condev in connectedDevices) {
@@ -111,7 +111,7 @@ class BleScanner implements ReactiveState<BleScannerState> {
   }
 
   void pauseScan() {
-    logger.i("pauseScan:");
+    //logger.i("pauseScan:");
     if (_subscription != null) {
       _subscription?.pause();
     }
@@ -120,12 +120,12 @@ class BleScanner implements ReactiveState<BleScannerState> {
   void resumeScan() {
     if (_subscription != null) {
       _subscription?.resume();
-      logger.i("Resume - Scan");
+      //logger.i("Resume - Scan");
     }
   }
 
   void startScan() async {
-    logger.i("Start Scan");
+    //logger.i("Start Scan");
     init();
     _subscription = _ble.scanForDevices(
       withServices: [],
@@ -145,7 +145,7 @@ class BleScanner implements ReactiveState<BleScannerState> {
               .checkNeedRemoveFromDevice(ref, dev.id);
 
           if (needRemove) {
-            logger.i("REMOVE ${device.name}");
+            //logger.i("REMOVE ${device.name}");
             _devices.removeWhere((element) => element.id == dev.id);
           }
 
@@ -160,8 +160,8 @@ class BleScanner implements ReactiveState<BleScannerState> {
           }
 
           _devices.add(device);
-          logger.i("ADD: ${device.name} $_pushedStateOnce");
-          logger.i("Pushed State Once: ${device.name}");
+          //logger.i("ADD: ${device.name} $_pushedStateOnce");
+          //logger.i("Pushed State Once: ${device.name}");
           if(_pushedStateOnce){
             _pushState();
             Future.delayed(const Duration(seconds: 3))
@@ -170,11 +170,11 @@ class BleScanner implements ReactiveState<BleScannerState> {
 
         }
       },
-      onError: (Object e) => logger.e(
+      onError: (Object e) => //logger.e(
         'Device scan fails with error: $e',
       ),
       onDone: () {
-        logger.d('Device scan is done.');
+        //logger.d('Device scan is done.');
       },
     );
 
@@ -186,7 +186,7 @@ class BleScanner implements ReactiveState<BleScannerState> {
   }
 
   void _pushState() {
-    logger.i("Pushh!!! $_devices $isClosed ${_subscription != null}");
+    //logger.i("Pushh!!! $_devices $isClosed ${_subscription != null}");
     if (!isClosed) {
       _stateStreamController!.add(
         BleScannerState(
@@ -201,7 +201,7 @@ class BleScanner implements ReactiveState<BleScannerState> {
       _stateStreamController == null || _stateStreamController!.isClosed;
 
   Future<void> stopScan() async {
-    logger.i('Stop ble discovery');
+    //logger.i('Stop ble discovery');
 
     if (_subscription != null) {
       await _subscription?.cancel();
@@ -214,7 +214,7 @@ class BleScanner implements ReactiveState<BleScannerState> {
   }
 
   Future<void> dispose() async {
-    logger.i("Dispose!!1");
+    //logger.i("Dispose!!1");
     _pushState();
 
     // I've commented out these lines, because
@@ -247,7 +247,7 @@ class BleScanner implements ReactiveState<BleScannerState> {
   }
 
   void init() {
-    logger.i("Init!!1");
+    //logger.i("Init!!1");
     _stateStreamController ??= StreamController();
   }
 }
