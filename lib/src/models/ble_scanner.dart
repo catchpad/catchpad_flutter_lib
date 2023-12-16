@@ -170,9 +170,7 @@ class BleScanner implements ReactiveState<BleScannerState> {
 
         }
       },
-      onError: (Object e) => //logger.e(
-        'Device scan fails with error: $e',
-      ),
+      onError: (Object e) {}, //logger.e('Device scan fails with error: $e',),
       onDone: () {
         //logger.d('Device scan is done.');
       },
