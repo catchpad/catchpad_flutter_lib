@@ -281,7 +281,7 @@ abstract class PadSensorManager {
       ref: ref,
       c: activateCharacteristic.qualCharacteristic(deviceId),
       data: utf8.encode(dt),
-      withResponse: false,
+      withResponse: true,
     );
   }
 
@@ -320,7 +320,7 @@ abstract class PadSensorManager {
     required String deviceId,
     required WidgetRef ref,
     required SensorConfigModel model,
-  }) async {
+  }) {
     final dt = [
       BigGuy.sensorTypeToStr(model.sensorType),
       model.scale?.index,
@@ -344,12 +344,12 @@ abstract class PadSensorManager {
       if (model.sensorType == SensorType.acc) '60' //thrValuedt
     ].map((e) => e ?? '-1').join(defaultSeperator);
 
-    return await BleManager.writeCharacteristic(
+    return  BleManager.writeCharacteristic(
       ref: ref,
       c: configCharacteristic.qualCharacteristic(deviceId),
       data: utf8.encode(dt),
       withResponse: true,
-    ).timeout(const Duration(seconds: 5),onTimeout: () => true);
+    );
   }
 
   static Future<bool> configAccSensor({

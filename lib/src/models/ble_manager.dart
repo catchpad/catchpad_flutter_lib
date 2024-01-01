@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:catchpad_flutter_lib/catchpad_flutter_lib.dart';
 import 'package:catchpad_flutter_lib/src/provs/ble_current_subscribes_prov.dart';
+import 'package:catchpad_flutter_lib/src/provs/device/device_info_prov.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -46,7 +48,28 @@ abstract class BleManager {
     FlutterReactiveBle inst;
 
     try {
+      //Called Functions...
+      StackTrace stackTrace = StackTrace.current;
+
+      final currentDevInfo = ref
+          .read(currentDevInfoManagers)
+          .values
+          .firstWhere((element) => element.cpId == c.deviceId);
+
+      bool unnecessaryCommand = false;
+
+      if(currentDevInfo.hwVersion != 'v2.0'){
+        for (var cp05PerFunction in cp05FunctionsList) {
+          if(stackTrace.toString().contains(cp05PerFunction)){
+            unnecessaryCommand = true;
+          }
+        }
+      }
+
+      if(unnecessaryCommand) return false;
+
       if (!ref.context.mounted) return false;
+
       inst = _inst(ref);
     } catch (e) {
       debugPrint('its in writeCharacteristic and failed');

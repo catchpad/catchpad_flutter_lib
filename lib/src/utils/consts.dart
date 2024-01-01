@@ -10,3 +10,14 @@ const tapEventCommand = 'tap_event';
 const Duration scanDuration = Duration(milliseconds: 5000);
 const Duration connectionScanDuration = Duration(milliseconds: 600);
 const Duration connectionTimeoutDuration = Duration(milliseconds: 30000);
+
+const List<String> cp05FunctionsList = [
+  "toggleMultiConnection",
+  "toggleInGame",
+  "iCanSeeYouStillControl",
+  "listenFSR",
+  "toggleVibration",
+  "toggleNfc",
+  "toggleFSR",
+  "setConnectionFlagTrue"
+];

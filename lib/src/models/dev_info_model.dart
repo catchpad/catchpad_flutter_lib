@@ -36,7 +36,7 @@ class DevInfoModel {
 
     const defaultValue = "9999999";
 
-    logger.w("DevInfoModel.fromBytes: $sp");
+    logger.w("Device Infos // CP ID 	/	MAC ID	/	STICKER TYPE	/	HW VERSION	/	SW VERSION	/	ACC THR	/	DST THR	/	VEL THR : $sp");
 
     return ( sp.toList().length != 1) ? DevInfoModel(
       cpId: sp[4],

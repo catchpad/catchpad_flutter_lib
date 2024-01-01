@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:catchpad_flutter_lib/src/provs/device/device_info_prov.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -427,6 +428,47 @@ abstract class PadManager {
       ref: ref,
     );
   }
+  static Future<bool> toggleMultiConnection(String deviceId, {
+    required bool enable,
+    AdminMonitorType type = AdminMonitorType.serial,
+    required WidgetRef ref,
+    bool? inGame,
+
+  }) async {
+    final dt = [
+      "-1",
+      "-1",
+      enable ? "1" : "0"
+    ].join(defaultSeperator);
+
+
+
+    return await BleManager.writeCharacteristic(
+      c: adminCharacteristic.qualCharacteristic(deviceId),
+      data: utf8.encode(dt),
+      withResponse: true,
+      ref: ref,
+    );
+  }
+
+  static Future<bool> toggleInGame(String deviceId, {
+
+    AdminMonitorType type = AdminMonitorType.serial,
+    required WidgetRef ref,
+    bool inGame = false,
+  }) async {
+    final dt = [
+      "G",
+      inGame ? "1" : "0"
+    ].join(defaultSeperator);
+
+    return await BleManager.writeCharacteristic(
+      c: adminCharacteristic.qualCharacteristic(deviceId),
+      data: utf8.encode(dt),
+      withResponse: true,
+      ref: ref,
+    );
+  }
 
   // #region device info
   static Future<bool> _sendGetDeviceInfoSignal(String deviceId, {
@@ -456,7 +498,37 @@ abstract class PadManager {
       return null;
     }
 
-    return DevInfoModel.fromBytes(dt);
+    final devInfo = DevInfoModel.fromBytes(dt);
+
+    //Dont Sent unnecessary commands to pads.
+
+    ref.read(currentDevInfoManagers.notifier).add(devInfo);
+
+    return devInfo;
+  }
+
+  static Future<bool> iCanSeeYouStillControl(String deviceId, {
+    required WidgetRef ref,
+    required bool enableAttribute,
+  }) async {
+    final dt = [
+      'SETINFO',
+      '-1',
+      '-1',
+      '-1',
+      '-1',
+      '-1',
+      '1',
+      '30000',
+      enableAttribute ? "1" : "0",
+    ].join(defaultSeperator);
+
+    return await BleManager.writeCharacteristic(
+      c: infoCharacteristic.qualCharacteristic(deviceId),
+      data: utf8.encode(dt),
+      withResponse: true,
+      ref: ref,
+    );
   }
 
   static Future<bool> _setDeviceSetName(String deviceId, {
