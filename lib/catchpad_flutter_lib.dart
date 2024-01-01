@@ -44,6 +44,7 @@ export 'src/provs/ble_status_prov.dart';
 export 'src/provs/ble_auto_connect_prov.dart';
 export 'src/provs/sleep_detec_prov.dart';
 export 'src/provs/enviroment_prov.dart';
+export 'src/provs/device/device_info_prov.dart';
  // #sub_region providers - trace
  export 'src/provs/trace/byte_trace_active_prov.dart';
 
