@@ -48,26 +48,28 @@ abstract class BleManager {
     FlutterReactiveBle inst;
 
     try {
-      //Called Functions...
-      StackTrace stackTrace = StackTrace.current;
+      if(ref
+          .read(currentDevInfoManagers).containsKey(c.deviceId)){
+        //Called Functions...
+        StackTrace stackTrace = StackTrace.current;
 
-      final currentDevInfo = ref
-          .read(currentDevInfoManagers)
-          .values
-          .firstWhere((element) => element.cpId == c.deviceId);
+        final currentDevInfo = ref
+            .read(currentDevInfoManagers)
+            .values
+            .firstWhere((element) => element.cpId == c.deviceId);
 
-      bool unnecessaryCommand = false;
+        bool unnecessaryCommand = false;
 
-      if(currentDevInfo.hwVersion != 'v2.0'){
-        for (var cp05PerFunction in cp05FunctionsList) {
-          if(stackTrace.toString().contains(cp05PerFunction)){
-            unnecessaryCommand = true;
+        if( &&currentDevInfo.hwVersion != 'v2.0'){
+          for (var cp05PerFunction in cp05FunctionsList) {
+            if(stackTrace.toString().contains(cp05PerFunction)){
+              unnecessaryCommand = true;
+            }
           }
         }
+
+        if(unnecessaryCommand) return false;
       }
-
-      if(unnecessaryCommand) return false;
-
       if (!ref.context.mounted) return false;
 
       inst = _inst(ref);
