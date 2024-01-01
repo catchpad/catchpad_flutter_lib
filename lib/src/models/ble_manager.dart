@@ -14,9 +14,9 @@ abstract class BleManager {
   static FlutterReactiveBle _inst(WidgetRef ref) => ref.read(bleProv);
 
   static Future<List<int>?> readCharacteristic(
-    QualifiedCharacteristic c, {
-    required WidgetRef ref,
-  }) async {
+      QualifiedCharacteristic c, {
+        required WidgetRef ref,
+      }) async {
     FlutterReactiveBle inst;
 
     try {
@@ -48,8 +48,11 @@ abstract class BleManager {
     FlutterReactiveBle inst;
 
     try {
+      bool unnecessaryCommand = false;
+      print('$unnecessaryCommand<-- unnecessary!!');
       if(ref
           .read(currentDevInfoManagers).containsKey(c.deviceId)){
+
         //Called Functions...
         StackTrace stackTrace = StackTrace.current;
 
@@ -58,22 +61,26 @@ abstract class BleManager {
             .values
             .firstWhere((element) => element.cpId == c.deviceId);
 
-        bool unnecessaryCommand = false;
+
 
         if(currentDevInfo.hwVersion != 'v2.0'){
+          print("Hey you are not v2.0 we should look some attributes");
           for (var cp05PerFunction in cp05FunctionsList) {
             if(stackTrace.toString().contains(cp05PerFunction)){
               unnecessaryCommand = true;
             }
           }
+        }else{
+          print("ooo new version on pad nice! go ahead!");
         }
 
-        if(unnecessaryCommand) return false;
       }
+      print('$unnecessaryCommand<-- unnecessary!!');
+      if(unnecessaryCommand) return false;
       if (!ref.context.mounted) return false;
-
       inst = _inst(ref);
     } catch (e) {
+
       debugPrint('its in writeCharacteristic and failed');
       logger.e(e);
       return false;
@@ -96,9 +103,9 @@ abstract class BleManager {
   }
 
   static Stream<List<int>> subscribeToCharacteristic(
-    QualifiedCharacteristic c, {
-    required WidgetRef ref,
-  }) {
+      QualifiedCharacteristic c, {
+        required WidgetRef ref,
+      }) {
     ref.read(currentQualifiedManagerProv.notifier).add(ref, c);
 
     return _inst(ref).subscribeToCharacteristic(c);

@@ -20,7 +20,8 @@ class DeviceInfoProvNotifier extends StateNotifier<CurrentDevInfos> {
   /// Add for control!
   void add(DevInfoModel infoModel) {
     final temp = state;
-    temp.addAll({infoModel.cpId!: infoModel});
+    print(infoModel.toString());
+    temp.addAll({infoModel.deviceId!: infoModel});
     state = temp;
   }
 }

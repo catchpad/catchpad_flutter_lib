@@ -14,7 +14,8 @@ class DevInfoModel {
       noTm,
       variantId,
       dstThr,
-      velThr;
+      velThr,
+  deviceId;
 
 
   DevInfoModel(
@@ -28,9 +29,10 @@ class DevInfoModel {
         this.noTm,
         this.variantId,
         this.dstThr,
-        this.velThr}); // CP ID 	/	MAC ID	/	STICKER TYPE	/	HW VERSION	/	SW VERSION	/	ACC THR	/	DST THR	/	VEL THR
+        this.velThr,
+      this.deviceId}); // CP ID 	/	MAC ID	/	STICKER TYPE	/	HW VERSION	/	SW VERSION	/	ACC THR	/	DST THR	/	VEL THR
 
-  factory DevInfoModel.fromBytes(List<int> bytes) {
+  factory DevInfoModel.fromBytes(List<int> bytes,{required String deviceId}) {
     final st = String.fromCharCodes(bytes);
     final sp = st.split('/');
 
@@ -47,6 +49,7 @@ class DevInfoModel {
       swVersion: sp[1],
       noTm: sp[2],
       variantId: sp[3],
+      deviceId: deviceId
 
     ) : DevInfoModel(
       cpId: defaultValue,
@@ -55,6 +58,7 @@ class DevInfoModel {
       stickerType: defaultValue,
       hwVersion: defaultValue,
       swVersion: defaultValue,
+      deviceId: deviceId,
       noTm: defaultValue,
       variantId: "1",
 
@@ -72,6 +76,7 @@ class DevInfoModel {
       'ACC Threshold: $accThr',
       'DST Threshold: $dstThr',
       'VEL Threshold: $velThr',
+      'VEL Threshold: $deviceId',
     ].join('\n');
   }
 }

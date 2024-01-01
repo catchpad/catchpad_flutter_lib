@@ -22,10 +22,10 @@ abstract class BigGuy {
     if (actionTime == -1 || commandTime == -1) {
       return null;
     }
-    logger.i("Action Time:"+actionTime.toString());
-    logger.i("Command Time:"+commandTime.toString());
+    //logger.i("Action Time:"+actionTime.toString());
+    //logger.i("Command Time:"+commandTime.toString());
     final ms = actionTime - commandTime;
-    logger.i("ms:"+ms.toString());
+    //logger.i("ms:"+ms.toString());
     return Duration(milliseconds: ms);
   }
 
