@@ -60,7 +60,7 @@ abstract class BleManager {
 
         bool unnecessaryCommand = false;
 
-        if( &&currentDevInfo.hwVersion != 'v2.0'){
+        if(currentDevInfo.hwVersion != 'v2.0'){
           for (var cp05PerFunction in cp05FunctionsList) {
             if(stackTrace.toString().contains(cp05PerFunction)){
               unnecessaryCommand = true;
