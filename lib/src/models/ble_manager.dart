@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:catchpad_flutter_lib/catchpad_flutter_lib.dart';
 import 'package:catchpad_flutter_lib/src/provs/ble_current_subscribes_prov.dart';
@@ -48,8 +49,10 @@ abstract class BleManager {
     FlutterReactiveBle inst;
 
     try {
+
+
+      if (!ref.context.mounted) return false;
       bool unnecessaryCommand = false;
-      print('$unnecessaryCommand<-- unnecessary!!');
       if(ref
           .read(currentDevInfoManagers).containsKey(c.deviceId)){
 
@@ -59,29 +62,24 @@ abstract class BleManager {
         final currentDevInfo = ref
             .read(currentDevInfoManagers)
             .values
-            .firstWhere((element) => element.cpId == c.deviceId);
+            .firstWhere((element) => element.deviceId == c.deviceId);
 
 
 
         if(currentDevInfo.hwVersion != 'v2.0'){
-          print("Hey you are not v2.0 we should look some attributes");
           for (var cp05PerFunction in cp05FunctionsList) {
             if(stackTrace.toString().contains(cp05PerFunction)){
               unnecessaryCommand = true;
             }
           }
         }else{
-          print("ooo new version on pad nice! go ahead!");
         }
 
       }
-      print('$unnecessaryCommand<-- unnecessary!!');
       if(unnecessaryCommand) return false;
-      if (!ref.context.mounted) return false;
       inst = _inst(ref);
     } catch (e) {
 
-      debugPrint('its in writeCharacteristic and failed');
       logger.e(e);
       return false;
     }
