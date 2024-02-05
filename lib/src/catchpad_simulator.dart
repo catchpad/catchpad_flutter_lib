@@ -459,6 +459,12 @@ class CatchpadSimulator extends _FlutterReactiveBleExtender {
     // TODO: implement resolveSingle
     throw UnimplementedError();
   }
+
+  @override
+  Future<int> readRssi(String deviceId) {
+    // TODO: implement readRssi
+    throw UnimplementedError();
+  }
 }
 
 extension CPCharectaristic on QualifiedCharacteristic {

@@ -226,10 +226,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_reactive_ble
-      sha256: "7a0d245412dc8e1b72ce2adc423808583b42ce824b1be74001ff22c8bb5ada48"
+      sha256: e2184b7793f0da1bd522a6296995f2b7a2a6ca28c57419cb5f5129b4cbdccf02
       url: "https://pub.dev"
     source: hosted
-    version: "5.2.0"
+    version: "5.3.0"
   flutter_riverpod:
     dependency: "direct main"
     description:
