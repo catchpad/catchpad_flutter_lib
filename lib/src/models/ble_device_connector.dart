@@ -26,7 +26,6 @@ class BleDeviceConnector extends ReactiveState<DeviceStatusMapEntry> {
       _connections = {};
 
   Future<void> connect(DeviceModel device) async {
-    logger.i('Start connecting to ${device.id}');
 
     final st = _ble.connectToDevice(
       id: device.id,
@@ -46,12 +45,11 @@ class BleDeviceConnector extends ReactiveState<DeviceStatusMapEntry> {
 
     _updateStat(
         MapEntry<DiscoveredDevice, ConnectionStateUpdate> update) async {
-      logger.i(
-          'ConnectionState for device ${device.id} : ${update.value.connectionState}');
+
 
       if (update.value.isConnected) {
         final mt = await _ble.requestMtu(deviceId: device.id, mtu: 512);
-        logger.i('MTU for device ${device.id} : $mt');
+
       }
 
       _deviceConnectionController.add(update);
@@ -86,7 +84,6 @@ class BleDeviceConnector extends ReactiveState<DeviceStatusMapEntry> {
 
   Future<void> disconnect(DeviceModel device) async {
     try {
-      logger.i('disconnecting to device: ${device.id}');
       await _connections[device]?.cancel();
     } on Exception catch (e) {
       logger.e("Error disconnecting from a device: $e");

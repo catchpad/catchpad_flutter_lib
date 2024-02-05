@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:catchpad_flutter_lib/src/provs/device/device_info_prov.dart';
@@ -224,7 +225,7 @@ abstract class PadManager {
       SidesColorsModel colorModel, {
         bool isCommand = false,
         required WidgetRef ref,
-        bool withResponse = true,
+        bool withResponse = false,
       }) async {
     if (debugMode) {
       EnviromentModel? env;
@@ -266,7 +267,9 @@ abstract class PadManager {
   }
 
   static Future<bool> isCommandRefresh(String deviceId,
-      {required WidgetRef ref, bool withResponse = false}) async {
+      {
+        required WidgetRef ref,
+        bool withResponse = false}) async {
     const refreshDt = '1/-1/-1/-1';
 
     return await BleManager.writeCharacteristic(
@@ -299,7 +302,7 @@ abstract class PadManager {
       {required WidgetRef ref,
         bool isCommand = false,
         bool withResponse = false}) async {
-    const dt = 'SETOTA/-1/1';
+    const dt = 'SETOTA/509/1';
 
     return await BleManager.writeCharacteristic(
       c: otaSettings.qualCharacteristic(deviceId),
@@ -338,17 +341,19 @@ abstract class PadManager {
     );
   }
 
-  static Future<bool> sendPartMusicFile(String deviceId,
+  static Future<bool> sendPartMusicFile (String deviceId,
       {required WidgetRef ref,
         required List<int> byteList,
         bool isCommand = false,
         bool withResponse = false}) async {
+
     return await BleManager.writeCharacteristic(
       c: mp3transferCharacteristic.qualCharacteristic(deviceId),
       data: byteList,
       withResponse: withResponse,
       ref: ref,
     );
+
   }
 
   /// restart the device
@@ -440,13 +445,14 @@ abstract class PadManager {
         AdminMonitorType type = AdminMonitorType.serial,
         required WidgetRef ref,
         bool inGame = false,
+        bool withResponse = false,
       }) async {
     final dt = ["G", inGame ? "1" : "0"].join(defaultSeperator);
 
     return await BleManager.writeCharacteristic(
       c: adminCharacteristic.qualCharacteristic(deviceId),
       data: utf8.encode(dt),
-      withResponse: true,
+      withResponse: Platform.isIOS,
       ref: ref,
     );
   }

@@ -93,7 +93,7 @@ abstract class BleManager {
     } catch (e) {
       logger.e(c.characteristicId.toString() +
           data.toString() +
-          withResponse.toString());
+          withResponse.toString()+e.toString());
       return false;
     }
 

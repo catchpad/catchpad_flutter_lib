@@ -15,7 +15,7 @@ class DevInfoModel {
       variantId,
       dstThr,
       velThr,
-  deviceId;
+      deviceId;
 
 
   DevInfoModel(
@@ -30,7 +30,7 @@ class DevInfoModel {
         this.variantId,
         this.dstThr,
         this.velThr,
-      this.deviceId}); // CP ID 	/	MAC ID	/	STICKER TYPE	/	HW VERSION	/	SW VERSION	/	ACC THR	/	DST THR	/	VEL THR
+        this.deviceId}); // CP ID 	/	MAC ID	/	STICKER TYPE	/	HW VERSION	/	SW VERSION	/	ACC THR	/	DST THR	/	VEL THR
 
   factory DevInfoModel.fromBytes(List<int> bytes,{required String deviceId}) {
     final st = String.fromCharCodes(bytes);
@@ -38,18 +38,17 @@ class DevInfoModel {
 
     const defaultValue = "9999999";
 
-    logger.w("Device Infos // CP ID 	/	MAC ID	/	STICKER TYPE	/	HW VERSION	/	SW VERSION	/	ACC THR	/	DST THR	/	VEL THR : $sp");
 
     return ( sp.toList().length != 1) ? DevInfoModel(
-      cpId: sp[4],
-      macId: sp[5],
-      bleName: sp[6],
-      stickerType: sp[7],
-      hwVersion: sp[0],
-      swVersion: sp[1],
-      noTm: sp[2],
-      variantId: sp[3],
-      deviceId: deviceId
+        cpId: sp[4],
+        macId: sp[5],
+        bleName: sp[6],
+        stickerType: sp[7],
+        hwVersion: sp[0],
+        swVersion: sp[1],
+        noTm: sp[2],
+        variantId: sp[3],
+        deviceId: deviceId
 
     ) : DevInfoModel(
       cpId: defaultValue,
@@ -64,6 +63,8 @@ class DevInfoModel {
 
     );
   }
+
+  bool get isCp04 => hwVersion == "v1.2";
 
   @override
   String toString() {

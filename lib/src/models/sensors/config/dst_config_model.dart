@@ -36,7 +36,6 @@ class DstConfigModel with _$DstConfigModel {
   SensorConfigModel toSensorConfigModel() {
 
     var localMode = ConfigMode.values[1];
-    logger.i("thresholdCm: $thresholdCm");
     if(thresholdCm! < 25 ) {
       localMode = ConfigMode.values[2];
     }else{
