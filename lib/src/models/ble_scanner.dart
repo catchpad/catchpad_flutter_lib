@@ -92,7 +92,6 @@ class BleScanner implements ReactiveState<BleScannerState> {
     _pushState();
 
     _lastdevices.clear();
-
   }
 
   void hardRefreshScan(
@@ -125,30 +124,31 @@ class BleScanner implements ReactiveState<BleScannerState> {
   }
 
   void startScan() async {
-    //logger.i("Start Scan");
     init();
     _subscription = _ble.scanForDevices(
       withServices: [],
       requireLocationServicesEnabled: true,
       // serviceUuids,
     ).listen(
-          (device) {
-
+      (device) {
         ref
             .read(sleepDetectedByTimerNotifierProv.notifier)
             .updateOrAddLastSeen(ref, device.id);
 
-        for (var dev in _devices) {
+        var devicesToRemove = <DiscoveredDevice>[];
 
+        for (var dev in _devices) {
           final needRemove = ref
               .read(sleepDetectedByTimerNotifierProv.notifier)
               .checkNeedRemoveFromDevice(ref, dev.id);
 
           if (needRemove) {
-            //logger.i("REMOVE ${device.name}");
-            _devices.removeWhere((element) => element.id == dev.id);
+            devicesToRemove.add(dev);
           }
+        }
 
+        for (var devToRemove in devicesToRemove) {
+          _devices.removeWhere((element) => element.id == devToRemove.id);
         }
 
         if (device.isCPDevice) {
@@ -160,14 +160,12 @@ class BleScanner implements ReactiveState<BleScannerState> {
           }
 
           _devices.add(device);
-          //logger.i("ADD: ${device.name} $_pushedStateOnce");
-          //logger.i("Pushed State Once: ${device.name}");
-          if(_pushedStateOnce){
+
+          if (_pushedStateOnce) {
             _pushState();
             Future.delayed(const Duration(seconds: 3))
                 .then((value) => _pushedStateOnce = false);
           }
-
         }
       },
       onError: (Object e) {}, //logger.e('Device scan fails with error: $e',),

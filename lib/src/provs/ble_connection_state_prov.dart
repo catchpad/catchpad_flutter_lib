@@ -16,6 +16,15 @@ final bleConenctionStateProv = StreamProvider<DeviceStatusMap>(
     final st = con.state;
 
     await for (final el in st) {
+      final device =  el.value;
+
+      if(device.failure != null) {
+        logger.e(device.failure!.message);
+      } else {
+        logger.i("Device:${device.deviceId} Connection Status:${device.connectionState.name}");
+      }
+
+
       ref.read(bleConPr.notifier).updateEntry(el);
 
       // Auto connect.We check if we are in any game we trying connect again to pad.

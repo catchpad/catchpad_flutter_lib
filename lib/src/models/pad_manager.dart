@@ -60,9 +60,9 @@ abstract class PadManager {
     return await BleManager.writeCharacteristic(
       c: sleepCharacteristicAdminInfo.qualCharacteristic(deviceId),
       data: utf8.encode(dt),
-      withResponse: true,
+      withResponse: Platform.isAndroid ? true : false,
       ref: ref,
-    );
+    ).timeout(const Duration(milliseconds: 100),onTimeout: ()=>true);
   }
 
   static Future<bool> ledOffNoResponse(
