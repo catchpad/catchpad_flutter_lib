@@ -57,7 +57,6 @@ const CpCharacteristic mp3transferCharacteristic = CpCharacteristic(
 
 // #mp3end
 
-
 // #otastart
 
 const String otaServiceId = 'c8659210-af91-4ad3-a995-a58d6fd26145';
@@ -79,8 +78,6 @@ const CpCharacteristic otaSettings = CpCharacteristic(
 
 // #otaend
 
-
-
 // #region admin
 const String adminServiceId = '23cb9fe8-b2ab-11ec-b909-DDDDDDDDDDDD';
 
@@ -92,8 +89,6 @@ const CpCharacteristic adminCharacteristic = CpCharacteristic(
 
 // #region sensors
 const String sensorServiceId = '722d9150-b2ab-11ec-b909-000000000000';
-
-
 
 const CpCharacteristic fsrCharacteristic = CpCharacteristic(
   id: '83e7f7e6-b2ab-11ec-b111-000000000003',
@@ -134,11 +129,13 @@ const CpCharacteristic vibrationCharacteristic = CpCharacteristic(
 // #region info
 const String infoServiceId = '23cb9fe8-b2ab-11ec-b909-dddddddddddd';
 
-
 const CpCharacteristic errorLog = CpCharacteristic(
   id: 'a4bf0dbb-b2ab-11ec-b909-DDDDDDDDDDD2',
   serviceId: infoServiceId,
 );
+
+const CpCharacteristic pongLog = CpCharacteristic(
+    id: 'a4bf0dbb-b2ab-11ec-b909-00000000000B', serviceId: infoServiceId);
 
 const CpCharacteristic infoCharacteristic = CpCharacteristic(
   id: 'a4bf0dbb-b2ab-11ec-b909-DDDDDDDDDDD0',
@@ -164,7 +161,6 @@ const CpCharacteristic audioCharacteristic = CpCharacteristic(
   serviceId: audioServiceId,
 );
 
-
 // #endregion
 // #endregion
 
@@ -172,6 +168,7 @@ const String oldMainServiceId = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
 const oldMainCharacteristicId = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
 
 Uuid get oldMainServiceUuid => Uuid.parse(oldMainServiceId);
+
 Uuid get oldMainCharacteristicUuid => Uuid.parse(oldMainCharacteristicId);
 
 const CpCharacteristic oldMainCharacteristic = CpCharacteristic(

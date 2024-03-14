@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -49,20 +50,20 @@ extension CpDiscoveredDevice on DiscoveredDevice {
   static Map<String, String?> devIdNameIdMap(Iterable<DeviceModel> devs) {
     return devs.fold(
       {},
-      (Map<String, String?> map, DeviceModel dev) {
+          (Map<String, String?> map, DeviceModel dev) {
         map[dev.id] = dev.deviceNameId;
         return map;
       },
     );
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson({Color? color}) {
     return {
       'id': id,
       'name': name,
+      'color': color!.toHexTriplet()
     };
   }
-
   static DeviceModel fromJson(Map<String, dynamic> json) {
     return DeviceModel(
       id: json['id'] as String,
@@ -73,4 +74,7 @@ extension CpDiscoveredDevice on DiscoveredDevice {
       serviceUuids: const [],
     );
   }
+}
+extension ColorX on Color {
+  String toHexTriplet() => '#${(value & 0xFFFFFF).toRadixString(16).padLeft(6, '0').toUpperCase()}';
 }

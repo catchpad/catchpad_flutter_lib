@@ -15,7 +15,10 @@ class DevInfoModel {
       variantId,
       dstThr,
       velThr,
-      deviceId;
+      deviceId,
+      disconnectingCount,
+      areYouOkCount
+  ;
 
 
   DevInfoModel(
@@ -30,7 +33,10 @@ class DevInfoModel {
         this.variantId,
         this.dstThr,
         this.velThr,
-        this.deviceId}); // CP ID 	/	MAC ID	/	STICKER TYPE	/	HW VERSION	/	SW VERSION	/	ACC THR	/	DST THR	/	VEL THR
+        this.deviceId,
+        this.disconnectingCount,
+        this.areYouOkCount
+      }); // CP ID 	/	MAC ID	/	STICKER TYPE	/	HW VERSION	/	SW VERSION	/	ACC THR	/	DST THR	/	VEL THR
 
   factory DevInfoModel.fromBytes(List<int> bytes,{required String deviceId}) {
     final st = String.fromCharCodes(bytes);
@@ -44,12 +50,13 @@ class DevInfoModel {
         macId: sp[5],
         bleName: sp[6],
         stickerType: sp[7],
+        disconnectingCount: sp.length > 8 ? sp[8] : "unknown",
+        areYouOkCount: sp.length > 9 ?  sp[9] : "unknown",
         hwVersion: sp[0],
         swVersion: sp[1],
         noTm: sp[2],
         variantId: sp[3],
         deviceId: deviceId
-
     ) : DevInfoModel(
       cpId: defaultValue,
       macId: defaultValue,
@@ -58,6 +65,8 @@ class DevInfoModel {
       hwVersion: defaultValue,
       swVersion: defaultValue,
       deviceId: deviceId,
+      disconnectingCount: defaultValue,
+      areYouOkCount:  defaultValue,
       noTm: defaultValue,
       variantId: "1",
 

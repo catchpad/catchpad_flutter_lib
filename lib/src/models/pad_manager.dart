@@ -60,9 +60,9 @@ abstract class PadManager {
     return await BleManager.writeCharacteristic(
       c: sleepCharacteristicAdminInfo.qualCharacteristic(deviceId),
       data: utf8.encode(dt),
-      withResponse: Platform.isAndroid ? true : false,
+      withResponse: Platform.isAndroid ? true : true,
       ref: ref,
-    ).timeout(const Duration(milliseconds: 100),onTimeout: ()=>true);
+    ).timeout(const Duration(milliseconds: 100), onTimeout: () => true);
   }
 
   static Future<bool> ledOffNoResponse(
@@ -100,7 +100,6 @@ abstract class PadManager {
         required WidgetRef ref,
       }) {
     final dateTime = DateTime.now().millisecondsSinceEpoch;
-
 
     return ledColor(
       deviceId,
@@ -267,9 +266,7 @@ abstract class PadManager {
   }
 
   static Future<bool> isCommandRefresh(String deviceId,
-      {
-        required WidgetRef ref,
-        bool withResponse = false}) async {
+      {required WidgetRef ref, bool withResponse = false}) async {
     const refreshDt = '1/-1/-1/-1';
 
     return await BleManager.writeCharacteristic(
@@ -341,19 +338,17 @@ abstract class PadManager {
     );
   }
 
-  static Future<bool> sendPartMusicFile (String deviceId,
+  static Future<bool> sendPartMusicFile(String deviceId,
       {required WidgetRef ref,
         required List<int> byteList,
         bool isCommand = false,
         bool withResponse = false}) async {
-
     return await BleManager.writeCharacteristic(
       c: mp3transferCharacteristic.qualCharacteristic(deviceId),
       data: byteList,
       withResponse: withResponse,
       ref: ref,
     );
-
   }
 
   /// restart the device
@@ -413,7 +408,6 @@ abstract class PadManager {
       type.index,
       (inGame == null) ? -1 : BigGuy.boolToInt(inGame)
     ].join(defaultSeperator);
-
 
     return await BleManager.writeCharacteristic(
       c: adminCharacteristic.qualCharacteristic(deviceId),
@@ -487,7 +481,7 @@ abstract class PadManager {
       return null;
     }
 
-    final devInfo = DevInfoModel.fromBytes(dt,deviceId: deviceId);
+    final devInfo = DevInfoModel.fromBytes(dt, deviceId: deviceId);
 
     //Dont Sent unnecessary commands to pads.
 
@@ -521,6 +515,47 @@ abstract class PadManager {
     );
   }
 
+  static Future<bool> circularPadShow(
+      String deviceId, {
+        required WidgetRef ref,
+        Duration? totalDuration,
+        Duration? timeOutLedOff,
+        Duration? passingEndColorTime,
+        required Color circularColor,
+        Color? endColor,
+      }) async {
+    if (totalDuration == null) return false;
+    int perSideDelayTime = totalDuration.inMilliseconds ~/ 4;
+    final perSideDelayDuration = Duration(milliseconds: perSideDelayTime);
+
+    for (int i = 0; i < 4; i++) {
+      if (i != 0) {
+        await Future.delayed(perSideDelayDuration);
+      }
+
+      PadManager.ledColor(
+          deviceId,
+          SidesColorsModel(
+              tl: circularColor,
+              bl: i >= 1 ? circularColor : null,
+              br: i >= 2 ? circularColor : null,
+              tr: i >= 3 ? circularColor : null,
+              same: i == 4),
+          ref: ref);
+    }
+
+    if (endColor != null) {
+      await Future.delayed(passingEndColorTime ?? Duration.zero);
+      PadManager.ledColor(deviceId, SidesColorsModel.all(endColor), ref: ref);
+    }
+
+    await Future.delayed(timeOutLedOff ?? Duration.zero);
+
+    PadManager.ledOff(deviceId, ref: ref);
+
+    return true;
+  }
+
   static Future<bool> _setDeviceSetName(
       String deviceId, {
         required WidgetRef ref,
@@ -538,6 +573,9 @@ abstract class PadManager {
       cpSN ?? '-1',
       bleName ?? '-1',
       stickerId ?? '-1',
+      "-1",
+      "-1",
+      "-1"
     ].join(defaultSeperator);
 
     return await BleManager.writeCharacteristic(
@@ -570,6 +608,16 @@ abstract class PadManager {
       }) async {
     return await BleManager.readCharacteristic(
         errorLog.qualCharacteristic(deviceId),
+        ref: ref);
+  }
+
+  static Future<List<int>?> readAreUOkTimer(
+      String deviceId, {
+        required WidgetRef ref,
+        withResponse = false,
+      }) async {
+    return await BleManager.readCharacteristic(
+        pongLog.qualCharacteristic(deviceId),
         ref: ref);
   }
 
@@ -715,7 +763,6 @@ abstract class PadManager {
 
     if (base != null) {
       final isExist = ref.exists(base);
-
     }
 
     if (batt != null) {
@@ -824,13 +871,10 @@ abstract class PadManager {
       int s = sw.elapsedMilliseconds;
       sums.add(s);
 
-
       indx++;
     }
 
     await _turnAudioOff(ref, deviceId);
-
-
 
     return true;
   }
@@ -847,7 +891,6 @@ abstract class PadManager {
     if (val != null) power = val;
 
     final dt = '1/$power';
-
 
     return await BleManager.writeCharacteristic(
       c: vibrationCharacteristic.qualCharacteristic(deviceId),
@@ -894,7 +937,8 @@ abstract class PadManager {
       {required WidgetRef ref,
         //Todo: enable disable mode!
         bool withResponse = false}) async {
-    const dt = '?/1';
+    final dt = ['SETINFO', '-1', '-1', '-1', '-1', '-1', '1', '-1', '-1']
+        .join(defaultSeperator);
     return await BleManager.writeCharacteristic(
       c: infoCharacteristic.qualCharacteristic(deviceId),
       data: utf8.encode(dt),

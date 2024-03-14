@@ -1,23 +1,16 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:catchpad_flutter_lib/catchpad_flutter_lib.dart';
 import 'package:catchpad_flutter_lib/src/provs/ble_current_subscribes_prov.dart';
-import 'package:catchpad_flutter_lib/src/provs/device/device_info_prov.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../catchpad_flutter_lib_init.dart';
-import '../provs/ble_prov.dart';
 
 abstract class BleManager {
   static FlutterReactiveBle _inst(WidgetRef ref) => ref.read(bleProv);
 
   static Future<List<int>?> readCharacteristic(
-      QualifiedCharacteristic c, {
-        required WidgetRef ref,
-      }) async {
+    QualifiedCharacteristic c, {
+    required WidgetRef ref,
+  }) async {
     FlutterReactiveBle inst;
 
     try {
@@ -49,13 +42,13 @@ abstract class BleManager {
     FlutterReactiveBle inst;
 
     try {
-
-
       if (!ref.context.mounted) return false;
-      bool unnecessaryCommand = false;
-      if(ref
-          .read(currentDevInfoManagers).containsKey(c.deviceId)){
 
+      bool unnecessaryCommand = false;
+
+      print(String.fromCharCodes(data));
+
+      if (ref.read(currentDevInfoManagers).containsKey(c.deviceId)) {
         //Called Functions...
         StackTrace stackTrace = StackTrace.current;
 
@@ -64,22 +57,17 @@ abstract class BleManager {
             .values
             .firstWhere((element) => element.deviceId == c.deviceId);
 
-
-
-        if(currentDevInfo.hwVersion != 'v2.0'){
+        if (currentDevInfo.hwVersion != 'v2.0') {
           for (var cp05PerFunction in cp05FunctionsList) {
-            if(stackTrace.toString().contains(cp05PerFunction)){
+            if (stackTrace.toString().contains(cp05PerFunction)) {
               unnecessaryCommand = true;
             }
           }
-        }else{
-        }
-
+        } else {}
       }
-      if(unnecessaryCommand) return false;
+      if (unnecessaryCommand) return false;
       inst = _inst(ref);
     } catch (e) {
-
       logger.e(e);
       return false;
     }
@@ -93,7 +81,8 @@ abstract class BleManager {
     } catch (e) {
       logger.e(c.characteristicId.toString() +
           data.toString() +
-          withResponse.toString()+e.toString());
+          withResponse.toString() +
+          e.toString());
       return false;
     }
 
@@ -101,9 +90,9 @@ abstract class BleManager {
   }
 
   static Stream<List<int>> subscribeToCharacteristic(
-      QualifiedCharacteristic c, {
-        required WidgetRef ref,
-      }) {
+    QualifiedCharacteristic c, {
+    required WidgetRef ref,
+  }) {
     ref.read(currentQualifiedManagerProv.notifier).add(ref, c);
 
     return _inst(ref).subscribeToCharacteristic(c);
