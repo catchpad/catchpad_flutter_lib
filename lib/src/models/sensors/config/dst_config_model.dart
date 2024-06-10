@@ -22,7 +22,7 @@ class DstConfigModel with _$DstConfigModel {
     int? timeout,
 
     ///
-    @Default(3)int? limitValue,
+    @Default(6)int? limitValue,
   }) = _DstConfigModel;
 
   int? get thresholdCm {

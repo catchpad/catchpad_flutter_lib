@@ -124,7 +124,7 @@ class __$$_DstConfigModelCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_DstConfigModel extends _DstConfigModel {
-  const _$_DstConfigModel({this.threshold, this.timeout, this.limitValue = 3})
+  const _$_DstConfigModel({this.threshold, this.timeout, this.limitValue = 6})
       : super._();
 
   factory _$_DstConfigModel.fromJson(Map<String, dynamic> json) =>

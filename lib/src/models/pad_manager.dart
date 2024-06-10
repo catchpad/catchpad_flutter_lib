@@ -752,6 +752,10 @@ abstract class PadManager {
         .map((event) => event);
   }
 
+
+
+
+
   static Stream<BatteryModel> listenToBattery(
       String deviceId, {
         required WidgetRef ref,

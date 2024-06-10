@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:catchpad_flutter_lib/catchpad_flutter_lib.dart';
 import 'package:catchpad_flutter_lib/src/provs/ble_current_subscribes_prov.dart';
+import 'package:catchpad_flutter_lib/src/provs/pad_listen_delay_prov.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 abstract class BleManager {
@@ -83,7 +85,8 @@ abstract class BleManager {
           data.toString() +
           withResponse.toString() +
           e.toString());
-      return false;
+      StackTrace stackTrace = StackTrace.current;
+      debugPrint("Error: ${stackTrace.toString()}");
     }
 
     return true;
@@ -94,7 +97,7 @@ abstract class BleManager {
     required WidgetRef ref,
   }) {
     ref.read(currentQualifiedManagerProv.notifier).add(ref, c);
-
-    return _inst(ref).subscribeToCharacteristic(c);
+    /// We are checking [currentHasDelayState] if the delay is active. If it is active, we will not subscribe to the characteristic.
+    return _inst(ref).subscribeToCharacteristic(c).where((event) => !ref.read(currentHasDelayState));
   }
 }

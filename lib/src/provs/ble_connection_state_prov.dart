@@ -20,8 +20,6 @@ final bleConenctionStateProv = StreamProvider<DeviceStatusMap>(
 
       if(device.failure != null) {
         logger.e(device.failure!.message);
-      } else {
-        logger.i("Device:${device.deviceId} Connection Status:${device.connectionState.name}");
       }
 
 
@@ -72,7 +70,22 @@ class BleConnectionStateNotifier extends StateNotifier<DeviceStatusMap> {
     DeviceModel chooseDeviceModel =
         state.keys.firstWhere((element) => element.id == deviceModelId);
     newM.remove(chooseDeviceModel);
+
     state = newM;
+
+
+    DeviceStatusMap deviceStatusMap = {};
+
+    state.forEach((key, value) {
+      if(!deviceStatusMap.keys.any((pDevice) => pDevice.id == key.id)){
+        deviceStatusMap.addAll({
+          key :value
+        });
+      }
+    });
+
+    state = deviceStatusMap;
+
   }
 
   void updateDevice(DeviceModel d, DeviceConnectionState conState) =>
@@ -101,8 +114,22 @@ class BleConnectionStateNotifier extends StateNotifier<DeviceStatusMap> {
     } else {
       newM.remove(device);
     }
-
     state = newM;
+
+
+    DeviceStatusMap deviceStatusMap = {};
+
+    state.forEach((key, value) {
+      if(!deviceStatusMap.keys.any((pDevice) => pDevice.id == key.id)){
+        deviceStatusMap.addAll({
+          key :value
+        });
+      }
+    });
+
+    state = deviceStatusMap;
+
+
   }
 }
 

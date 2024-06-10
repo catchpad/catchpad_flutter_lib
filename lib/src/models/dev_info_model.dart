@@ -40,6 +40,7 @@ class DevInfoModel {
 
   factory DevInfoModel.fromBytes(List<int> bytes,{required String deviceId}) {
     final st = String.fromCharCodes(bytes);
+    // "CP ID 	/	MAC ID	/	STICKER TYPE	/	HW VERSION	/	SW VERSION	/	ACC THR	/	DST THR	/	VEL THR"
     final sp = st.split('/');
 
     const defaultValue = "9999999";

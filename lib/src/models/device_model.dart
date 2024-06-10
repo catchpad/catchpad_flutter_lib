@@ -61,7 +61,7 @@ extension CpDiscoveredDevice on DiscoveredDevice {
     return {
       'id': id,
       'name': name,
-      'color': color!.toHexTriplet()
+      'color': color?.toHexTriplet()
     };
   }
   static DeviceModel fromJson(Map<String, dynamic> json) {
