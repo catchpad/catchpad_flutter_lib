@@ -19,7 +19,8 @@ abstract class BleManager {
       if (!ref.context.mounted) return [];
       inst = _inst(ref);
     } catch (e) {
-      logger.e(e);
+      StackTrace currentTrace = StackTrace.current;
+      logger.e("$e\n$currentTrace");
       return null;
     }
 
@@ -28,7 +29,8 @@ abstract class BleManager {
     try {
       read = await inst.readCharacteristic(c);
     } catch (e) {
-      logger.e(e);
+      StackTrace currentTrace = StackTrace.current;
+      logger.e("$e\n$currentTrace");
       return null;
     }
 
@@ -70,7 +72,8 @@ abstract class BleManager {
       if (unnecessaryCommand) return false;
       inst = _inst(ref);
     } catch (e) {
-      logger.e(e);
+      StackTrace currentTrace = StackTrace.current;
+      logger.e("$e\n$currentTrace");
       return false;
     }
 

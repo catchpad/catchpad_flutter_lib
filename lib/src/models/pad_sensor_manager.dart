@@ -509,6 +509,22 @@ abstract class PadSensorManager {
     );
   }
 
+  static Stream<TouchEvent> listenToTouch2(
+      String deviceId, {
+        required WidgetRef ref,
+      }) async* {
+    yield* BleManager.subscribeToCharacteristic(
+      accCharacteristic.qualCharacteristic(deviceId),
+      ref: ref,
+    ).map(
+          (bytes) => TouchEvent(
+        deviceId,
+        AcceleremetorTapModel.fromBytes(bytes),
+      ),
+    );
+  }
+
+
   static Stream<TouchEvent> listenToTouchMulti(
       Iterable<String> deviceIds, {
         required WidgetRef ref,

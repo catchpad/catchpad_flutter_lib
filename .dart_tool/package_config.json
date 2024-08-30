@@ -3,13 +3,13 @@
   "packages": [
     {
       "name": "_fe_analyzer_shared",
-      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/_fe_analyzer_shared-58.0.0",
+      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/_fe_analyzer_shared-61.0.0",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "analyzer",
-      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/analyzer-5.10.0",
+      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/analyzer-5.13.0",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
@@ -105,7 +105,7 @@
     },
     {
       "name": "collection",
-      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/collection-1.17.2",
+      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/collection-1.18.0",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -117,9 +117,9 @@
     },
     {
       "name": "coverage",
-      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/coverage-1.6.3",
+      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/coverage-1.8.0",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "3.0"
     },
     {
       "name": "crypto",
@@ -159,9 +159,9 @@
     },
     {
       "name": "flutter",
-      "rootUri": "file:///Users/berkantcalikusu/Desktop/main/flutter/packages/flutter",
+      "rootUri": "file:///Users/berkantcalikusu/Desktop/MyWorks/main/flutter/packages/flutter",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.2"
     },
     {
       "name": "flutter_lints",
@@ -183,15 +183,15 @@
     },
     {
       "name": "flutter_test",
-      "rootUri": "file:///Users/berkantcalikusu/Desktop/main/flutter/packages/flutter_test",
+      "rootUri": "file:///Users/berkantcalikusu/Desktop/MyWorks/main/flutter/packages/flutter_test",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.2"
     },
     {
       "name": "flutter_web_plugins",
-      "rootUri": "file:///Users/berkantcalikusu/Desktop/main/flutter/packages/flutter_web_plugins",
+      "rootUri": "file:///Users/berkantcalikusu/Desktop/MyWorks/main/flutter/packages/flutter_web_plugins",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.2"
     },
     {
       "name": "freezed",
@@ -272,6 +272,24 @@
       "languageVersion": "2.18"
     },
     {
+      "name": "leak_tracker",
+      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/leak_tracker-10.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "leak_tracker_flutter_testing",
+      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/leak_tracker_flutter_testing-2.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
+      "name": "leak_tracker_testing",
+      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/leak_tracker_testing-2.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.1"
+    },
+    {
       "name": "lints",
       "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/lints-2.0.1",
       "packageUri": "lib/",
@@ -291,19 +309,19 @@
     },
     {
       "name": "matcher",
-      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/matcher-0.12.16",
+      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/matcher-0.12.16+1",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "3.0"
     },
     {
       "name": "material_color_utilities",
-      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/material_color_utilities-0.5.0",
+      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/material_color_utilities-0.8.0",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "meta",
-      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/meta-1.9.1",
+      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/meta-1.11.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -327,9 +345,9 @@
     },
     {
       "name": "path",
-      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/path-1.8.3",
+      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/path-1.9.0",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "3.0"
     },
     {
       "name": "plugin_platform_interface",
@@ -405,9 +423,9 @@
     },
     {
       "name": "sky_engine",
-      "rootUri": "file:///Users/berkantcalikusu/Desktop/main/flutter/bin/cache/pkg/sky_engine",
+      "rootUri": "file:///Users/berkantcalikusu/Desktop/MyWorks/main/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.2"
     },
     {
       "name": "source_gen",
@@ -441,7 +459,7 @@
     },
     {
       "name": "stack_trace",
-      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/stack_trace-1.11.0",
+      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/stack_trace-1.11.1",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -453,9 +471,9 @@
     },
     {
       "name": "stream_channel",
-      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/stream_channel-2.1.1",
+      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/stream_channel-2.1.2",
       "packageUri": "lib/",
-      "languageVersion": "2.14"
+      "languageVersion": "2.19"
     },
     {
       "name": "stream_transform",
@@ -477,21 +495,21 @@
     },
     {
       "name": "test",
-      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/test-1.24.3",
+      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/test-1.24.9",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "3.0"
     },
     {
       "name": "test_api",
-      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/test_api-0.6.0",
+      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/test_api-0.6.1",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "3.0"
     },
     {
       "name": "test_core",
-      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/test_core-0.5.3",
+      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/test_core-0.5.9",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "3.0"
     },
     {
       "name": "timing",
@@ -513,21 +531,15 @@
     },
     {
       "name": "vm_service",
-      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/vm_service-9.4.0",
+      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/vm_service-13.0.0",
       "packageUri": "lib/",
-      "languageVersion": "2.15"
+      "languageVersion": "3.0"
     },
     {
       "name": "watcher",
       "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/watcher-1.0.2",
       "packageUri": "lib/",
       "languageVersion": "2.14"
-    },
-    {
-      "name": "web",
-      "rootUri": "file:///Users/berkantcalikusu/.pub-cache/hosted/pub.dev/web-0.1.4-beta",
-      "packageUri": "lib/",
-      "languageVersion": "3.1"
     },
     {
       "name": "web_socket_channel",
@@ -560,7 +572,7 @@
       "languageVersion": "2.17"
     }
   ],
-  "generated": "2024-02-14T11:30:29.827072Z",
+  "generated": "2024-08-20T11:07:46.998765Z",
   "generator": "pub",
-  "generatorVersion": "3.1.3"
+  "generatorVersion": "3.3.1"
 }
