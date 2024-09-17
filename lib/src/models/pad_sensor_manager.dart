@@ -421,7 +421,6 @@ abstract class PadSensorManager {
       }) async* {
     //BleDeviceConnector Check Status
 
-
     yield* BleManager.subscribeToCharacteristic(
       dstCharacteristic.qualCharacteristic(deviceId),
       ref: ref,
@@ -442,7 +441,10 @@ abstract class PadSensorManager {
         // be fixed soon.
         return event.distance.isPositive;
       },
-    );
+    ).handleError((error) {
+      // Hata durumunda ne yapılacağını belirleyin
+      print('Error occurred: $error');
+    });
   }
 
   static Stream<DistanceEvent> listenToDistanceMulti(
@@ -456,7 +458,10 @@ abstract class PadSensorManager {
           ref: ref,
         ),
       ),
-    );
+    ).handleError((error) {
+      // Hata durumunda ne yapılacağını belirleyin
+      print('Error occurred: $error');
+    });
   }
 
   // #endregion
@@ -474,7 +479,10 @@ abstract class PadSensorManager {
         deviceId,
         AcceleremetorGravityModel.fromBytes(bytes),
       ),
-    );
+    ).handleError((error) {
+      // Hata durumunda ne yapılacağını belirleyin
+      print('Error occurred: $error');
+    });
   }
 
   static Stream<MotionEvent> listenToMotionMulti(
@@ -488,7 +496,10 @@ abstract class PadSensorManager {
           ref: ref,
         ),
       ),
-    );
+    ).handleError((error) {
+      // Hata durumunda ne yapılacağını belirleyin
+      print('Error occurred: $error');
+    });
   }
 
   // #endregion
@@ -506,24 +517,11 @@ abstract class PadSensorManager {
         deviceId,
         AcceleremetorTapModel.fromBytes(bytes),
       ),
-    );
+    ).handleError((error) {
+      // Hata durumunda ne yapılacağını belirleyin
+      print('Error occurred: $error');
+    });
   }
-
-  static Stream<TouchEvent> listenToTouch2(
-      String deviceId, {
-        required WidgetRef ref,
-      }) async* {
-    yield* BleManager.subscribeToCharacteristic(
-      accCharacteristic.qualCharacteristic(deviceId),
-      ref: ref,
-    ).map(
-          (bytes) => TouchEvent(
-        deviceId,
-        AcceleremetorTapModel.fromBytes(bytes),
-      ),
-    );
-  }
-
 
   static Stream<TouchEvent> listenToTouchMulti(
       Iterable<String> deviceIds, {
@@ -536,7 +534,10 @@ abstract class PadSensorManager {
           ref: ref,
         ),
       ),
-    );
+    ).handleError((error) {
+      // Hata durumunda ne yapılacağını belirleyin
+      print('Error occurred: $error');
+    });
   }
 // #endregion
 

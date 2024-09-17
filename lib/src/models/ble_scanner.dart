@@ -17,6 +17,7 @@ class BleScanner implements ReactiveState<BleScannerState> {
 
   StreamSubscription? _subscription;
 
+  var _notCpDevices = <DeviceModel>{};
   var _devices = <DeviceModel>{};
   final _lastdevices = <DeviceModel>{};
 
@@ -130,7 +131,7 @@ class BleScanner implements ReactiveState<BleScannerState> {
       requireLocationServicesEnabled: true,
       // serviceUuids,
     ).listen(
-      (device) {
+          (device) {
         ref
             .read(sleepDetectedByTimerNotifierProv.notifier)
             .updateOrAddLastSeen(ref, device.id);
@@ -166,6 +167,10 @@ class BleScanner implements ReactiveState<BleScannerState> {
             Future.delayed(const Duration(seconds: 3))
                 .then((value) => _pushedStateOnce = false);
           }
+        }else{
+          if(!_notCpDevices.contains(device)){
+            _notCpDevices.add(device);
+          }
         }
       },
       onError: (Object e) {}, //logger.e('Device scan fails with error: $e',),
@@ -188,6 +193,7 @@ class BleScanner implements ReactiveState<BleScannerState> {
         BleScannerState(
           deviceModels: _devices,
           scanIsInProgress: _subscription != null,
+          notCpDevices: _notCpDevices,
         ),
       );
     }
@@ -252,12 +258,18 @@ class BleScanner implements ReactiveState<BleScannerState> {
 class BleScannerState {
   const BleScannerState({
     required Set<DeviceModel> deviceModels,
+    required Set<DeviceModel> notCpDevices,
     required this.scanIsInProgress,
-  }) : _deviceModels = deviceModels;
+  }) : _deviceModels = deviceModels , _notCpDevices = notCpDevices;
 
   final Set<DeviceModel> _deviceModels;
+  final Set<DeviceModel> _notCpDevices;
   final bool scanIsInProgress;
+
+  List<DeviceModel> get notIsCpDevices =>
+      _notCpDevices.toList()..sort((a, b) => a.name.compareTo(b.name));
 
   List<DeviceModel> get deviceModels =>
       _deviceModels.where((element) => element.isCPDevice).toList();
+
 }

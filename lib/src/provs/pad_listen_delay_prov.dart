@@ -1,3 +1,4 @@
+import 'package:catchpad_flutter_lib/catchpad_flutter_lib.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
@@ -14,9 +15,11 @@ class PadListenDelayControlNotifier extends StateNotifier<bool> {
 
   set delayMs(int delayMs) {
     _delayMs = delayMs;
+    logger.i('startDelay2');
   }
 
   Future<void> startDelay() async {
+    logger.i('startDelay');
     state = false;
     Future.delayed(Duration(milliseconds: _delayMs), () {
       state = true;

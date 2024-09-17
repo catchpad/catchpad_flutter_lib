@@ -87,6 +87,17 @@ const CpCharacteristic adminCharacteristic = CpCharacteristic(
 );
 // #endregion
 
+// #hearth rate start
+const String heartRateService = '180D';
+
+const CpCharacteristic heartRateCharacteristic = CpCharacteristic(
+  id: '2A37',
+  serviceId: heartRateService,
+);
+
+// #hearth rate end
+
+
 // #region sensors
 const String sensorServiceId = '722d9150-b2ab-11ec-b909-000000000000';
 
@@ -99,6 +110,8 @@ const CpCharacteristic accCharacteristic = CpCharacteristic(
   id: '7af57456-b2ab-11ec-b909-000000000001',
   serviceId: sensorServiceId,
 );
+
+
 
 const CpCharacteristic dstCharacteristic = CpCharacteristic(
   id: '83e7f7e6-b2ab-11ec-b909-000000000002',

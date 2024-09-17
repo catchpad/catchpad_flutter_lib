@@ -22,10 +22,9 @@ export 'sides_colors_model.dart';
 
 // TODO: seperate every service to its own file (e.g. led, audio, etc.)
 abstract class PadManager {
-  static Future<bool> toggleLight(
-      String deviceId, {
-        required WidgetRef ref,
-      }) async {
+  static Future<bool> toggleLight(String deviceId, {
+    required WidgetRef ref,
+  }) async {
     return await ledColor(
       deviceId,
       const SidesColorsModel(
@@ -38,11 +37,10 @@ abstract class PadManager {
     );
   }
 
-  static Future<bool> ledOff(
-      String deviceId, {
-        required WidgetRef ref,
-        bool isCommand = false,
-      }) async {
+  static Future<bool> ledOff(String deviceId, {
+    required WidgetRef ref,
+    bool isCommand = false,
+  }) async {
     return await ledColor(
       deviceId,
       SidesColorsModel.off(),
@@ -51,11 +49,10 @@ abstract class PadManager {
     );
   }
 
-  static Future<bool> sleepDevice(
-      String deviceId, {
-        required WidgetRef ref,
-        bool isCommand = false,
-      }) async {
+  static Future<bool> sleepDevice(String deviceId, {
+    required WidgetRef ref,
+    bool isCommand = false,
+  }) async {
     const dt = 'S';
     return await BleManager.writeCharacteristic(
       c: sleepCharacteristicAdminInfo.qualCharacteristic(deviceId),
@@ -65,11 +62,10 @@ abstract class PadManager {
     ).timeout(const Duration(milliseconds: 100), onTimeout: () => true);
   }
 
-  static Future<bool> ledOffNoResponse(
-      String deviceId, {
-        required WidgetRef ref,
-        bool isCommand = false,
-      }) async {
+  static Future<bool> ledOffNoResponse(String deviceId, {
+    required WidgetRef ref,
+    bool isCommand = false,
+  }) async {
     return await ledColor(
       deviceId,
       SidesColorsModel.off(),
@@ -79,10 +75,9 @@ abstract class PadManager {
     );
   }
 
-  static Future<bool> randomColors(
-      String deviceId, {
-        required WidgetRef ref,
-      }) async {
+  static Future<bool> randomColors(String deviceId, {
+    required WidgetRef ref,
+  }) async {
     for (var i = 0; i < 100; i++) {
       await ledColor(
         deviceId,
@@ -95,11 +90,12 @@ abstract class PadManager {
     return true;
   }
 
-  static Future<bool> sendIsCommand(
-      String deviceId, {
-        required WidgetRef ref,
-      }) {
-    final dateTime = DateTime.now().millisecondsSinceEpoch;
+  static Future<bool> sendIsCommand(String deviceId, {
+    required WidgetRef ref,
+  }) {
+    final dateTime = DateTime
+        .now()
+        .millisecondsSinceEpoch;
 
     return ledColor(
       deviceId,
@@ -109,8 +105,7 @@ abstract class PadManager {
     );
   }
 
-  static Future<bool> ledColorNoResponse(
-      String deviceId,
+  static Future<bool> ledColorNoResponse(String deviceId,
       SidesColorsModel colorModel, {
         bool isCommand = false,
         required WidgetRef ref,
@@ -129,8 +124,7 @@ abstract class PadManager {
     );
   }
 
-  static Future<bool> ledMultiColor(
-      Set<String> deviceIds,
+  static Future<bool> ledMultiColor(Set<String> deviceIds,
       Set<SidesColorsModel> colorModels, {
         bool isCommand = false,
         required WidgetRef ref,
@@ -186,8 +180,7 @@ abstract class PadManager {
     return ret;
   }
 
-  static Future<bool> ledColor(
-      String deviceId,
+  static Future<bool> ledColor(String deviceId,
       SidesColorsModel colorModel, {
         bool isCommand = false,
         required WidgetRef ref,
@@ -219,8 +212,7 @@ abstract class PadManager {
     return led && ledoff;
   }
 
-  static Future<bool> _ledColor(
-      String deviceId,
+  static Future<bool> _ledColor(String deviceId,
       SidesColorsModel colorModel, {
         bool isCommand = false,
         required WidgetRef ref,
@@ -253,6 +245,7 @@ abstract class PadManager {
       BigGuy.boolToNumString(isCommand),
       colorModel,
     ].join(defaultSeperator);
+
     final charac = colorModel.allColorsSame
         ? ledAllCharacteristic.qualCharacteristic(deviceId)
         : ledCharacteristic.qualCharacteristic(deviceId);
@@ -323,12 +316,11 @@ abstract class PadManager {
   }
 
   //play Music
-  static Future<bool> playMusic(
-      String deviceId, {
-        required WidgetRef ref,
-        bool isCommand = false,
-        bool withResponse = false,
-      }) async {
+  static Future<bool> playMusic(String deviceId, {
+    required WidgetRef ref,
+    bool isCommand = false,
+    bool withResponse = false,
+  }) async {
     const dt = 'PLAY';
     return await BleManager.writeCharacteristic(
       c: audioCharacteristic.qualCharacteristic(deviceId),
@@ -352,10 +344,9 @@ abstract class PadManager {
   }
 
   /// restart the device
-  static Future<bool> resetDevice(
-      String deviceId, {
-        required WidgetRef ref,
-      }) async {
+  static Future<bool> resetDevice(String deviceId, {
+    required WidgetRef ref,
+  }) async {
     const dt = 'R';
     return await BleManager.writeCharacteristic(
       c: adminCharacteristic.qualCharacteristic(deviceId),
@@ -365,22 +356,23 @@ abstract class PadManager {
     );
   }
 
-  static Future<bool> resetDeviceSettings(
-      String deviceId, {
-        required WidgetRef ref,
-      }) async {
+  static Future<bool> resetDeviceSettings(String deviceId, {
+    required WidgetRef ref,
+  }) async {
     final futures = [
-          () => PadSensorManager.configAccSensor(
-        deviceId: deviceId,
-        ref: ref,
-        model: defAccConfigModel,
-        intModel: accInterruptConfigModelWithMinusOne,
-      ),
-          () => PadSensorManager.configDstSensor(
-        deviceId: deviceId,
-        ref: ref,
-        model: defDstConfigModel,
-      ),
+          () =>
+          PadSensorManager.configAccSensor(
+            deviceId: deviceId,
+            ref: ref,
+            model: defAccConfigModel,
+            intModel: accInterruptConfigModelWithMinusOne,
+          ),
+          () =>
+          PadSensorManager.configDstSensor(
+            deviceId: deviceId,
+            ref: ref,
+            model: defDstConfigModel,
+          ),
     ];
 
     bool ret = false;
@@ -396,13 +388,12 @@ abstract class PadManager {
     return ret;
   }
 
-  static Future<bool> toggleDebug(
-      String deviceId, {
-        required bool enable,
-        AdminMonitorType type = AdminMonitorType.serial,
-        required WidgetRef ref,
-        bool? inGame,
-      }) async {
+  static Future<bool> toggleDebug(String deviceId, {
+    required bool enable,
+    AdminMonitorType type = AdminMonitorType.serial,
+    required WidgetRef ref,
+    bool? inGame,
+  }) async {
     final dt = [
       BigGuy.boolToInt(enable),
       type.index,
@@ -417,13 +408,12 @@ abstract class PadManager {
     );
   }
 
-  static Future<bool> toggleMultiConnection(
-      String deviceId, {
-        required bool enable,
-        AdminMonitorType type = AdminMonitorType.serial,
-        required WidgetRef ref,
-        bool? inGame,
-      }) async {
+  static Future<bool> toggleMultiConnection(String deviceId, {
+    required bool enable,
+    AdminMonitorType type = AdminMonitorType.serial,
+    required WidgetRef ref,
+    bool? inGame,
+  }) async {
     final dt = ["-1", "-1", enable ? "1" : "0"].join(defaultSeperator);
 
     return await BleManager.writeCharacteristic(
@@ -434,13 +424,12 @@ abstract class PadManager {
     );
   }
 
-  static Future<bool> toggleInGame(
-      String deviceId, {
-        AdminMonitorType type = AdminMonitorType.serial,
-        required WidgetRef ref,
-        bool inGame = false,
-        bool withResponse = false,
-      }) async {
+  static Future<bool> toggleInGame(String deviceId, {
+    AdminMonitorType type = AdminMonitorType.serial,
+    required WidgetRef ref,
+    bool inGame = false,
+    bool withResponse = false,
+  }) async {
     final dt = ["G", inGame ? "1" : "0"].join(defaultSeperator);
 
     return await BleManager.writeCharacteristic(
@@ -452,10 +441,9 @@ abstract class PadManager {
   }
 
   // #region device info
-  static Future<bool> _sendGetDeviceInfoSignal(
-      String deviceId, {
-        required WidgetRef ref,
-      }) async {
+  static Future<bool> _sendGetDeviceInfoSignal(String deviceId, {
+    required WidgetRef ref,
+  }) async {
     const dt = '?';
 
     return await BleManager.writeCharacteristic(
@@ -466,10 +454,22 @@ abstract class PadManager {
     ).timeout(const Duration(milliseconds: 500), onTimeout: () => true);
   }
 
-  static Future<DevInfoModel?> getDeviceInfo(
-      String deviceId, {
-        required WidgetRef ref,
-      }) async {
+  // Read heart rate from the device
+  static Stream<List<int>?> readHeartRate(String deviceId, {
+    required WidgetRef ref,
+  }) async* {
+    yield* BleManager.subscribeToCharacteristic(
+      heartRateCharacteristic.qualCharacteristic(deviceId),
+      ref: ref,
+    )
+        .map((dt) => dt.toList())
+        .where((event) => event.isNotEmpty);
+  }
+
+
+  static Future<DevInfoModel?> getDeviceInfo(String deviceId, {
+    required WidgetRef ref,
+  }) async {
     await _sendGetDeviceInfoSignal(deviceId, ref: ref);
 
     final dt = await BleManager.readCharacteristic(
@@ -490,11 +490,10 @@ abstract class PadManager {
     return devInfo;
   }
 
-  static Future<bool> iCanSeeYouStillControl(
-      String deviceId, {
-        required WidgetRef ref,
-        required bool enableAttribute,
-      }) async {
+  static Future<bool> iCanSeeYouStillControl(String deviceId, {
+    required WidgetRef ref,
+    required bool enableAttribute,
+  }) async {
     final dt = [
       'SETINFO',
       '-1',
@@ -515,15 +514,14 @@ abstract class PadManager {
     );
   }
 
-  static Future<bool> circularPadShow(
-      String deviceId, {
-        required WidgetRef ref,
-        Duration? totalDuration,
-        Duration? timeOutLedOff,
-        Duration? passingEndColorTime,
-        required Color circularColor,
-        Color? endColor,
-      }) async {
+  static Future<bool> circularPadShow(String deviceId, {
+    required WidgetRef ref,
+    Duration? totalDuration,
+    Duration? timeOutLedOff,
+    Duration? passingEndColorTime,
+    required Color circularColor,
+    Color? endColor,
+  }) async {
     if (totalDuration == null) return false;
     int perSideDelayTime = totalDuration.inMilliseconds ~/ 4;
     final perSideDelayDuration = Duration(milliseconds: perSideDelayTime);
@@ -556,16 +554,15 @@ abstract class PadManager {
     return true;
   }
 
-  static Future<bool> _setDeviceSetName(
-      String deviceId, {
-        required WidgetRef ref,
-        String? cpId,
-        String? bleName,
-        String? cpSN,
-        String? noTM,
-        String? variantId,
-        String? stickerId,
-      }) async {
+  static Future<bool> _setDeviceSetName(String deviceId, {
+    required WidgetRef ref,
+    String? cpId,
+    String? bleName,
+    String? cpSN,
+    String? noTM,
+    String? variantId,
+    String? stickerId,
+  }) async {
     final dt = [
       'SETINFO',
       noTM ?? '-1',
@@ -586,11 +583,10 @@ abstract class PadManager {
     );
   }
 
-  static Future<bool> requestErrorLog(
-      String deviceId, {
-        required WidgetRef ref,
-        withResponse = true,
-      }) async {
+  static Future<bool> requestErrorLog(String deviceId, {
+    required WidgetRef ref,
+    withResponse = true,
+  }) async {
     const dt = '?';
     return await BleManager.writeCharacteristic(
       c: errorLog.qualCharacteristic(deviceId),
@@ -601,31 +597,28 @@ abstract class PadManager {
   }
 
   //readErrorLog
-  static Future<List<int>?> readErrorLog(
-      String deviceId, {
-        required WidgetRef ref,
-        withResponse = false,
-      }) async {
+  static Future<List<int>?> readErrorLog(String deviceId, {
+    required WidgetRef ref,
+    withResponse = false,
+  }) async {
     return await BleManager.readCharacteristic(
         errorLog.qualCharacteristic(deviceId),
         ref: ref);
   }
 
-  static Future<List<int>?> readAreUOkTimer(
-      String deviceId, {
-        required WidgetRef ref,
-        withResponse = false,
-      }) async {
+  static Future<List<int>?> readAreUOkTimer(String deviceId, {
+    required WidgetRef ref,
+    withResponse = false,
+  }) async {
     return await BleManager.readCharacteristic(
         pongLog.qualCharacteristic(deviceId),
         ref: ref);
   }
 
-  static Future<bool> setDeviceCpId(
-      String deviceId, {
-        required WidgetRef ref,
-        required String id,
-      }) async {
+  static Future<bool> setDeviceCpId(String deviceId, {
+    required WidgetRef ref,
+    required String id,
+  }) async {
     return _setDeviceSetName(
       deviceId,
       ref: ref,
@@ -633,15 +626,14 @@ abstract class PadManager {
     );
   }
 
-  static Future<bool> setDeviceBleName(
-      String deviceId, {
-        required WidgetRef ref,
-        required String name,
-        String? cpSN,
-        String? noTM,
-        String? variantId,
-        String? stickerId,
-      }) async {
+  static Future<bool> setDeviceBleName(String deviceId, {
+    required WidgetRef ref,
+    required String name,
+    String? cpSN,
+    String? noTM,
+    String? variantId,
+    String? stickerId,
+  }) async {
     return _setDeviceSetName(
       deviceId,
       ref: ref,
@@ -654,10 +646,9 @@ abstract class PadManager {
   }
 
   // #region battery
-  static Future<bool> _sendGetBatterySignal(
-      String deviceId, {
-        required WidgetRef ref,
-      }) async {
+  static Future<bool> _sendGetBatterySignal(String deviceId, {
+    required WidgetRef ref,
+  }) async {
     const dt = '?';
     return await BleManager.writeCharacteristic(
       c: batteryCharacteristic.qualCharacteristic(deviceId),
@@ -667,10 +658,9 @@ abstract class PadManager {
     );
   }
 
-  static Future<BatteryModel?> readBattery(
-      String deviceId, {
-        required WidgetRef ref,
-      }) async {
+  static Future<BatteryModel?> readBattery(String deviceId, {
+    required WidgetRef ref,
+  }) async {
     final signal = await _sendGetBatterySignal(deviceId, ref: ref);
     if (!signal) {
       return null;
@@ -714,7 +704,9 @@ abstract class PadManager {
 
           final now = DateTime.now();
 
-          if (now.difference(start).inSeconds > 10) {
+          if (now
+              .difference(start)
+              .inSeconds > 10) {
             return false;
           }
 
@@ -753,15 +745,11 @@ abstract class PadManager {
   }
 
 
-
-
-
-  static Stream<BatteryModel> listenToBattery(
-      String deviceId, {
-        required WidgetRef ref,
-        ProviderBase? base,
-        bool needRead = true,
-      }) async* {
+  static Stream<BatteryModel> listenToBattery(String deviceId, {
+    required WidgetRef ref,
+    ProviderBase? base,
+    bool needRead = true,
+  }) async* {
     BatteryModel? batt;
     batt = await readBattery(deviceId, ref: ref);
 
@@ -781,20 +769,18 @@ abstract class PadManager {
     }
   }
 
-  static Stream<String> listenToResponseForOTAUpdate(
-      String deviceId, {
-        required WidgetRef ref,
-      }) async* {
+  static Stream<String> listenToResponseForOTAUpdate(String deviceId, {
+    required WidgetRef ref,
+  }) async* {
     yield* BleManager.subscribeToCharacteristic(
       otaFwCharacteristic.qualCharacteristic(deviceId),
       ref: ref,
     ).map((event) => String.fromCharCodes(event));
   }
 
-  static Stream<String> listenToResponseForUploadMusicFile(
-      String deviceId, {
-        required WidgetRef ref,
-      }) async* {
+  static Stream<String> listenToResponseForUploadMusicFile(String deviceId, {
+    required WidgetRef ref,
+  }) async* {
     yield* BleManager.subscribeToCharacteristic(
       audioCharacteristic.qualCharacteristic(deviceId),
       ref: ref,
@@ -807,8 +793,8 @@ abstract class PadManager {
 
   // #region audio
 
-  static Future<bool> _turnAudio(
-      WidgetRef ref, String deviceId, bool enable) async {
+  static Future<bool> _turnAudio(WidgetRef ref, String deviceId,
+      bool enable) async {
     return await BleManager.writeCharacteristic(
       c: audioCharacteristic.qualCharacteristic(deviceId),
       data: utf8.encode(enable ? 'ON' : 'OFF'),
@@ -823,12 +809,11 @@ abstract class PadManager {
   static Future<bool> _turnAudioOff(WidgetRef ref, String deviceId) =>
       _turnAudio(ref, deviceId, false);
 
-  static Future<bool> playAudio(
-      String deviceId, {
-        required WidgetRef ref,
-        // required String fileName,
-        double level = 1.0,
-      }) async {
+  static Future<bool> playAudio(String deviceId, {
+    required WidgetRef ref,
+    // required String fileName,
+    double level = 1.0,
+  }) async {
     assert(level >= 0.0 && level <= 1.0);
 
     await _turnAudioOn(ref, deviceId);

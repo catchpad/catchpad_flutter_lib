@@ -34,6 +34,7 @@ class DistanceModel {
     if (sp.length <= 3) {
       isNewPad = false;
     }
+
     return DistanceModel(
         commandTime: parse(sp[0]),
         actionTime: parse(sp[1]),

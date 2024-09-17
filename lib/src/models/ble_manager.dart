@@ -10,12 +10,14 @@ abstract class BleManager {
   static FlutterReactiveBle _inst(WidgetRef ref) => ref.read(bleProv);
 
   static Future<List<int>?> readCharacteristic(
-    QualifiedCharacteristic c, {
-    required WidgetRef ref,
-  }) async {
+      QualifiedCharacteristic c, {
+        required WidgetRef ref,
+
+      }) async {
     FlutterReactiveBle inst;
 
     try {
+      // if("015FCC39-5797-8D3D-8E8A-A5FB10465E53" == c.deviceId) return [];
       if (!ref.context.mounted) return [];
       inst = _inst(ref);
     } catch (e) {
@@ -27,6 +29,8 @@ abstract class BleManager {
     List<int> read;
 
     try {
+
+
       read = await inst.readCharacteristic(c);
     } catch (e) {
       StackTrace currentTrace = StackTrace.current;
@@ -46,6 +50,7 @@ abstract class BleManager {
     FlutterReactiveBle inst;
 
     try {
+      if("015FCC39-5797-8D3D-8E8A-A5FB10465E53" == c.deviceId) return false;
       if (!ref.context.mounted) return false;
 
       bool unnecessaryCommand = false;
@@ -79,6 +84,7 @@ abstract class BleManager {
 
     try {
       if (withResponse) {
+
         await inst.writeCharacteristicWithResponse(c, value: data);
       } else {
         await inst.writeCharacteristicWithoutResponse(c, value: data);
@@ -96,11 +102,17 @@ abstract class BleManager {
   }
 
   static Stream<List<int>> subscribeToCharacteristic(
-    QualifiedCharacteristic c, {
-    required WidgetRef ref,
-  }) {
+      QualifiedCharacteristic c, {
+        required WidgetRef ref,
+      }) {
     ref.read(currentQualifiedManagerProv.notifier).add(ref, c);
-    /// We are checking [currentHasDelayState] if the delay is active. If it is active, we will not subscribe to the characteristic.
-    return _inst(ref).subscribeToCharacteristic(c).where((event) => !ref.read(currentHasDelayState));
+    /// We are checking [currentHasDelayState] if the delay is active.
+    /// If it is active, we will not subscribe to the characteristic.
+    return _inst(ref).subscribeToCharacteristic(c).where((event) =>  ref.context.mounted && !ref.read(currentHasDelayState)).handleError(
+          (e) {
+        logger.e(e);
+      },
+      test: (e) => e is Exception,
+    );
   }
 }
