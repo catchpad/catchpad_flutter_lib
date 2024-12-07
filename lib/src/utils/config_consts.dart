@@ -2,7 +2,7 @@ part of 'pad_consts.dart';
 
 // #region sensor config defaults
 
-const ConfigScale defConfigScale = ConfigScale.LIS2DH12_16g;
+const ConfigScale defConfigScale = ConfigScale.LIS2DH12_4g;
 const ConfigMode defConfigMode = ConfigMode.LIS2DH12_HR_12bit;
 const DataRate defDataRate = DataRate.LIS2DH12_ODR_1kHz620_LP;
 const ConfigScale defConfigIntScale = ConfigScale.LIS2DH12_2g;

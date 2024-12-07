@@ -1,5 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:async/async.dart' show StreamGroup;
@@ -109,7 +110,7 @@ abstract class PadSensorManager {
     return _deactivateAcc(
       ref: ref,
       deviceId: deviceId,
-      accSensorType: AccSensorType.tap,
+      accSensorType: AccSensorType.force,
     );
   }
 
@@ -270,13 +271,14 @@ abstract class PadSensorManager {
       BigGuy.sensorTypeToStr(sensorType),
       BigGuy.boolToInt(status),
       (accSensorType
-          // we have to send a value for the acc sensor type
-          // even if it is not used.
-          ??
-          AccSensorType.values[0])
+              // we have to send a value for the acc sensor type
+              // even if it is not used.
+              ??
+              AccSensorType.values[0])
           .index,
       BigGuy.boolToInt(thrLock),
     ].join(defaultSeperator);
+
     return await BleManager.writeCharacteristic(
       ref: ref,
       c: activateCharacteristic.qualCharacteristic(deviceId),
@@ -286,7 +288,7 @@ abstract class PadSensorManager {
   }
 
   static Future<bool> deactivateAll(
-      {required WidgetRef ref, required String deviceId}) =>
+          {required WidgetRef ref, required String deviceId}) =>
       _deactivateAll(ref: ref, deviceId: deviceId);
 
   static Future<bool> _deactivateAll(
@@ -320,36 +322,103 @@ abstract class PadSensorManager {
     required String deviceId,
     required WidgetRef ref,
     required SensorConfigModel model,
-  }) {
-    final dt = [
-      BigGuy.sensorTypeToStr(model.sensorType),
+    bool needCheck = true,
+  }) async {
+    final isCp06 = ref.read(currentDevInfoManagers)[deviceId]?.isCp06 ?? false;
+    final list = [
+      BigGuy.sensorTypeToStr(model.sensorType, isCp06: isCp06),
       model.scale?.index,
       model.mode?.index,
-      model.dataRate?.index,
+      if (!isCp06 || (isCp06 && model.sensorType == SensorType.acc))
+        model.dataRate?.index,
       model.threshold,
+      //Duration ---
+      if (isCp06 && model.sensorType == SensorType.acc) model.intDuration,
       model.timeout,
-      if (model.sensorType != SensorType.dst) ...[
+      if (model.sensorType != SensorType.dst && !isCp06) ...[
         model.intScale?.index ?? '-1',
         model.intMode?.index ?? '-1',
         model.intDataRate?.index ?? '-1',
         model.intThreshold ?? '-1',
         model.intDuration ?? '-1',
         model.intTimeout ?? '-1',
-        model.intSleepEnable == null
-            ? '-1'
-            : BigGuy.boolToNumString(model.intSleepEnable!),
+        if (!isCp06)
+          model.intSleepEnable == null
+              ? '-1'
+              : BigGuy.boolToNumString(model.intSleepEnable!),
       ],
-      if (model.sensorType == SensorType.dst) ...[model.limitValue],
-      if (model.sensorType == SensorType.acc) '200', //timeoutdt
-      if (model.sensorType == SensorType.acc) '60' //thrValuedt
-    ].map((e) => e ?? '-1').join(defaultSeperator);
+      if (!isCp06 && model.sensorType == SensorType.dst) ...[model.limitValue],
+      if (!isCp06 && model.sensorType == SensorType.acc) '200', //timeoutdt
+      if (!isCp06 && model.sensorType == SensorType.acc) '60' //thrValuedt
+    ];
 
-    return  BleManager.writeCharacteristic(
+    final dt = list.map((e) => e ?? '-1').join(defaultSeperator);
+
+    final writeResponse = await BleManager.writeCharacteristic(
       ref: ref,
       c: configCharacteristic.qualCharacteristic(deviceId),
       data: utf8.encode(dt),
       withResponse: true,
     );
+    bool checked = false;
+
+    //check isCp06
+    if (isCp06 && needCheck) {
+      checked = await checkSendConfig(
+          deviceId: deviceId,
+          ref: ref,
+          sensorType: model.sensorType,
+          checkCommand: "$dt/");
+      if (!checked) {
+        logger.e("Send Again Config Because Failed: $checked");
+        await _config(deviceId: deviceId, ref: ref, model: model);
+      }
+    } else {
+      checked = true;
+    }
+
+
+
+    return writeResponse && checked;
+  }
+
+  static Future<bool> checkSendConfig({
+    required String deviceId,
+    required WidgetRef ref,
+    required SensorType sensorType,
+    required String checkCommand,
+  }) async {
+    logger.d("Checking Config: $checkCommand");
+
+    final deviceInfoStream = BleManager.subscribeToCharacteristic(
+      infoCharacteristic.qualCharacteristic(deviceId),
+      ref: ref,
+    );
+
+    final completer = Completer<bool>();
+
+    late final StreamSubscription<List<int>> subscription;
+
+    subscription = deviceInfoStream.listen((event) {
+      final result = utf8.decode(event);
+
+
+      if (!completer.isCompleted) {
+        completer.complete(result == checkCommand);
+
+        subscription.cancel();
+      }
+    });
+
+    final dt = sensorType == SensorType.acc ? 'ACCGAME?' : 'DSTGAME?';
+
+     BleManager.writeCharacteristic(
+      ref: ref,
+      c: infoCharacteristic.qualCharacteristic(deviceId),
+      data: utf8.encode(dt),
+      withResponse: false,
+    );
+    return completer.future;
   }
 
   static Future<bool> configAccSensor({
@@ -365,6 +434,7 @@ abstract class PadSensorManager {
     // -1's, so we have to send the default one
     // if it is null.
     = accInterruptConfigModelWithMinusOne,
+    bool needCheck = true,
   }) {
     assert(model != null || intModel != null);
 
@@ -396,6 +466,7 @@ abstract class PadSensorManager {
       deviceId: deviceId,
       ref: ref,
       model: newModel,
+      needCheck: needCheck
     );
   }
 
@@ -403,11 +474,13 @@ abstract class PadSensorManager {
     required String deviceId,
     required WidgetRef ref,
     required DstConfigModel model,
+    bool needCheck = true,
   }) =>
       _config(
         deviceId: deviceId,
         ref: ref,
         model: model.toSensorConfigModel(),
+        needCheck: needCheck
       );
 
   // #endregion
@@ -416,24 +489,23 @@ abstract class PadSensorManager {
 
   // #region distance
   static Stream<DistanceEvent> listenToDistance(
-      String deviceId, {
-        required WidgetRef ref,
-      }) async* {
+    String deviceId, {
+    required WidgetRef ref,
+  }) async* {
     //BleDeviceConnector Check Status
 
     yield* BleManager.subscribeToCharacteristic(
       dstCharacteristic.qualCharacteristic(deviceId),
       ref: ref,
     ).map(
-          (bytes) {
+      (bytes) {
         return DistanceEvent(
           deviceId,
           DistanceModel.fromBytes(bytes),
         );
       },
     ).where(
-          (event) {
-
+      (event) {
         // TODO: temporarily, the hardware is giving us
         // some innocent surprises of negative values
         // sometimes 😇. @fatih says that the source is
@@ -446,83 +518,6 @@ abstract class PadSensorManager {
       print('Error occurred: $error');
     });
   }
-
-  static Stream<DistanceEvent> listenToDistanceMulti(
-      Iterable<String> deviceIds, {
-        required WidgetRef ref,
-      }) {
-    return StreamGroup.merge(
-      deviceIds.map(
-            (deviceId) => listenToDistance(
-          deviceId,
-          ref: ref,
-        ),
-      ),
-    ).handleError((error) {
-      // Hata durumunda ne yapılacağını belirleyin
-      print('Error occurred: $error');
-    });
-  }
-
-  // #endregion
-
-  // #region motion
-  static Stream<MotionEvent> listenToMotion(
-      String deviceId, {
-        required WidgetRef ref,
-      }) async* {
-    yield* BleManager.subscribeToCharacteristic(
-      accCharacteristic.qualCharacteristic(deviceId),
-      ref: ref,
-    ).map(
-          (bytes) => MotionEvent(
-        deviceId,
-        AcceleremetorGravityModel.fromBytes(bytes),
-      ),
-    ).handleError((error) {
-      // Hata durumunda ne yapılacağını belirleyin
-      print('Error occurred: $error');
-    });
-  }
-
-  static Stream<MotionEvent> listenToMotionMulti(
-      Iterable<String> deviceIds, {
-        required WidgetRef ref,
-      }) {
-    return StreamGroup.merge(
-      deviceIds.map(
-            (deviceId) => listenToMotion(
-          deviceId,
-          ref: ref,
-        ),
-      ),
-    ).handleError((error) {
-      // Hata durumunda ne yapılacağını belirleyin
-      print('Error occurred: $error');
-    });
-  }
-
-  // #endregion
-
-  // #region touch
-  static Stream<TouchEvent> listenToTouch(
-      String deviceId, {
-        required WidgetRef ref,
-      }) async* {
-    yield* BleManager.subscribeToCharacteristic(
-      accCharacteristic.qualCharacteristic(deviceId),
-      ref: ref,
-    ).map(
-          (bytes) => TouchEvent(
-        deviceId,
-        AcceleremetorTapModel.fromBytes(bytes),
-      ),
-    ).handleError((error) {
-      // Hata durumunda ne yapılacağını belirleyin
-      print('Error occurred: $error');
-    });
-  }
-
   static Stream<TouchEvent> listenToTouchMulti(
       Iterable<String> deviceIds, {
         required WidgetRef ref,
@@ -539,6 +534,90 @@ abstract class PadSensorManager {
       print('Error occurred: $error');
     });
   }
+  static Stream<DistanceEvent> listenToDistanceMulti(
+    Iterable<String> deviceIds, {
+    required WidgetRef ref,
+  }) {
+    return StreamGroup.merge(
+      deviceIds.map(
+        (deviceId) => listenToDistance(
+          deviceId,
+          ref: ref,
+        ),
+      ),
+    ).handleError((error) {
+      // Hata durumunda ne yapılacağını belirleyin
+      print('Error occurred: $error');
+    });
+  }
+
+  // #endregion
+
+  // #region motion
+  static Stream<MotionEvent> listenToMotion(
+    String deviceId, {
+    required WidgetRef ref,
+  }) async* {
+    yield* BleManager.subscribeToCharacteristic(
+      accCharacteristic.qualCharacteristic(deviceId),
+      ref: ref,
+    )
+        .map(
+      (bytes) => MotionEvent(
+        deviceId,
+        AcceleremetorGravityModel.fromBytes(bytes),
+      ),
+    )
+        .handleError((error) {
+      // Hata durumunda ne yapılacağını belirleyin
+      print('Error occurred: $error');
+    });
+  }
+
+  static Stream<MotionEvent> listenToMotionMulti(
+    Iterable<String> deviceIds, {
+    required WidgetRef ref,
+  }) {
+    return StreamGroup.merge(
+      deviceIds.map(
+        (deviceId) => listenToMotion(
+          deviceId,
+          ref: ref,
+        ),
+      ),
+    ).handleError((error) {
+      // Hata durumunda ne yapılacağını belirleyin
+      print('Error occurred: $error');
+    });
+  }
+
+  // #endregion
+
+  // #region touch
+  static Stream<TouchEvent> listenToTouch(
+    String deviceId, {
+    required WidgetRef ref,
+  }) async* {
+
+    logger.i("Listen To Touch: $deviceId");
+
+    yield* BleManager.subscribeToCharacteristic(
+      accCharacteristic.qualCharacteristic(deviceId),
+      ref: ref,
+    )
+        .map(
+      (bytes) => TouchEvent(
+        deviceId,
+        AcceleremetorTapModel.fromBytes(bytes),
+      ),
+    )
+        .handleError((error) {
+      // Hata durumunda ne yapılacağını belirleyin
+      print('Error occurred: $error');
+    });
+  }
+
+
 // #endregion
 
 // #endregion

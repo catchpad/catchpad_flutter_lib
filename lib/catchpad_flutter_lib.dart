@@ -46,6 +46,8 @@ export 'src/provs/sleep_detec_prov.dart';
 export 'src/provs/enviroment_prov.dart';
 export 'src/provs/device/device_info_prov.dart';
 export 'src/provs/pad_listen_delay_prov.dart';
+export 'src/provs/battery_model_manager.dart';
+export 'src/provs/write_logs_prov.dart';
  // #sub_region providers - trace
  export 'src/provs/trace/byte_trace_active_prov.dart';
 

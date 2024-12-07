@@ -15,10 +15,13 @@ class BatteryModel {
   /// once unplugged, this will be false.
   final bool isCompleted;
 
+  final int? idkParam;
+
   BatteryModel({
     required this.voltage,
     required this.isCharging,
     required this.isCompleted,
+    this.idkParam,
   });
 
   int get percentage => voltageToPercentage(voltage);
@@ -28,12 +31,22 @@ class BatteryModel {
   /// when the pad is plugged in.
   bool get isActive => !isCharging && !isCompleted;
 
+  //empty Battery Model
+  static BatteryModel empty() {
+    return BatteryModel(
+      voltage: 7000,
+      isCharging: false,
+      isCompleted: false,
+    );
+  }
+
   static BatteryModel? fromBytes(List<int> bytes) {
     final st = String.fromCharCodes(bytes);
 
     final sp = st.split('/');
 
-    if (sp.length != 3) {
+    if (sp.length < 3) {
+      logger.w('BatteryModel.fromBytes: sp.length < 3 (${sp.length})');
       return null;
     }
 
@@ -41,13 +54,23 @@ class BatteryModel {
       isCompleted: BigGuy.intToBool(int.tryParse(sp[0]) ?? 0),
       isCharging: BigGuy.intToBool(int.tryParse(sp[1]) ?? 0),
       voltage: double.tryParse(sp[2]),
+      idkParam: sp.length > 3 ? int.tryParse(sp[3]) : null,
     );
+  }
+
+  String fromFabricString() {
+    return [
+      'Voltage: ${voltage ?? 'null'}',
+      'Voltage: ${idkParam ?? 'null'}',
+      'Percentage: %$percentage'
+    ].join('\n');
   }
 
   @override
   String toString() {
     return [
       'Voltage: ${voltage ?? 'null'}',
+      'Voltage: ${idkParam ?? 'null'}',
       'Percentage: %$percentage',
       'Is Charging: ${isCharging ? 'true' : 'false'}',
       'Is Completed: ${isCompleted ? 'true' : 'false'}',

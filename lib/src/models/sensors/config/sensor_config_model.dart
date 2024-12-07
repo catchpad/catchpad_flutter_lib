@@ -15,7 +15,8 @@ class SensorConfigModel with _$SensorConfigModel {
     required SensorType sensorType,
     final ConfigScale? scale,
     final ConfigMode? mode,
-    final DataRate? dataRate,
+    @Default(DataRate.LIS2DH12_ODR_1kHz620_LP)
+    final DataRate dataRate,
     @Default(6) final int? limitValue,
 
     /// ACC: 0-127
@@ -38,8 +39,8 @@ class SensorConfigModel with _$SensorConfigModel {
     /// ms
     /// 0 - 20 ms
     /// how long to wait for an interrupt
-    final int? intDuration,
-
+    @Default(3)
+    final int intDuration,
     /// wether to enable sleep mode
     final bool? intSleepEnable,
   }) = _SensorConfigModel;

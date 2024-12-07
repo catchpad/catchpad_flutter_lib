@@ -56,7 +56,7 @@ class AcceleremetorGravityModel {
       x: parse(sp[2]),
       y: parse(sp[3]),
       z: parse(sp[4]),
-      temperature: parse(sp[5]),
+      temperature: sp.length>5 ? parse(sp[5]) : 0.0,
     );
   }
 

@@ -2,7 +2,6 @@
 
 /// the higher the bitrate is, the more accurate the reading
 enum ConfigMode {
-  defaultMode,
   LIS2DH12_HR_12bit,
   LIS2DH12_NM_10bit,
 }

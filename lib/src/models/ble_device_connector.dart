@@ -84,6 +84,7 @@ class BleDeviceConnector extends ReactiveState<DeviceStatusMapEntry> {
 
   Future<void> disconnect(DeviceModel device) async {
     try {
+
       await _connections[device]?.cancel();
     } on Exception catch (e) {
       logger.e("Error disconnecting from a device: $e");

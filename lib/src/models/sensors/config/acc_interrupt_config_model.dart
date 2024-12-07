@@ -48,8 +48,8 @@ class AccInterruptConfigModel with _$AccInterruptConfigModel {
       intMode: mode,
       intDataRate: dataRate,
       intThreshold: threshold,
+      intDuration: 3,
       intTimeout: timeout,
-      intDuration: duration,
       intSleepEnable: sleepEnable,
     );
   }

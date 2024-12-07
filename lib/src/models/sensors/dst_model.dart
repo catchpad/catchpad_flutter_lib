@@ -30,6 +30,9 @@ class DistanceModel {
       return (double.tryParse(s) ?? 0.0).toInt();
     }
 
+    //check is cp06
+
+
     bool isNewPad = true;
     if (sp.length <= 3) {
       isNewPad = false;
@@ -40,7 +43,8 @@ class DistanceModel {
         actionTime: parse(sp[1]),
         distance: parse(sp[2]),
         rangeStatus: parse((isNewPad) ? sp[3] : '0'),
-        limitCheckCurrent: parse((isNewPad) ? sp[4] : '0'));
+        limitCheckCurrent: parse((isNewPad && sp.length>4) ? sp[4] : '0')
+    );
   }
 
   String toParseString() {

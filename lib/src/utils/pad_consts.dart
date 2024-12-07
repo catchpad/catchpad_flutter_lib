@@ -43,6 +43,9 @@ const CpCharacteristic ledAllCharacteristic = CpCharacteristic(
   id: '6412075e-b2ab-11ec-b909-000000000111',
   serviceId: ledServiceId,
 );
+const CpCharacteristic ledSettingsCharacteristic = CpCharacteristic(
+    id: '6412075e-b2ab-11ec-b909-a00000011111',
+    serviceId: ledServiceId);
 // #endregion
 
 // #mp3start

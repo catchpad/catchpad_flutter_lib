@@ -35,11 +35,11 @@ class DstConfigModel with _$DstConfigModel {
 
   SensorConfigModel toSensorConfigModel() {
 
-    var localMode = ConfigMode.values[1];
+    var localMode = ConfigMode.values[0];
     if(thresholdCm! < 25 ) {
-      localMode = ConfigMode.values[2];
-    }else{
       localMode = ConfigMode.values[1];
+    }else{
+      localMode = ConfigMode.values[0];
     }
 
     return SensorConfigModel(
@@ -49,9 +49,9 @@ class DstConfigModel with _$DstConfigModel {
         // TODO: temporarily, the hardware does not parse
         // -1's for the following values for DST, so we can
         // only send 0 or 1 for now.
-        scale: ConfigScale.values[0],
+        scale: ConfigScale.values.first,
         mode: localMode,
-        dataRate: DataRate.values[0],
+        dataRate: DataRate.values.first,
         limitValue: limitValue);
   }
 

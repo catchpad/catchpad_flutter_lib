@@ -22,6 +22,7 @@ class AccConfigModel with _$AccConfigModel {
     ConfigMode? mode,
     DataRate? dataRate,
 
+
     /// 0-127
     int? threshold,
 
@@ -34,9 +35,11 @@ class AccConfigModel with _$AccConfigModel {
       sensorType: SensorType.acc,
       scale: scale,
       mode: mode,
-      dataRate: dataRate,
-      threshold: threshold,
       timeout: timeout,
+      threshold: threshold,
+
+      dataRate: dataRate ?? DataRate.LIS2DH12_ODR_1kHz620_LP,
+      intDuration: 3,
     );
   }
 
