@@ -33,6 +33,7 @@ class DevInfoModel {
 
   //Is cp06 device
   bool get isCp06 => hwVersion == "3.0";
+  bool get isCp04 => hwVersion == "v1.2";
 
 
 
@@ -92,7 +93,6 @@ class DevInfoModel {
           );
   }
 
-  bool get isCp04 => hwVersion == "v1.2";
 
   String toFabricString() {
     return "MacID:$macId\n"

@@ -1239,6 +1239,19 @@ abstract class PadManager {
     return completer.future;
   }
 
+  static Future<bool> otaDisable(String deviceId,
+      {required WidgetRef ref,
+        bool isCommand = false,
+        bool withResponse = false}) async {
+    const dt = 'SETOTA/-1/0';
+
+    return await BleManager.writeCharacteristic(
+      c: otaSettings.qualCharacteristic(deviceId),
+      data: utf8.encode(dt),
+      withResponse: withResponse,
+      ref: ref,
+    );
+  }
 
   static Future<DevInfoModel?> getDeviceInfo(
       String deviceId, {
