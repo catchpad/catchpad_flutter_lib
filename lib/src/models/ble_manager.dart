@@ -29,7 +29,6 @@ abstract class BleManager {
     // If cp06, subscribe and get the value from the stream
     if (isCp06) {
       try {
-        logger.d("Detected CP06 device, subscribing to characteristic");
         final completer = Completer<List<int>?>();
         final subscription = subscribeToCharacteristic(c, ref: ref).listen(
               (data) {
@@ -100,8 +99,7 @@ abstract class BleManager {
   }) async {
     FlutterReactiveBle inst;
 
-
-      if ("015FCC39-5797-8D3D-8E8A-A5FB10465E53" == c.deviceId) return false;
+      logger.i("write: ");
       if (!ref.context.mounted) return false;
       final isCp06 =
           ref.read(currentDevInfoManagers)[c.deviceId]?.isCp06 ?? false;
@@ -112,6 +110,9 @@ abstract class BleManager {
         data = utf8.encode(commandStr);
       }
       bool unnecessaryCommand = false;
+
+
+
       if (ref.read(currentDevInfoManagers).containsKey(c.deviceId)) {
         //Called Functions...
         StackTrace stackTrace = StackTrace.current;
@@ -121,14 +122,19 @@ abstract class BleManager {
             .values
             .firstWhere((element) => element.deviceId == c.deviceId);
 
+
+
         if (currentDevInfo.hwVersion != 'v2.0') {
           for (var cp05PerFunction in cp05FunctionsList) {
+            if(cp05PerFunction == 'toggleVibration' && currentDevInfo.isCp06) continue;
             if (stackTrace.toString().contains(cp05PerFunction) && !disableUnnecessaryCommand) {
               unnecessaryCommand = true;
             }
           }
         }
       }
+
+
       if (unnecessaryCommand) return false;
       inst = _inst(ref);
 
@@ -147,7 +153,6 @@ abstract class BleManager {
         await inst.writeCharacteristicWithResponse(c, value: data);
         ref.read(writeLogControlNotifierProvider.notifier).addLog(beautifulCommand);
       } else {
-        logger.i("Is Cp06: $isCp06 $commandStr");
         //cp05 çalışmıyor.
         // add to data that is "/" character to the end of the data
         // if(isCp06){

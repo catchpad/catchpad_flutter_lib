@@ -811,18 +811,19 @@ abstract class PadManager {
     String deviceId, {
     required WidgetRef ref,
   }) async {
+
     final currentDevs = ref.read(currentDevInfoManagers);
     final currentDevBatteryMap = ref.read(currentBatteryModelControlProvider);
 
     if (!currentDevs.containsKey(deviceId)) return null;
 
-    if (currentDevBatteryMap.containsKey(deviceId) &&
-        currentDevBatteryMap[deviceId] != null) {
-      return currentDevBatteryMap[deviceId];
-    }
+    // if (currentDevBatteryMap.containsKey(deviceId) &&
+    //     currentDevBatteryMap[deviceId] != null) {
+    //   return currentDevBatteryMap[deviceId];
+    // }
 
     if (currentDevs[deviceId]?.isCp06 ?? false) {
-      return getBatteryCp06(deviceId, ref: ref);
+      return await getBatteryCp06(deviceId, ref: ref);
     }
 
     final signal = await _sendGetBatterySignal(deviceId, ref: ref);
@@ -914,7 +915,6 @@ abstract class PadManager {
           BatteryModel.empty();
     }
     final currentDevBatteryMap = ref.read(currentBatteryModelControlProvider);
-    logger.wtf(currentDevBatteryMap[deviceId].toString());
     if (currentDevBatteryMap.containsKey(deviceId) &&
         currentDevBatteryMap[deviceId] != null) {
       yield currentDevBatteryMap[deviceId]!;
@@ -923,10 +923,10 @@ abstract class PadManager {
     // İlk olarak bataryayı okuyoruz
     batt = await readBattery(deviceId, ref: ref);
 
+
     // Eğer `base` verilmişse kontrol ediyoruz
     if (base != null) {
       final isExist = ref.exists(base);
-      logger.i("Base existence check: $isExist");
     }
 
     // Eğer batarya bilgisi boş değilse
@@ -1076,6 +1076,7 @@ abstract class PadManager {
       required bool vibrationOn,
       String? val,
       bool withResponse = true}) async {
+    logger.i("Vibration Activated:$vibrationOn");
     //12-14
     var power = vibrationOn ? '20' : '0';
 
@@ -1296,7 +1297,6 @@ abstract class PadManager {
             batteryCharacteristic.qualCharacteristic(deviceId),
             ref: ref)
         .listen((event) {
-      logger.i("Get Battery Infos: $event");
       // Gelen veriyi Completer ile tamamlıyoruz
       if (!completer.isCompleted) {
         final batteryModel = BatteryModel.fromBytes(event);

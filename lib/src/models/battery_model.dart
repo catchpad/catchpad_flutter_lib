@@ -49,7 +49,6 @@ class BatteryModel {
       logger.w('BatteryModel.fromBytes: sp.length < 3 (${sp.length})');
       return null;
     }
-
     return BatteryModel(
       isCompleted: BigGuy.intToBool(int.tryParse(sp[0]) ?? 0),
       isCharging: BigGuy.intToBool(int.tryParse(sp[1]) ?? 0),

@@ -23,7 +23,7 @@ class BleDeviceConnector extends ReactiveState<DeviceStatusMapEntry> {
   final _deviceConnectionController = StreamController<DeviceStatusMapEntry>();
 
   final Map<DeviceModel, StreamSubscription<DeviceStatusMapEntry>>
-      _connections = {};
+  _connections = {};
 
   Future<void> connect(DeviceModel device) async {
 
@@ -72,7 +72,7 @@ class BleDeviceConnector extends ReactiveState<DeviceStatusMapEntry> {
     );
     // _connection
     _connections[device] = st.map(
-      (event) {
+          (event) {
         return MapEntry(device, event);
       },
     ).listen(

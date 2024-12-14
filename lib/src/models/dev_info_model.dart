@@ -29,13 +29,13 @@ class DevInfoModel {
       this.velThr,
       this.deviceId,
       this.disconnectingCount,
-      this.areYouOkCount,this.areYouEnable}); // CP ID 	/	MAC ID	/	STICKER TYPE	/	HW VERSION	/	SW VERSION	/	ACC THR	/	DST THR	/	VEL THR
+      this.areYouOkCount,
+      this.areYouEnable}); // CP ID 	/	MAC ID	/	STICKER TYPE	/	HW VERSION	/	SW VERSION	/	ACC THR	/	DST THR	/	VEL THR
 
   //Is cp06 device
   bool get isCp06 => hwVersion == "3.0";
+
   bool get isCp04 => hwVersion == "v1.2";
-
-
 
   //TODO: Create factory for cp06 demo DevInfoModel
   factory DevInfoModel.cp06DemoDeviceInfo(
@@ -51,7 +51,7 @@ class DevInfoModel {
       disconnectingCount: "9999999",
       areYouOkCount: "9999999",
       noTm: "9999999",
-      areYouEnable:"9999999",
+      areYouEnable: "9999999",
       variantId: "3",
     );
   }
@@ -65,16 +65,16 @@ class DevInfoModel {
 
     return (sp.toList().length != 1)
         ? DevInfoModel(
-            cpId: sp[4],
-            macId: sp[5],
-            bleName: sp[6],
-            stickerType: sp[7],
+            cpId: sp.length > 4 ? sp[4] : "unknown",
+            macId: sp.length > 5 ? sp[5] : "unknown",
+            bleName: sp.length > 6 ? sp[6] : "unknown",
+            stickerType: sp.length > 7 ? sp[7] : "unknown",
             disconnectingCount: sp.length > 8 ? sp[8] : "unknown",
             areYouOkCount: sp.length > 9 ? sp[9] : "unknown",
-            hwVersion: sp[0],
-            swVersion: sp[1],
-            noTm: sp[2],
-            variantId: sp[3],
+            hwVersion:sp.first,
+            swVersion:sp[1],
+            noTm: sp.length > 2 ? sp[2] : "unknown",
+            variantId: sp.length > 3 ? sp[3] : "unknown",
             areYouEnable: sp.length > 10 ? sp[10] : "unknown",
             deviceId: deviceId)
         : DevInfoModel(
@@ -93,7 +93,6 @@ class DevInfoModel {
           );
   }
 
-
   String toFabricString() {
     return "MacID:$macId\n"
         "StickerType:$stickerType\n"
@@ -111,8 +110,7 @@ class DevInfoModel {
 
   @override
   String toString() {
-    String text =
-        "CP_INFO: "
+    String text = "CP_INFO: "
         "Mac Id: $cpId "
         "Sticker Type: $stickerType "
         "Hardware Version: $hwVersion "

@@ -19,6 +19,8 @@ class CurrentBatteryModelControlNotifier
 
   void changState(CurrentMapOfBatteryModel val) => state = val;
 
-  void updateOrAddBatteryModel(String deviceId, BatteryModel? val) =>
-      state[deviceId] = val;
+  void updateOrAddBatteryModel(String deviceId, BatteryModel? val){
+    state[deviceId] = val;
+  }
+
 }
