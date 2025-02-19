@@ -17,7 +17,7 @@ const defDstThreshold = 60;
 
 const minAccThreshold = 0;
 const maxAccThreshold = 127;
-const defAccThreshold = 40;
+const defAccThreshold = 60;
 
 const minAccIntThreshold = 0;
 const maxAccIntThreshold = 127;
