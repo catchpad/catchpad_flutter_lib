@@ -14,24 +14,24 @@ import '../provs/write_logs_prov.dart';
 abstract class BleManager {
   static FlutterReactiveBle _inst(WidgetRef ref) => ref.read(bleProv);
 
-  static Future<List<int>?> readCharacteristic(QualifiedCharacteristic c, {
+  static Future<List<int>?> readCharacteristic(
+    QualifiedCharacteristic c, {
     required WidgetRef ref,
   }) async {
     FlutterReactiveBle inst;
     final cDevs = ref.read(currentDevInfoManagers);
-    if(!cDevs.containsKey(c.deviceId)) return null;
+    if (!cDevs.containsKey(c.deviceId)) return null;
 
     // Check if the device is cp06
     final isCp06 =
         ref.read(currentDevInfoManagers)[c.deviceId]?.isCp06 ?? false;
-
 
     // If cp06, subscribe and get the value from the stream
     if (isCp06) {
       try {
         final completer = Completer<List<int>?>();
         final subscription = subscribeToCharacteristic(c, ref: ref).listen(
-              (data) {
+          (data) {
             // logger.i("Data: $data");
             // When data arrives, complete the future
             if (!completer.isCompleted) {
@@ -49,7 +49,6 @@ abstract class BleManager {
         // Wait for the first value with a timeout of 5 seconds
         final read = await completer.future
             .timeout(Duration(seconds: Platform.isIOS ? 7 : 5), onTimeout: () {
-
           subscription.cancel(); // Cancel the subscription on timeout
           return null;
         });
@@ -90,68 +89,65 @@ abstract class BleManager {
     return read;
   }
 
-  static Future<bool> writeCharacteristic({
-    required WidgetRef ref,
-    required QualifiedCharacteristic c,
-    required List<int> data,
-    required bool withResponse,
-    bool disableUnnecessaryCommand = false
-  }) async {
+  static Future<bool> writeCharacteristic(
+      {required WidgetRef ref,
+      required QualifiedCharacteristic c,
+      required List<int> data,
+      required bool withResponse,
+      bool disableUnnecessaryCommand = false}) async {
     FlutterReactiveBle inst;
 
-      logger.i("write: ");
-      if (!ref.context.mounted) return false;
-      final isCp06 =
-          ref.read(currentDevInfoManagers)[c.deviceId]?.isCp06 ?? false;
-      String commandStr = String.fromCharCodes(data);
+    logger.i("write: ");
+    if (!ref.context.mounted) return false;
+    final isCp06 =
+        ref.read(currentDevInfoManagers)[c.deviceId]?.isCp06 ?? false;
+    String commandStr = String.fromCharCodes(data);
 
-      if (isCp06) {
-        commandStr = "$commandStr/";
-        data = utf8.encode(commandStr);
-      }
-      bool unnecessaryCommand = false;
+    if (isCp06) {
+      commandStr = "$commandStr/";
+      data = utf8.encode(commandStr);
+    }
+    bool unnecessaryCommand = false;
 
+    if (ref.read(currentDevInfoManagers).containsKey(c.deviceId)) {
+      //Called Functions...
+      StackTrace stackTrace = StackTrace.current;
 
+      final currentDevInfo = ref
+          .read(currentDevInfoManagers)
+          .values
+          .firstWhere((element) => element.deviceId == c.deviceId);
 
-      if (ref.read(currentDevInfoManagers).containsKey(c.deviceId)) {
-        //Called Functions...
-        StackTrace stackTrace = StackTrace.current;
-
-        final currentDevInfo = ref
-            .read(currentDevInfoManagers)
-            .values
-            .firstWhere((element) => element.deviceId == c.deviceId);
-
-
-
-        if (currentDevInfo.hwVersion != 'v2.0') {
-          for (var cp05PerFunction in cp05FunctionsList) {
-            if(cp05PerFunction == 'toggleVibration' && currentDevInfo.isCp06) continue;
-            if (stackTrace.toString().contains(cp05PerFunction) && !disableUnnecessaryCommand) {
-              unnecessaryCommand = true;
-            }
+      if (currentDevInfo.hwVersion != 'v2.0') {
+        for (var cp05PerFunction in cp05FunctionsList) {
+          if (cp05PerFunction == 'toggleVibration' && currentDevInfo.isCp06)
+            continue;
+          if (stackTrace.toString().contains(cp05PerFunction) &&
+              !disableUnnecessaryCommand) {
+            unnecessaryCommand = true;
           }
         }
       }
+    }
 
+    if (unnecessaryCommand) return false;
+    inst = _inst(ref);
 
-      if (unnecessaryCommand) return false;
-      inst = _inst(ref);
-
-      final beautifulCommand =
-          "***\nCommand: $commandStr\nDevice Id: ${c.deviceId}\nDevice Name: ${ref.read(currentDevInfoManagers)[c.deviceId]?.bleName}";
-
+    final beautifulCommand =
+        "***\nCommand: $commandStr\nDevice Id: ${c.deviceId}\nDevice Name: ${ref.read(currentDevInfoManagers)[c.deviceId]?.bleName}";
 
     try {
-      final isCp06 =
-          ref.read(currentDevInfoManagers)[c.deviceId]?.isCp06 ?? false;
+      const isCp06 =
+          // ref.read(currentDevInfoManagers)[c.deviceId]?.isCp06 ?? false
+          true; // iga ve gsb de zaten 06 kullanıldığını bildiğimiz için true yapıyoruz. Ve device info isteği atmaya gerek kalmıyor.
       logger.i("Is Cp06: $isCp06 $commandStr");
 
       if (withResponse && !isCp06) {
-
         //cp06 çalışmıyor.
         await inst.writeCharacteristicWithResponse(c, value: data);
-        ref.read(writeLogControlNotifierProvider.notifier).addLog(beautifulCommand);
+        ref
+            .read(writeLogControlNotifierProvider.notifier)
+            .addLog(beautifulCommand);
       } else {
         //cp05 çalışmıyor.
         // add to data that is "/" character to the end of the data
@@ -160,7 +156,9 @@ abstract class BleManager {
         // }
 
         await inst.writeCharacteristicWithoutResponse(c, value: data);
-        ref.read(writeLogControlNotifierProvider.notifier).addLog(beautifulCommand);
+        ref
+            .read(writeLogControlNotifierProvider.notifier)
+            .addLog(beautifulCommand);
       }
     } catch (e) {
       logger.e(c.characteristicId.toString() +
@@ -174,20 +172,19 @@ abstract class BleManager {
     return true;
   }
 
-  static Stream<List<int>> subscribeToCharacteristic(QualifiedCharacteristic c,
-      {
-        required WidgetRef ref,
-      }) {
+  static Stream<List<int>> subscribeToCharacteristic(
+    QualifiedCharacteristic c, {
+    required WidgetRef ref,
+  }) {
     ref.read(currentQualifiedManagerProv.notifier).add(ref, c);
 
     /// We are checking [currentHasDelayState] if the delay is active.
     /// If it is active, we will not subscribe to the characteristic.
     return _inst(ref).subscribeToCharacteristic(c).where((event) {
-      if(event.isNotEmpty){
-      }
+      if (event.isNotEmpty) {}
       return ref.context.mounted && !ref.read(currentHasDelayState);
     }).handleError(
-          (e) {
+      (e) {
         logger.e(e);
       },
       test: (e) => e is Exception,
