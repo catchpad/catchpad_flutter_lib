@@ -140,7 +140,7 @@ abstract class BleManager {
       const isCp06 =
           // ref.read(currentDevInfoManagers)[c.deviceId]?.isCp06 ?? false
           true; // iga ve gsb de zaten 06 kullanıldığını bildiğimiz için true yapıyoruz. Ve device info isteği atmaya gerek kalmıyor.
-      logger.i("Is Cp06: $isCp06 $commandStr");
+      logger.i("Is Cp06A: $isCp06 $commandStr");
 
       if (withResponse && !isCp06) {
         //cp06 çalışmıyor.
