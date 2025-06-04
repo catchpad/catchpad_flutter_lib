@@ -96,17 +96,21 @@ abstract class BleManager {
       required bool withResponse,
       bool disableUnnecessaryCommand = false}) async {
     FlutterReactiveBle inst;
+    // await Future.delayed(const Duration(milliseconds: 100));
 
-    logger.i("write: ");
+    const isCp06 = true;
+    final deviceId = ref.read(currentDevInfoManagers)[c.deviceId]?.deviceId;
+
     if (!ref.context.mounted) return false;
-    final isCp06 =
-        ref.read(currentDevInfoManagers)[c.deviceId]?.isCp06 ?? false;
+
     String commandStr = String.fromCharCodes(data);
 
     if (isCp06) {
       commandStr = "$commandStr/";
       data = utf8.encode(commandStr);
     }
+    logger.i(
+        "abc123 characteristic: ${c.characteristicId} write characteristic:  ${String.fromCharCodes(data)} deviceId: $deviceId");
     bool unnecessaryCommand = false;
 
     if (ref.read(currentDevInfoManagers).containsKey(c.deviceId)) {

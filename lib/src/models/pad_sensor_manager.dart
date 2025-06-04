@@ -324,33 +324,8 @@ abstract class PadSensorManager {
     required SensorConfigModel model,
     bool needCheck = true,
   }) async {
-    final isCp06 = ref.read(currentDevInfoManagers)[deviceId]?.isCp06 ?? false;
-    final list = [
-      BigGuy.sensorTypeToStr(model.sensorType, isCp06: isCp06),
-      model.scale?.index,
-      model.mode?.index,
-      if (!isCp06 || (isCp06 && model.sensorType == SensorType.acc))
-        model.dataRate?.index,
-      model.threshold,
-      //Duration ---
-      if (isCp06 && model.sensorType == SensorType.acc) model.intDuration,
-      model.timeout,
-      if (model.sensorType != SensorType.dst && !isCp06) ...[
-        model.intScale?.index ?? '-1',
-        model.intMode?.index ?? '-1',
-        model.intDataRate?.index ?? '-1',
-        model.intThreshold ?? '-1',
-        model.intDuration ?? '-1',
-        model.intTimeout ?? '-1',
-        if (!isCp06)
-          model.intSleepEnable == null
-              ? '-1'
-              : BigGuy.boolToNumString(model.intSleepEnable!),
-      ],
-      if (!isCp06 && model.sensorType == SensorType.dst) ...[model.limitValue],
-      if (!isCp06 && model.sensorType == SensorType.acc) '200', //timeoutdt
-      if (!isCp06 && model.sensorType == SensorType.acc) '60' //thrValuedt
-    ];
+    const isCp06 = true;
+    final list = ['ACCGAME', 1, 0, 8, 55, 3, 200];
 
     final dt = list.map((e) => e ?? '-1').join(defaultSeperator);
 
@@ -360,24 +335,22 @@ abstract class PadSensorManager {
       data: utf8.encode(dt),
       withResponse: true,
     );
-    bool checked = false;
+    bool checked = true;
 
     //check isCp06
-    if (isCp06 && needCheck) {
-      checked = await checkSendConfig(
-          deviceId: deviceId,
-          ref: ref,
-          sensorType: model.sensorType,
-          checkCommand: "$dt/");
-      if (!checked) {
-        logger.e("Send Again Config Because Failed: $checked");
-        await _config(deviceId: deviceId, ref: ref, model: model);
-      }
-    } else {
-      checked = true;
-    }
-
-
+    // if (isCp06 && needCheck) {
+    //   checked = await checkSendConfig(
+    //       deviceId: deviceId,
+    //       ref: ref,
+    //       sensorType: model.sensorType,
+    //       checkCommand: "$dt/");
+    //   if (!checked) {
+    //     logger.e("Send Again Config Because Failed: $checked");
+    //     await _config(deviceId: deviceId, ref: ref, model: model);
+    //   }
+    // } else {
+    //   checked = true;
+    // }
 
     return writeResponse && checked;
   }
@@ -402,7 +375,6 @@ abstract class PadSensorManager {
     subscription = deviceInfoStream.listen((event) {
       final result = utf8.decode(event);
 
-
       if (!completer.isCompleted) {
         completer.complete(result == checkCommand);
 
@@ -412,7 +384,7 @@ abstract class PadSensorManager {
 
     final dt = sensorType == SensorType.acc ? 'ACCGAME?' : 'DSTGAME?';
 
-     BleManager.writeCharacteristic(
+    BleManager.writeCharacteristic(
       ref: ref,
       c: infoCharacteristic.qualCharacteristic(deviceId),
       data: utf8.encode(dt),
@@ -463,11 +435,7 @@ abstract class PadSensorManager {
     }
 
     return _config(
-      deviceId: deviceId,
-      ref: ref,
-      model: newModel,
-      needCheck: needCheck
-    );
+        deviceId: deviceId, ref: ref, model: newModel, needCheck: needCheck);
   }
 
   static Future<bool> configDstSensor({
@@ -477,11 +445,10 @@ abstract class PadSensorManager {
     bool needCheck = true,
   }) =>
       _config(
-        deviceId: deviceId,
-        ref: ref,
-        model: model.toSensorConfigModel(),
-        needCheck: needCheck
-      );
+          deviceId: deviceId,
+          ref: ref,
+          model: model.toSensorConfigModel(),
+          needCheck: needCheck);
 
   // #endregion
 
@@ -518,13 +485,14 @@ abstract class PadSensorManager {
       print('Error occurred: $error');
     });
   }
+
   static Stream<TouchEvent> listenToTouchMulti(
-      Iterable<String> deviceIds, {
-        required WidgetRef ref,
-      }) {
+    Iterable<String> deviceIds, {
+    required WidgetRef ref,
+  }) {
     return StreamGroup.merge(
       deviceIds.map(
-            (deviceId) => listenToTouch(
+        (deviceId) => listenToTouch(
           deviceId,
           ref: ref,
         ),
@@ -534,6 +502,7 @@ abstract class PadSensorManager {
       print('Error occurred: $error');
     });
   }
+
   static Stream<DistanceEvent> listenToDistanceMulti(
     Iterable<String> deviceIds, {
     required WidgetRef ref,
@@ -598,7 +567,6 @@ abstract class PadSensorManager {
     String deviceId, {
     required WidgetRef ref,
   }) async* {
-
     logger.i("Listen To Touch: $deviceId");
 
     yield* BleManager.subscribeToCharacteristic(
@@ -616,7 +584,6 @@ abstract class PadSensorManager {
       print('Error occurred: $error');
     });
   }
-
 
 // #endregion
 

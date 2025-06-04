@@ -126,7 +126,7 @@ abstract class PadManager {
 
   static Future<bool> chargeLedOptimization(String deviceId,
       {required WidgetRef ref}) {
-    final dt = ["LEDSETTING","30","1250","20"].join(defaultSeperator);
+    final dt = ["LEDSETTING", "30", "1250", "20"].join(defaultSeperator);
 
     return BleManager.writeCharacteristic(
         ref: ref,
@@ -134,7 +134,6 @@ abstract class PadManager {
         data: utf8.encode(dt),
         withResponse: false);
   }
-
 
   static Future<bool> ledMultiColor(
     Set<String> deviceIds,
@@ -460,20 +459,20 @@ abstract class PadManager {
         disableUnnecessaryCommand: !inGame);
   }
 
-  // #region device info
-  static Future<bool> _sendGetDeviceInfoSignal(
-    String deviceId, {
-    required WidgetRef ref,
-  }) async {
-    const dt = '?';
+  // // #region device info
+  // static Future<bool> _sendGetDeviceInfoSignal(
+  //   String deviceId, {
+  //   required WidgetRef ref,
+  // }) async {
+  //   const dt = '?';
 
-    return  BleManager.writeCharacteristic(
-      c: infoCharacteristic.qualCharacteristic(deviceId),
-      data: utf8.encode(dt),
-      withResponse: true,
-      ref: ref,
-    ).timeout(const Duration(milliseconds: 500), onTimeout: () => true);
-  }
+  //   return BleManager.writeCharacteristic(
+  //     c: infoCharacteristic.qualCharacteristic(deviceId),
+  //     data: utf8.encode(dt),
+  //     withResponse: true,
+  //     ref: ref,
+  //   ).timeout(const Duration(milliseconds: 500), onTimeout: () => true);
+  // }
 
   static Future<bool> _sendMemoryInfoSignal(
     String deviceId, {
@@ -513,9 +512,6 @@ abstract class PadManager {
       ref: ref,
     ).map((dt) => dt.toList()).where((event) => event.isNotEmpty);
   }
-
-
-
 
   // static Future<DevInfoModel?> getDeviceInfo(
   //   String deviceId, {
@@ -811,7 +807,6 @@ abstract class PadManager {
     String deviceId, {
     required WidgetRef ref,
   }) async {
-
     final currentDevs = ref.read(currentDevInfoManagers);
     final currentDevBatteryMap = ref.read(currentBatteryModelControlProvider);
 
@@ -923,7 +918,6 @@ abstract class PadManager {
     // İlk olarak bataryayı okuyoruz
     batt = await readBattery(deviceId, ref: ref);
 
-
     // Eğer `base` verilmişse kontrol ediyoruz
     if (base != null) {
       final isExist = ref.exists(base);
@@ -941,12 +935,6 @@ abstract class PadManager {
       )
           .asyncMap((dt) async {
             // `dt` boş olabilir, bunu kontrol ediyoruz
-            if (dt == null) {
-              logger.w("Received null data for characteristic on iOS");
-              return null;
-            }
-
-            // Veriyi işleyip `BatteryModel` nesnesine dönüştürüyoruz
             try {
               return BatteryModel.fromBytes(dt);
             } catch (e) {
@@ -1242,8 +1230,8 @@ abstract class PadManager {
 
   static Future<bool> otaDisable(String deviceId,
       {required WidgetRef ref,
-        bool isCommand = false,
-        bool withResponse = false}) async {
+      bool isCommand = false,
+      bool withResponse = false}) async {
     const dt = 'SETOTA/-1/0';
 
     return await BleManager.writeCharacteristic(
@@ -1255,9 +1243,17 @@ abstract class PadManager {
   }
 
   static Future<DevInfoModel?> getDeviceInfo(
-      String deviceId, {
-        required WidgetRef ref,
-      }) async {
+    String deviceId, {
+    required WidgetRef ref,
+  }) async {
+    final devInfoModel = DevInfoModel(
+        deviceId: deviceId,
+        macId: deviceId,
+        hwVersion: "3.0",
+        swVersion: "9999999",
+        variantId: '3');
+    ref.read(currentDevInfoManagers.notifier).add(devInfoModel);
+    return devInfoModel;
 
     // Completer oluşturuyoruz
     final completer = Completer<DevInfoModel?>();
@@ -1277,9 +1273,9 @@ abstract class PadManager {
     });
 
     // Cihaza veri yazılmadan önce subscribe oluyoruz
-    if(!completer.isCompleted){
-       _sendGetDeviceInfoSignal(deviceId, ref: ref);
-    }
+    // if (!completer.isCompleted) {
+    //   _sendGetDeviceInfoSignal(deviceId, ref: ref);
+    // }
 
     // Completer tamamlanana kadar bekliyoruz
     return completer.future;

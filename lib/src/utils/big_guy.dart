@@ -29,14 +29,14 @@ abstract class BigGuy {
     return Duration(milliseconds: ms);
   }
 
-  static String sensorTypeToStr(SensorType type, {bool isCp06 = false}) {
+  static String sensorTypeToStr(SensorType type, {bool isCp06 = true}) {
     switch (type) {
       case SensorType.acc:
-        final sensor = "ACC${isCp06 ? "GAME" : ""}";
+        const sensor = "ACC";
 
         return sensor;
       case SensorType.dst:
-        final sensor = "DST${isCp06 ? "GAME" : ""}";
+        const sensor = "DSTGAME";
         return sensor;
       case SensorType.vel:
         return 'VEL';
@@ -44,8 +44,6 @@ abstract class BigGuy {
         return '';
     }
   }
-
-
 
   static void onPop(BuildContext context, VoidCallback onPop) {
     final loc = GoRouter.of(context).location;
