@@ -29,7 +29,7 @@ abstract class BigGuy {
     return Duration(milliseconds: ms);
   }
 
-  static String sensorTypeToStr(SensorType type, {bool isCp06 = true}) {
+  static String sensorTypeToStr(SensorType type, {bool isCp06 = false}) {
     switch (type) {
       case SensorType.acc:
         const sensor = "ACC";

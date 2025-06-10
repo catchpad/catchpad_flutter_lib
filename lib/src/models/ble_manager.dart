@@ -98,7 +98,7 @@ abstract class BleManager {
     FlutterReactiveBle inst;
     // await Future.delayed(const Duration(milliseconds: 100));
 
-    const isCp06 = true;
+    const isCp06 = false;
     final deviceId = ref.read(currentDevInfoManagers)[c.deviceId]?.deviceId;
 
     if (!ref.context.mounted) return false;
@@ -143,7 +143,7 @@ abstract class BleManager {
     try {
       const isCp06 =
           // ref.read(currentDevInfoManagers)[c.deviceId]?.isCp06 ?? false
-          true; // iga ve gsb de zaten 06 kullanıldığını bildiğimiz için true yapıyoruz. Ve device info isteği atmaya gerek kalmıyor.
+          false; // iga ve gsb de zaten 06 kullanıldığını bildiğimiz için true yapıyoruz. Ve device info isteği atmaya gerek kalmıyor.
       logger.i("Is Cp06A: $isCp06 $commandStr");
 
       if (withResponse && !isCp06) {

@@ -1249,7 +1249,7 @@ abstract class PadManager {
     final devInfoModel = DevInfoModel(
         deviceId: deviceId,
         macId: deviceId,
-        hwVersion: "3.0",
+        hwVersion: "2.0",
         swVersion: "9999999",
         variantId: '3');
     ref.read(currentDevInfoManagers.notifier).add(devInfoModel);

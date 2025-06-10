@@ -324,8 +324,10 @@ abstract class PadSensorManager {
     required SensorConfigModel model,
     bool needCheck = true,
   }) async {
-    const isCp06 = true;
-    final list = ['ACCGAME', 1, 0, 8, 55, 3, 200];
+    const isCp06 = false;
+    final list = ['ACC', 3, 1, 8, 50, 150, -1, -1, -1, -1, -1, -1, -1, 200, 60];
+    // ACC/3/1/8/50/150/-1/-1/-1/-1/-1/-1/-1/200/60
+    
 
     final dt = list.map((e) => e ?? '-1').join(defaultSeperator);
 
