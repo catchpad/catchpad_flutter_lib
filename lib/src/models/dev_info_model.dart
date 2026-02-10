@@ -33,7 +33,7 @@ class DevInfoModel {
       this.areYouEnable}); // CP ID 	/	MAC ID	/	STICKER TYPE	/	HW VERSION	/	SW VERSION	/	ACC THR	/	DST THR	/	VEL THR
 
   //Is cp06 device
-  bool get isCp06 => hwVersion == "3.0";
+  bool get isCp06 => true;
 
   bool get isCp04 => hwVersion == "v1.2";
 
@@ -71,8 +71,8 @@ class DevInfoModel {
             stickerType: sp.length > 7 ? sp[7] : "unknown",
             disconnectingCount: sp.length > 8 ? sp[8] : "unknown",
             areYouOkCount: sp.length > 9 ? sp[9] : "unknown",
-            hwVersion:sp.first,
-            swVersion:sp[1],
+            hwVersion: sp.first,
+            swVersion: sp[1],
             noTm: sp.length > 2 ? sp[2] : "unknown",
             variantId: sp.length > 3 ? sp[3] : "unknown",
             areYouEnable: sp.length > 10 ? sp[10] : "unknown",

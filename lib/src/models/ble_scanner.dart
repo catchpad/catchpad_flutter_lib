@@ -20,6 +20,7 @@ class BleScanner implements ReactiveState<BleScannerState> {
   var _notCpDevices = <DeviceModel>{};
   var _devices = <DeviceModel>{};
   final _lastdevices = <DeviceModel>{};
+  static const int _maxNotCpDevices = 200;
 
   @override
   Stream<BleScannerState> get state {
@@ -125,6 +126,13 @@ class BleScanner implements ReactiveState<BleScannerState> {
   }
 
   void startScan() async {
+    if (_subscription != null) {
+      if (_subscription!.isPaused) {
+        _subscription!.resume();
+        _pushState();
+      }
+      return;
+    }
     init();
     _subscription = _ble.scanForDevices(
       withServices: [],
@@ -170,6 +178,9 @@ class BleScanner implements ReactiveState<BleScannerState> {
         }else{
           if(!_notCpDevices.contains(device)){
             _notCpDevices.add(device);
+            if (_notCpDevices.length > _maxNotCpDevices) {
+              _notCpDevices = _notCpDevices.take(_maxNotCpDevices).toSet();
+            }
           }
         }
       },

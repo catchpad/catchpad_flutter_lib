@@ -51,6 +51,7 @@ class BleConnectionCheckStateControlNotifier extends StateNotifier<bool> {
 
           if (!anyConnectedDevice && resumeTimer != null) {
             resumeTimer!.cancel();
+            resumeTimer = null;
           }
         },
         error: (obj, sTrace) {
@@ -67,6 +68,7 @@ class BleConnectionCheckStateControlNotifier extends StateNotifier<bool> {
         break;
       case AppLifecycleState.resumed:
         pauseTimer?.cancel();
+        pauseTimer = null;
         startListenToBleResumeState(ref);
         break;
       case AppLifecycleState.inactive:
@@ -114,6 +116,7 @@ class BleConnectionCheckStateControlNotifier extends StateNotifier<bool> {
 
           if (!anyConnectedDevice && pauseTimer != null) {
             pauseTimer!.cancel();
+            pauseTimer = null;
           }
         },
         error: (obj, sTrace) {

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:catchpad_flutter_lib/catchpad_flutter_lib.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,16 +10,17 @@ typedef DeviceStatusMapEntry = MapEntry<DeviceModel, ConnectionStateUpdate>;
 final bleConenctionStateProv = StreamProvider<DeviceStatusMap>(
   (ref) async* {
     final con = ref.watch(bleDeviceConnectorProv);
+    final reconnectAttemptAt = <String, DateTime>{};
+    const reconnectCooldown = Duration(seconds: 4);
 
     final st = con.state;
 
     await for (final el in st) {
-      final device =  el.value;
+      final device = el.value;
 
-      if(device.failure != null) {
+      if (device.failure != null) {
         logger.e(device.failure!.message);
       }
-
 
       ref.read(bleConPr.notifier).updateEntry(el);
 
@@ -30,24 +29,35 @@ final bleConenctionStateProv = StreamProvider<DeviceStatusMap>(
 
       if (ref.read(bleAutoConnectStateNotifierProv) &&
           el.value.connectionState == DeviceConnectionState.disconnected) {
+        final now = DateTime.now();
+        final lastAttempt = reconnectAttemptAt[el.key.id];
+        if (lastAttempt != null &&
+            now.difference(lastAttempt) < reconnectCooldown) {
+          logger.w('Auto reconnect skipped for ${el.key.id}: cooldown active');
+          continue;
+        }
+
+        reconnectAttemptAt[el.key.id] = now;
+        reconnectAttemptAt.removeWhere(
+          (_, attemptedAt) =>
+              now.difference(attemptedAt) > const Duration(minutes: 1),
+        );
+
         ref.read(bleAutoConnectStateNotifierProv.notifier).changState(false);
 
-        ref
-            .read(randomlyDisconnectedDevProv.notifier)
-            .addDiscoveredDevice(el.key);
+        try {
+          ref
+              .read(randomlyDisconnectedDevProv.notifier)
+              .addDiscoveredDevice(el.key);
 
-        final deviceConnector = ref.read(bleDeviceConnectorProv);
-
-        deviceConnector.connect(el.key);
-
-        ref.read(bleAutoConnectStateNotifierProv.notifier).changState(true);
+          final deviceConnector = ref.read(bleDeviceConnectorProv);
+          await deviceConnector.connect(el.key);
+        } catch (e) {
+          logger.e('Auto reconnect failed for ${el.key.id}: $e');
+        } finally {
+          ref.read(bleAutoConnectStateNotifierProv.notifier).changState(true);
+        }
       }
-
-      /// Clear cache if device is connected
-      if (el.value.connectionState == DeviceConnectionState.connected  && Platform.isAndroid) {
-        ref.read(bleProv).clearGattCache(el.key.id);
-      }
-
     }
   },
 );
@@ -73,19 +83,15 @@ class BleConnectionStateNotifier extends StateNotifier<DeviceStatusMap> {
 
     state = newM;
 
-
     DeviceStatusMap deviceStatusMap = {};
 
     state.forEach((key, value) {
-      if(!deviceStatusMap.keys.any((pDevice) => pDevice.id == key.id)){
-        deviceStatusMap.addAll({
-          key :value
-        });
+      if (!deviceStatusMap.keys.any((pDevice) => pDevice.id == key.id)) {
+        deviceStatusMap.addAll({key: value});
       }
     });
 
     state = deviceStatusMap;
-
   }
 
   void updateDevice(DeviceModel d, DeviceConnectionState conState) =>
@@ -98,38 +104,39 @@ class BleConnectionStateNotifier extends StateNotifier<DeviceStatusMap> {
     DeviceStatusMap newM = {};
 
     for (var item in state.entries) {
-      if (item.key == device) {
+      if (item.key.id == device.id) {
         newM[item.key] = item.value.copyWith(connectionState: conState);
       } else {
         newM[item.key] = item.value;
       }
     }
 
-    if (conState == DeviceConnectionState.connected) {
-      newM[device] ??= ConnectionStateUpdate(
-        connectionState: conState,
-        deviceId: device.id,
-        failure: null,
-      );
+    // Keep non-disconnected states (e.g. connecting) so callers do not
+    // continuously issue duplicate connect requests while a connection
+    // attempt is already in progress.
+    if (conState != DeviceConnectionState.disconnected) {
+      final hasEntry = newM.keys.any((k) => k.id == device.id);
+      if (!hasEntry) {
+        newM[device] = ConnectionStateUpdate(
+          connectionState: conState,
+          deviceId: device.id,
+          failure: null,
+        );
+      }
     } else {
-      newM.remove(device);
+      newM.removeWhere((key, _) => key.id == device.id);
     }
     state = newM;
-
 
     DeviceStatusMap deviceStatusMap = {};
 
     state.forEach((key, value) {
-      if(!deviceStatusMap.keys.any((pDevice) => pDevice.id == key.id)){
-        deviceStatusMap.addAll({
-          key :value
-        });
+      if (!deviceStatusMap.keys.any((pDevice) => pDevice.id == key.id)) {
+        deviceStatusMap.addAll({key: value});
       }
     });
 
     state = deviceStatusMap;
-
-
   }
 }
 

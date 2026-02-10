@@ -22,10 +22,14 @@ class BleDeviceConnector extends ReactiveState<DeviceStatusMapEntry> {
 
   final _deviceConnectionController = StreamController<DeviceStatusMapEntry>();
 
-  final Map<DeviceModel, StreamSubscription<DeviceStatusMapEntry>>
-  _connections = {};
+  final Map<String, StreamSubscription<DeviceStatusMapEntry>> _connections = {};
+
+  int get activeConnectionCount => _connections.length;
 
   Future<void> connect(DeviceModel device) async {
+    // Prevent duplicate subscriptions for the same device id
+    await _connections[device.id]?.cancel();
+    _connections.remove(device.id);
 
     final st = _ble.connectToDevice(
       id: device.id,
@@ -71,7 +75,7 @@ class BleDeviceConnector extends ReactiveState<DeviceStatusMapEntry> {
       ),
     );
     // _connection
-    _connections[device] = st.map(
+    _connections[device.id] = st.map(
           (event) {
         return MapEntry(device, event);
       },
@@ -85,7 +89,8 @@ class BleDeviceConnector extends ReactiveState<DeviceStatusMapEntry> {
   Future<void> disconnect(DeviceModel device) async {
     try {
 
-      await _connections[device]?.cancel();
+      await _connections[device.id]?.cancel();
+      _connections.remove(device.id);
     } on Exception catch (e) {
       logger.e("Error disconnecting from a device: $e");
     } finally {

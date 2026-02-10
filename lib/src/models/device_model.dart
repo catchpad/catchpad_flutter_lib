@@ -12,7 +12,23 @@ extension CatchpadConnection on ConnectionStateUpdate {
 }
 
 extension CpDiscoveredDevice on DiscoveredDevice {
-  bool get isCPDevice => name.toLowerCase().contains('catchpad');
+  /// Cihazın CatchPad olup olmadığını kontrol eder
+  /// Desteklenen formatlar:
+  /// - "X CatchPad" (örn: "1 CatchPad", "12 CatchPad")
+  /// - Sadece rakam (örn: "1", "2", "8", "12") - 1-12 arası
+  bool get isCPDevice {
+    // Format 1: "catchpad" içeren isimler
+    if (name.toLowerCase().contains('catchpad')) {
+      return true;
+    }
+    // Format 2: Sadece rakam (1-12 arası)
+    final trimmed = name.trim();
+    final number = int.tryParse(trimmed);
+    if (number != null && number >= 1 && number <= 12) {
+      return true;
+    }
+    return false;
+  }
 
   int? get deviceNumber {
     final d = deviceNameId;
@@ -20,12 +36,22 @@ extension CpDiscoveredDevice on DiscoveredDevice {
     return int.tryParse(d);
   }
 
+  /// Cihaz isminden pad numarasını çıkarır
+  /// Desteklenen formatlar:
+  /// - "X CatchPad" -> "X" döner (örn: "1 CatchPad" -> "1")
+  /// - Sadece rakam -> direkt döner (örn: "2" -> "2", "8" -> "8")
   String? get deviceNameId {
-    List<String> sp;
-    sp = name.split(' ');
-
+    // Format 1: "X CatchPad" pattern
+    List<String> sp = name.split(' ');
     if (sp.length == 2) {
       return sp[0];
+    }
+
+    // Format 2: Sadece rakam (1-12 arası)
+    final trimmed = name.trim();
+    final number = int.tryParse(trimmed);
+    if (number != null && number >= 1 && number <= 12) {
+      return trimmed;
     }
 
     return null;
