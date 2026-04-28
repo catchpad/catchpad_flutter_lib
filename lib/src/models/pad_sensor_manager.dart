@@ -18,13 +18,18 @@ abstract class PadSensorManager {
     required WidgetRef ref,
     required String deviceId,
   }) async {
+    logger.i('SDBG [activateDst] START deviceId=$deviceId');
+    final sw = Stopwatch()..start();
     await _deactivateAll(deviceId: deviceId, ref: ref);
-    return _activate(
+    final res = await _activate(
       sensorType: SensorType.dst,
       status: true,
       ref: ref,
       deviceId: deviceId,
     );
+    sw.stop();
+    logger.i('SDBG [activateDst] DONE deviceId=$deviceId, result=$res, elapsed=${sw.elapsedMilliseconds}ms');
+    return res;
   }
 
   static Future<bool> deactivateDst({
@@ -67,40 +72,55 @@ abstract class PadSensorManager {
     required WidgetRef ref,
     required String deviceId,
   }) async {
+    logger.i('SDBG [activateAccForce] START deviceId=$deviceId');
+    final sw = Stopwatch()..start();
     await _deactivateAll(deviceId: deviceId, ref: ref);
-    return _activate(
+    final res = await _activate(
       sensorType: SensorType.acc,
       accSensorType: AccSensorType.force,
       status: true,
       ref: ref,
       deviceId: deviceId,
     );
+    sw.stop();
+    logger.i('SDBG [activateAccForce] DONE deviceId=$deviceId, result=$res, elapsed=${sw.elapsedMilliseconds}ms');
+    return res;
   }
 
   static Future<bool> activateAccGravity({
     required WidgetRef ref,
     required String deviceId,
   }) async {
+    logger.i('SDBG [activateAccGravity] START deviceId=$deviceId');
+    final sw = Stopwatch()..start();
     await _deactivateAll(deviceId: deviceId, ref: ref);
-    return _activate(
+    final res = await _activate(
       sensorType: SensorType.acc,
       accSensorType: AccSensorType.gravity,
       status: true,
       ref: ref,
       deviceId: deviceId,
     );
+    sw.stop();
+    logger.i('SDBG [activateAccGravity] DONE deviceId=$deviceId, result=$res, elapsed=${sw.elapsedMilliseconds}ms');
+    return res;
   }
 
   static Future<bool> activateAccTap(
       {required WidgetRef ref, required String deviceId}) async {
+    logger.i('SDBG [activateAccTap] START deviceId=$deviceId');
+    final sw = Stopwatch()..start();
     await _deactivateAll(deviceId: deviceId, ref: ref);
-    return _activate(
+    final res = await _activate(
       sensorType: SensorType.acc,
       accSensorType: AccSensorType.tap,
       status: true,
       ref: ref,
       deviceId: deviceId,
     );
+    sw.stop();
+    logger.i('SDBG [activateAccTap] DONE deviceId=$deviceId, result=$res, elapsed=${sw.elapsedMilliseconds}ms');
+    return res;
   }
 
   static Future<bool> deactivateAccTap({
@@ -110,7 +130,7 @@ abstract class PadSensorManager {
     return _deactivateAcc(
       ref: ref,
       deviceId: deviceId,
-      accSensorType: AccSensorType.force,
+      accSensorType: AccSensorType.tap,
     );
   }
 
@@ -279,6 +299,8 @@ abstract class PadSensorManager {
       BigGuy.boolToInt(thrLock),
     ].join(defaultSeperator);
 
+    logger.i('SDBG [_activate] deviceId=$deviceId, sensor=$sensorType, accType=$accSensorType, status=$status, thrLock=$thrLock, cmd=$dt');
+
     return await BleManager.writeCharacteristic(
       ref: ref,
       c: activateCharacteristic.qualCharacteristic(deviceId),
@@ -293,25 +315,21 @@ abstract class PadSensorManager {
 
   static Future<bool> _deactivateAll(
       {required WidgetRef ref, required String deviceId}) async {
-    final reqs = [
-      // only one acc deactivate
-      // is enough to deactivate
-      // both tap and gravity
-      // deactivateAccGravity,
-      deactivateAccTap,
-      deactivateDst,
-    ];
+    logger.i('SDBG [_deactivateAll] START deviceId=$deviceId');
+    final sw = Stopwatch()..start();
 
-    bool allTrue = true;
+    final results = await Future.wait([
+      deactivateAccTap(ref: ref, deviceId: deviceId),
+      deactivateAccGravity(ref: ref, deviceId: deviceId),
+      deactivateAccForce(ref: ref, deviceId: deviceId),
+      deactivateDst(ref: ref, deviceId: deviceId),
+    ]);
 
-    for (final req in reqs) {
-      final res = await req(ref: ref, deviceId: deviceId);
-      await Future.delayed(const Duration(milliseconds: 100));
-      if (!res) {
-        allTrue = false;
-      }
-    }
     await Future.delayed(const Duration(milliseconds: 100));
+    sw.stop();
+
+    final allTrue = results.every((r) => r);
+    logger.i('SDBG [_deactivateAll] DONE deviceId=$deviceId, allTrue=$allTrue, results=$results, elapsed=${sw.elapsedMilliseconds}ms');
     return allTrue;
   }
 
@@ -353,6 +371,7 @@ abstract class PadSensorManager {
     ];
 
     final dt = list.map((e) => e ?? '-1').join(defaultSeperator);
+    logger.i('SDBG [_config] deviceId=$deviceId, sensorType=${model.sensorType}, isCp06=$isCp06, cmd=$dt');
 
     final writeResponse = await BleManager.writeCharacteristic(
       ref: ref,
@@ -418,7 +437,11 @@ abstract class PadSensorManager {
       data: utf8.encode(dt),
       withResponse: false,
     );
-    return completer.future;
+    return completer.future.timeout(const Duration(seconds: 2), onTimeout: () {
+      logger.w('SDBG [checkSendConfig] TIMEOUT waiting for config confirmation deviceId=$deviceId, sensorType=$sensorType');
+      subscription.cancel();
+      return false;
+    });
   }
 
   static Future<bool> configAccSensor({
@@ -599,21 +622,23 @@ abstract class PadSensorManager {
     required WidgetRef ref,
   }) async* {
 
-    logger.i("Listen To Touch: $deviceId");
+    logger.i("[listenToTouch] START deviceId=$deviceId, subscribing to accCharacteristic");
 
     yield* BleManager.subscribeToCharacteristic(
       accCharacteristic.qualCharacteristic(deviceId),
       ref: ref,
     )
         .map(
-      (bytes) => TouchEvent(
-        deviceId,
-        AcceleremetorTapModel.fromBytes(bytes),
-      ),
+      (bytes) {
+        logger.i('SDBG [listenToTouch] RAW bytes received deviceId=$deviceId, length=${bytes.length}');
+        return TouchEvent(
+          deviceId,
+          AcceleremetorTapModel.fromBytes(bytes),
+        );
+      },
     )
         .handleError((error) {
-      // Hata durumunda ne yapılacağını belirleyin
-      print('Error occurred: $error');
+      logger.e('SDBG [listenToTouch] ERROR deviceId=$deviceId: $error');
     });
   }
 

@@ -173,15 +173,21 @@ abstract class BleManager {
     required WidgetRef ref,
   }) {
     ref.read(currentQualifiedManagerProv.notifier).add(ref, c);
+    logger.i('SDBG [BLE_SUB] subscribing to characteristic=${c.characteristicId}, deviceId=${c.deviceId}');
 
     /// We are checking [currentHasDelayState] if the delay is active.
     /// If it is active, we will not subscribe to the characteristic.
     return _inst(ref).subscribeToCharacteristic(c).where((event) {
-      if (event.isNotEmpty) {}
-      return ref.context.mounted && !ref.read(currentHasDelayState);
+      final mounted = ref.context.mounted;
+      final hasDelay = ref.read(currentHasDelayState);
+      final pass = mounted && !hasDelay;
+      if (!pass && event.isNotEmpty) {
+        logger.w('SDBG [BLE_SUB] FILTERED event on ${c.characteristicId} deviceId=${c.deviceId}, mounted=$mounted, hasDelay=$hasDelay, bytes=${event.length}');
+      }
+      return pass;
     }).handleError(
       (e) {
-        logger.e(e);
+        logger.e('SDBG [BLE_SUB] ERROR on ${c.characteristicId} deviceId=${c.deviceId}: $e');
       },
       test: (e) => e is Exception,
     );
